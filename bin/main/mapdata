@@ -1,0 +1,55 @@
+[continent]Australia 2
+    New Guinea
+    Indonesia
+    Western Australia
+    Eastern Australia
+
+
+[continent]South America 2
+    Venezuela
+    Peru
+    Brazil
+    Argentina
+
+[continent]North America 5
+    Alaska
+    Northwest Territory
+    Greenland
+    Alberta
+    Ontario
+    Eastern Canada
+    Western United States
+    Eastern United States
+    Central America
+
+[continent]Europe 5
+    Iceland
+    Scandinavia
+    Russia
+    Great Britain
+    Northern Europe
+    Southern Europe
+    Western Europe
+    
+[continent]Africa 3
+    Egypt
+    North Africa
+    East Africa
+    Central Africa
+    South Africa
+    Madagascar
+
+
+[continent]Asia 7
+    Siberia
+    Yakutsk
+    Kamchatka
+    Ural
+    Irkutsk
+    Mongolia
+    Japan
+    Afghanistan
+    China
+    Middle East
+    India
+    Southeast Asia
