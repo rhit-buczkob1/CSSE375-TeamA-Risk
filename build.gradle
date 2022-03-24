@@ -49,14 +49,15 @@ task checkstyleMain {
 task checkstyleTest {
     source = 'src/test/java'
 }
+*/
 
-task pitest {
+pitest {
     targetClasses = ['Risk.*']  //by default "${project.group}.*"
     threads = 4
     outputFormats = ['XML', 'HTML']
     timestampedReports = false
 }
-
+/*
 task jacoco {
 	toolVersion = "0.7.5+"
 	}
