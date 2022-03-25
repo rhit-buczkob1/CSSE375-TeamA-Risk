@@ -25,7 +25,7 @@ public class GameFlowController {
 	AttackerDefenderController adcontroller;
 	public static Random rand = new Random();
 	
-	private ResourceBundle messages;
+	ResourceBundle messages;
 
 	public GameFlowController(PlayerController playercontroller,
 				  GameBoardController gbcontroller,
@@ -93,6 +93,8 @@ public class GameFlowController {
 		return this.gbcontroller.isAdjacent(firstName, secondName);
 	}
 
+	int currPhase = 0;
+
 	public void next_phase() {
 		String input = this.getPhase();
 
@@ -102,7 +104,7 @@ public class GameFlowController {
 			if (!this.playercontroller.getInit()) {
 
 				this.assignment_phase();
-				
+
 				return;
 			}
 
@@ -134,7 +136,7 @@ public class GameFlowController {
 			return;
 
 		default:
-			
+
 			throw new IllegalArgumentException("Invalid Phase");
 
 		}
@@ -148,7 +150,7 @@ public class GameFlowController {
 
 	public void init_turn() {
 		this.phase = "setup";
-
+		currPhase = 0;
 	}
 
 	public void assignment_phase() {
