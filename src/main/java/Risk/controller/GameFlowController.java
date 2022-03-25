@@ -94,54 +94,73 @@ public class GameFlowController {
 	}
 
 	int currPhase = 0;
+	Phase[] phases = {new SetupPhase(this), new AssignmentPhase(this),
+						new AttackPhase(this), new FortifyPhase(this)};
 
 	public void next_phase() {
-		String input = this.getPhase();
-
-		switch (input) {
-
-		case "setup":
-			if (!this.playercontroller.getInit()) {
-
-				this.assignment_phase();
-
-				return;
-			}
-
-			throw new IllegalArgumentException("Init Phase isn't over");
-
-		case "assignment":
-			this.updateCardsOnGui();
-			boolean donePlacing = this.playercontroller.playerDonePlacingNew();
-			boolean doneCards = this.playercontroller.playerDoneWithCards();
-
-			if (donePlacing && doneCards) {
-				this.attack_phase();
-
-				return;
-			}
-			if (!donePlacing) {
-				throw new IllegalArgumentException("Player has unplaced armies");
-			} else {
-				throw new IllegalArgumentException("Player has too many cards in hand");
-			}
-
-		case "attack":
-			this.fortify_phase();
-			return;
-
-		case "fortify":
-			this.playercontroller.nextPlayer();
-			this.assignment_phase();
-			return;
-
-		default:
-
-			throw new IllegalArgumentException("Invalid Phase");
-
-		}
-
+		phases[currPhase].doPhase();
 	}
+
+	public void updateCurrPhase(boolean setup) {
+		if (setup) {
+			currPhase = 0;
+		}
+		else {
+			currPhase++;
+			if (currPhase >= 4) {
+				currPhase = 1;
+			}
+		}
+		this.phase = phases[currPhase].getPhaseName();
+	}
+
+//	public void next_phase() {
+//		String input = this.getPhase();
+//
+//		switch (input) {
+//
+//		case "setup":
+//			if (!this.playercontroller.getInit()) {
+//
+//				this.assignment_phase();
+//
+//				return;
+//			}
+//
+//			throw new IllegalArgumentException("Init Phase isn't over");
+//
+//		case "assignment":
+//			this.updateCardsOnGui();
+//			boolean donePlacing = this.playercontroller.playerDonePlacingNew();
+//			boolean doneCards = this.playercontroller.playerDoneWithCards();
+//
+//			if (donePlacing && doneCards) {
+//				this.attack_phase();
+//
+//				return;
+//			}
+//			if (!donePlacing) {
+//				throw new IllegalArgumentException("Player has unplaced armies");
+//			} else {
+//				throw new IllegalArgumentException("Player has too many cards in hand");
+//			}
+//
+//		case "attack":
+//			this.fortify_phase();
+//			return;
+//
+//		case "fortify":
+//			this.playercontroller.nextPlayer();
+//			this.assignment_phase();
+//			return;
+//
+//		default:
+//
+//			throw new IllegalArgumentException("Invalid Phase");
+//
+//		}
+//
+//	}
 
 	public String getPhase() {
 		return this.phase;

@@ -1,13 +1,15 @@
 package Risk.controller;
 
 public class AssignmentPhase extends Phase {
+
+
     public AssignmentPhase(GameFlowController gameFlowController) {
         super(gameFlowController);
+        phaseName = "assignment";
     }
 
     @Override
     public void doPhase() {
-        gameFlowController.phase = "assignment";
         gameFlowController.updateCardsOnGui();
 
         gameFlowController.playercontroller.addNewArmiestoPlayer();
@@ -25,7 +27,8 @@ public class AssignmentPhase extends Phase {
         boolean doneCards = gameFlowController.playercontroller.playerDoneWithCards();
 
         if (donePlacing && doneCards) {
-//            gameFlowController.updateCurrPhase();
+            System.out.println("Done");
+            gameFlowController.updateCurrPhase(false);
 
             return;
         }

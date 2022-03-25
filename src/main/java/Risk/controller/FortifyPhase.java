@@ -4,11 +4,11 @@ public class FortifyPhase extends Phase {
 
     public FortifyPhase(GameFlowController gameFlowController) {
         super(gameFlowController);
+        phaseName = "fortify";
     }
 
     @Override
     public void doPhase() {
-        gameFlowController.phase = "fortify";
         PlayerController pc = gameFlowController.playercontroller;
         if (pc.getCurrentPlayer().hasCaughtTerritory()) {
             pc.addCardToCurrentPlayer(gameFlowController.gbcontroller.gameBoardDeck.drawCard());
@@ -21,6 +21,6 @@ public class FortifyPhase extends Phase {
         }
 
         pc.nextPlayer();
-//        gameFlowController.updateCurrPhase();
+        gameFlowController.updateCurrPhase(false);
     }
 }
