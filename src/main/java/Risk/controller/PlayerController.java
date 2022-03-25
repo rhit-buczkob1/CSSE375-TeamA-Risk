@@ -24,17 +24,18 @@ public class PlayerController {
 		return this.currentIndex;
 	}
 
-	public void initializePlayer() {
-		if (players.size() == 4) {
-			for (Player player : players) {
-				player.addPlayerArmies(30);
-			}
+	public void initializePlayer() throws Exception {
+		if(players.size() < 3){
+			throw new Exception("Cannot initialize with fewer than three players");
 		}
-		if (players.size() == 3) {
-			for (Player player : players) {
-				player.addPlayerArmies(35);
-			}
+		else if(players.size() > 6){
+			throw new Exception("Cannot initialize with more than six players");
 		}
+		int numArmiesPerPlayer = 35 - (3 - players.size())*5;
+
+			for (Player player : players) {
+				player.addPlayerArmies(numArmiesPerPlayer);
+			}
 	}
 
 	public void addInfantryToTerritory(Territory territory, int armies) {
