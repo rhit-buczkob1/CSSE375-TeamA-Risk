@@ -300,14 +300,14 @@ public class GraphicalUserInterface {
 			Graphics2D g2 = (Graphics2D) g;
 			currentBounds.clear();
 			for (int i = 0; i < territoryBounds.size(); i++) {
-				Rectangle2D.Double border = new Rectangle2D.Double(
-						((double) territoryBounds.get(i).x) * frame.getWidth() / screenWidth - 5,
-						((double) territoryBounds.get(i).y) * frame.getHeight() / screenHeight - 5,
-						((double) frame.getWidth()) / 50 + 10, ((double) frame.getHeight()) / 25 + 10);
-				Rectangle2D.Double rect = new Rectangle2D.Double(
-						((double) territoryBounds.get(i).x) * frame.getWidth() / screenWidth,
-						((double) territoryBounds.get(i).y) * frame.getHeight() / screenHeight,
-						((double) frame.getWidth()) / 50, ((double) frame.getHeight()) / 25);
+				Rectangle2D.Double border = getTerritoryBox(i);
+				border.width = border.width + 10;
+				border.height = border.height + 10;
+				border.x = border.x - 5;
+				border.y = border.y - 5;
+				
+				Rectangle2D.Double rect = getTerritoryBox(i);
+				
 				g2.setColor(Color.DARK_GRAY);
 				if (clickedIndex == i) {
 					g2.setColor(Color.WHITE);
@@ -317,6 +317,13 @@ public class GraphicalUserInterface {
 				g2.fill(rect);
 			}
 			g.setColor(previous);
+		}
+
+		private Rectangle2D.Double getTerritoryBox(int pos) {
+			return new Rectangle2D.Double(
+					((double) territoryBounds.get(pos).x) * frame.getWidth() / screenWidth,
+					((double) territoryBounds.get(pos).y) * frame.getHeight() / screenHeight,
+					((double) frame.getWidth()) / 50, ((double) frame.getHeight()) / 25);
 		}
 
 		private void paintBackgroundImage(Graphics g) {
