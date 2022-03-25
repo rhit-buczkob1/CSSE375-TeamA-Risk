@@ -9,7 +9,6 @@
 plugins {
 	id 'jacoco'
     id 'java-library'
-    id 'checkstyle'
     id 'info.solidsoft.pitest' version '1.5.1'
     id "application"
 }
