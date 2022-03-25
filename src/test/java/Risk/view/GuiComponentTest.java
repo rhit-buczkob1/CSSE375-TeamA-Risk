@@ -14,7 +14,6 @@ public class GuiComponentTest {
 
 	@Test
 	public void testConstructor() {
-		assertTrue(false);
 		GraphicalUserInterface gui = new GraphicalUserInterface(msg);
 		GuiComponent backgroundImage = gui.new GuiComponent(gui.territoriesBounds);
 		assertTrue(backgroundImage.original != null);
