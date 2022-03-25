@@ -280,7 +280,7 @@ public class AttackerDefenderControllerTests {
 		adc.setAttackingTerritory(test1);
 		adc.setDefendingTerritory(test2);
 		try {
-			adc.setArmies(19);
+			adc.setArmies(20);
 			fail();
 		} catch (IllegalArgumentException e) {
 			System.err.println(e.getMessage());

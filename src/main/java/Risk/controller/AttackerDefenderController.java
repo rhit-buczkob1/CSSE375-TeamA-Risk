@@ -64,8 +64,8 @@ public class AttackerDefenderController {
 	}
 
 	public void setArmies(int i) {
-		if (attackerTerritory.getArmyCount() - i < 2) {
-			throw new IllegalArgumentException("need a minimum of 2 armies left in attacking territory");
+		if (attackerTerritory.getArmyCount() - i < 1) {
+			throw new IllegalArgumentException("need a minimum of 1 armies left in attacking territory");
 		}
 		this.attackerArmies = i;
 		this.attackerTerritory.removeArmies(i);
