@@ -101,17 +101,8 @@ public class GameFlowController {
 		phases[currPhase].doPhase();
 	}
 
-	public void updateCurrPhase(boolean setup) {
-		if (setup) {
-			currPhase = 0;
-		}
-		else {
-			currPhase++;
-			if (currPhase >= 4) {
-				currPhase = 1;
-			}
-		}
-		this.phase = phases[currPhase].getPhaseName();
+	public void updateCurrPhase(int newPhase) {
+		currPhase = newPhase;
 	}
 
 //	public void next_phase() {

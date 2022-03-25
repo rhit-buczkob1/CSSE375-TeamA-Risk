@@ -10,17 +10,6 @@ public class AssignmentPhase extends Phase {
 
     @Override
     public void doPhase() {
-        gameFlowController.updateCardsOnGui();
-
-        gameFlowController.playercontroller.addNewArmiestoPlayer();
-        int toaddarmies = gameFlowController.gbcontroller
-                .getNewContinentPlayerArmies(gameFlowController.playercontroller.getCurrentPlayer().getId());
-        gameFlowController.playercontroller.addArmiesToCurrentPlayer(toaddarmies);
-        gameFlowController.gbcontroller.updateGameBoard();
-        gameFlowController.gui.currentPhase = gameFlowController.messages.getString(gameFlowController.phase);
-        if (!gameFlowController.gui.testMode) {
-            gameFlowController.gui.component.repaint();
-        }
 
         gameFlowController.updateCardsOnGui();
         boolean donePlacing = gameFlowController.playercontroller.playerDonePlacingNew();
@@ -28,7 +17,7 @@ public class AssignmentPhase extends Phase {
 
         if (donePlacing && doneCards) {
             System.out.println("Done");
-            gameFlowController.updateCurrPhase(false);
+            next_phase();
 
             return;
         }
@@ -37,5 +26,15 @@ public class AssignmentPhase extends Phase {
         } else {
             throw new IllegalArgumentException("Player has too many cards in hand");
         }
+    }
+
+    public void next_phase() {
+        gameFlowController.phase = "attack";
+        gameFlowController.gui.currentPhase = gameFlowController.messages.getString(gameFlowController.phase);
+        if (!gameFlowController.gui.testMode) {
+            gameFlowController.gui.component.repaint();
+        }
+
+        gameFlowController.updateCurrPhase(2);
     }
 }

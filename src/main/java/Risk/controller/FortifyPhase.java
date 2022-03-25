@@ -9,18 +9,24 @@ public class FortifyPhase extends Phase {
 
     @Override
     public void doPhase() {
-        PlayerController pc = gameFlowController.playercontroller;
-        if (pc.getCurrentPlayer().hasCaughtTerritory()) {
-            pc.addCardToCurrentPlayer(gameFlowController.gbcontroller.gameBoardDeck.drawCard());
-            pc.getCurrentPlayer().caughtTerritory(false);
-        }
+        gameFlowController.playercontroller.nextPlayer();
+        next_phase();
+    }
+
+    public void next_phase() {
+        gameFlowController.phase = "assignment";
         gameFlowController.updateCardsOnGui();
+
+        gameFlowController.playercontroller.addNewArmiestoPlayer();
+        int toaddarmies = gameFlowController.gbcontroller
+                .getNewContinentPlayerArmies(gameFlowController.playercontroller.getCurrentPlayer().getId());
+        gameFlowController.playercontroller.addArmiesToCurrentPlayer(toaddarmies);
+        gameFlowController.gbcontroller.updateGameBoard();
         gameFlowController.gui.currentPhase = gameFlowController.messages.getString(gameFlowController.phase);
         if (!gameFlowController.gui.testMode) {
             gameFlowController.gui.component.repaint();
         }
 
-        pc.nextPlayer();
-        gameFlowController.updateCurrPhase(false);
+        gameFlowController.updateCurrPhase(1);
     }
 }
