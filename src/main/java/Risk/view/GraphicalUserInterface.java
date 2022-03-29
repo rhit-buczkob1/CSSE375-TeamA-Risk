@@ -1,6 +1,6 @@
 package Risk.view;
 
-import Risk.controller.GameFlowController.ClickListener;
+import Risk.controller.ClickListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
