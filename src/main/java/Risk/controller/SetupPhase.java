@@ -31,7 +31,5 @@ public class SetupPhase extends Phase {
         if (!gameFlowController.gui.testMode) {
             gameFlowController.gui.component.repaint();
         }
-
-        gameFlowController.updateCurrPhase(1);
     }
 }

@@ -93,65 +93,53 @@ public class GameFlowController {
 		return this.gbcontroller.isAdjacent(firstName, secondName);
 	}
 
-	int currPhase = 0;
-	Phase[] phases = {new SetupPhase(this), new AssignmentPhase(this),
-						new AttackPhase(this), new FortifyPhase(this)};
-
 	public void next_phase() {
-		phases[currPhase].doPhase();
-	}
+		String input = this.getPhase();
 
-	public void updateCurrPhase(int newPhase) {
-		currPhase = newPhase;
-	}
+		switch (input) {
 
-//	public void next_phase() {
-//		String input = this.getPhase();
-//
-//		switch (input) {
-//
-//		case "setup":
-//			if (!this.playercontroller.getInit()) {
-//
-//				this.assignment_phase();
-//
-//				return;
-//			}
-//
-//			throw new IllegalArgumentException("Init Phase isn't over");
-//
-//		case "assignment":
-//			this.updateCardsOnGui();
-//			boolean donePlacing = this.playercontroller.playerDonePlacingNew();
-//			boolean doneCards = this.playercontroller.playerDoneWithCards();
-//
-//			if (donePlacing && doneCards) {
-//				this.attack_phase();
-//
-//				return;
-//			}
-//			if (!donePlacing) {
-//				throw new IllegalArgumentException("Player has unplaced armies");
-//			} else {
-//				throw new IllegalArgumentException("Player has too many cards in hand");
-//			}
-//
-//		case "attack":
-//			this.fortify_phase();
-//			return;
-//
-//		case "fortify":
-//			this.playercontroller.nextPlayer();
-//			this.assignment_phase();
-//			return;
-//
-//		default:
-//
-//			throw new IllegalArgumentException("Invalid Phase");
-//
-//		}
-//
-//	}
+		case "setup":
+			if (!this.playercontroller.getInit()) {
+
+				this.assignment_phase();
+
+				return;
+			}
+
+			throw new IllegalArgumentException("Init Phase isn't over");
+
+		case "assignment":
+			this.updateCardsOnGui();
+			boolean donePlacing = this.playercontroller.playerDonePlacingNew();
+			boolean doneCards = this.playercontroller.playerDoneWithCards();
+
+			if (donePlacing && doneCards) {
+				this.attack_phase();
+
+				return;
+			}
+			if (!donePlacing) {
+				throw new IllegalArgumentException("Player has unplaced armies");
+			} else {
+				throw new IllegalArgumentException("Player has too many cards in hand");
+			}
+
+		case "attack":
+			this.fortify_phase();
+			return;
+
+		case "fortify":
+			this.playercontroller.nextPlayer();
+			this.assignment_phase();
+			return;
+
+		default:
+
+			throw new IllegalArgumentException("Invalid Phase");
+
+		}
+
+	}
 
 	public String getPhase() {
 		return this.phase;
@@ -160,7 +148,6 @@ public class GameFlowController {
 
 	public void init_turn() {
 		this.phase = "setup";
-		currPhase = 0;
 	}
 
 	public void assignment_phase() {
@@ -239,22 +226,12 @@ public class GameFlowController {
 		}
 	}
 
-	public class TurnInCardListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-
-		}
-
-	}
-
 	public class AttackListener implements ActionListener {
 
 		String attackingterritory = "";
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JButton toset = (JButton) e.getSource();
 			if (phase.equals("attack") && attackingterritory.equals("")) {
 				if (!(gui.clickedTerritory.equals(""))) {
 					if (!verifyOwnership(gui.clickedTerritory)) {
@@ -279,9 +256,7 @@ public class GameFlowController {
 
 				}
 			}
-
 		}
-
 	}
 
 	public class AddTerritoryListener implements ActionListener {
@@ -303,9 +278,7 @@ public class GameFlowController {
 							|| !verifyAdjacent(fromTerritory, toTerritory)) {
 						fromTerritory = "";
 						toTerritory = "";
-						return;
 					}
-
 				}
 			} else if (phase.equals("fortify")) {
 				try {
@@ -316,7 +289,6 @@ public class GameFlowController {
 				} catch (IllegalArgumentException e1) {
 					System.err.println(e1.getMessage());
 				}
-
 			} else if (toset.getText().equals(messages.getString("addArmy"))) {
 				if (!(gui.clickedTerritory.equals(""))) {
 					int player = playercontroller.getCurrentPlayer().getId();
@@ -334,9 +306,7 @@ public class GameFlowController {
 				} else {
 					throw new IllegalArgumentException("Mouse not clicked");
 				}
-
 			}
-
 		}
 	}
 	

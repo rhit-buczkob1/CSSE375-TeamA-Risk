@@ -22,6 +22,5 @@ public class AttackPhase extends Phase {
         if (!gameFlowController.gui.testMode) {
             gameFlowController.gui.component.repaint();
         }
-        gameFlowController.updateCurrPhase(3);
     }
 }
