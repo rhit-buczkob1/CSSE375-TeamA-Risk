@@ -10,13 +10,14 @@ public class Main {
 	
 	public static void main(String[] args) {
 		PlayerController pc = new PlayerController();
+		PhaseController phc = new PhaseController(pc);
 		GameBoardController gameBoard = new GameBoardController();
 		Locale l = new Locale("en", "US");
 		ResourceBundle msg = ResourceBundle.getBundle("MessagesBundle", l);
 		GraphicalUserInterface gui = new GraphicalUserInterface(msg);
 		AttackerDefenderController adc = new AttackerDefenderController();
 
-		GameFlowController gameflowcontroller = new GameFlowController(pc, gameBoard, adc, gui, msg);
+		GameFlowController gameflowcontroller = new GameFlowController(phc, pc, gameBoard, adc, gui, msg);
 
 		runMain(pc, gameBoard);
 

@@ -18,6 +18,7 @@ import java.util.Random;
 import java.util.ResourceBundle;
 
 public class GameFlowController {
+	PhaseController phaseController;
 	PlayerController playercontroller;
 	String phase;
 	GameBoardController gbcontroller;
@@ -27,11 +28,12 @@ public class GameFlowController {
 	
 	private ResourceBundle messages;
 
-	public GameFlowController(PlayerController playercontroller,
+	public GameFlowController(PhaseController phaseController, PlayerController playercontroller,
 				  GameBoardController gbcontroller,
 				  AttackerDefenderController adc,
 				  GraphicalUserInterface gui,
 				  ResourceBundle msg) {
+		this.phaseController = phaseController;
 		this.playercontroller = playercontroller;
 		this.phase = "setup";
 		this.gbcontroller = gbcontroller;
@@ -94,6 +96,20 @@ public class GameFlowController {
 	}
 
 	public void next_phase() {
+		if (phaseController.getUpdateCards()) {
+			updateCardsOnGui();
+		}
+		phaseController.next_phase();
+		if (phaseController.getUpdateCards()) {
+			updateCardsOnGui();
+		}
+		this.gui.currentPhase = this.messages.getString(phaseController.getPhase());
+		if (!gui.testMode) {
+			gui.component.repaint();
+		}
+	}
+
+	/*public void next_phase() {
 		String input = this.getPhase();
 
 		switch (input) {
@@ -185,6 +201,10 @@ public class GameFlowController {
 		if (!gui.testMode) {
 			this.gui.component.repaint();
 		}
+	}*/
+	public String getPhase() {
+		return this.phase;
+
 	}
 
 	public void turnInCards(Card card1, Card card2, Card card3) {
@@ -242,6 +262,7 @@ public class GameFlowController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			phase = phaseController.getPhase();
 			JButton toset = (JButton) e.getSource();
 			if (phase.equals("attack") && attackingterritory.equals("")) {
 				if (!(gui.clickedTerritory.equals(""))) {

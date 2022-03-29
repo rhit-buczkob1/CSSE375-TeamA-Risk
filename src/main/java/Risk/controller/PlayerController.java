@@ -27,7 +27,7 @@ public class PlayerController {
 	public void initializePlayer() {
 		if (players.size() == 4) {
 			for (Player player : players) {
-				player.addPlayerArmies(30);
+				player.addPlayerArmies(2);
 			}
 		}
 		if (players.size() == 3) {
