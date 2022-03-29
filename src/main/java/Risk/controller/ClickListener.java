@@ -36,11 +36,11 @@ public class ClickListener implements MouseListener {
         int x = event.getX();
         int y = event.getY();
         lastClick = new Point(x, y);
-        String lastclickedstring = gfController.gui.checkForPointOnTerritory();
+        String lastclickedstring = gfController.checkForPointOnTerritory();
         lastclickedstring = lastclickedstring.replace("_", " ");
-        Territory toupdate = gfController.gbcontroller.getTerritory(lastclickedstring);
-        gfController.gui.currentTerritoryArmyCount = toupdate.getArmyCount();
-        gfController.gui.currentTerritoryPlayer = toupdate.getPlayer();
+        Territory toupdate = gfController.getTerritory(lastclickedstring);
+        gfController.setCurrentTerritoryArmyCount(toupdate.getArmyCount());
+        gfController.setCurrentTerritoryPlayer(toupdate.getPlayer());
         if (this.guiComponent != null) {
             this.guiComponent.repaint();
         }

@@ -229,4 +229,20 @@ public class GameFlowController {
 	public void setLanguage() {
 		gui.setLanguage(messages, getPhase());
 	}
+
+	public String checkForPointOnTerritory() {
+		return gui.checkForPointOnTerritory();
+	}
+
+	public Territory getTerritory(String lastclickedstring) {
+		return gbcontroller.getTerritory(lastclickedstring);
+	}
+
+	public void setCurrentTerritoryArmyCount(int armyCount) {
+		gui.currentTerritoryArmyCount = armyCount;
+	}
+
+	public void setCurrentTerritoryPlayer(int player) {
+		gui.currentTerritoryPlayer = player;
+	}
 }
