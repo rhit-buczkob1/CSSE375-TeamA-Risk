@@ -157,18 +157,7 @@ public class PlayerController {
 		}
 		
 		
-		if ((card1.troopType.equals(card2.troopType)
-			&& card2.troopType.equals(card3.troopType))
-			|| (card2.troopType.equals("Wildcard")
-			&& card1.troopType.equals(card3.troopType))
-			|| (card1.troopType.equals("Wildcard")
-			&& card2.troopType.equals(card3.troopType))
-			|| (card3.troopType.equals("Wildcard")
-			&& card1.troopType.equals(card2.troopType))
-			||
-			(!card1.troopType.equals(card2.troopType)
-			&& !card1.troopType.equals(card3.troopType)
-			&& !card2.troopType.equals(card3.troopType))) {
+		if (validateTroopTypes(card1, card2, card3)) {
 			ArrayList<Card> tocheck
 				= new ArrayList<Card>(this.getCurrentPlayer().getDeck());
 			for (Card card : tocheck) {
@@ -180,7 +169,21 @@ public class PlayerController {
 		} else {
 			throw new IllegalArgumentException("Cards don't match");
 		}
+	}
 
+	private boolean validateTroopTypes(Card card1, Card card2, Card card3){
+		return ((card1.troopType.equals(card2.troopType)
+				&& card2.troopType.equals(card3.troopType))
+				|| (card2.troopType.equals("Wildcard")
+				&& card1.troopType.equals(card3.troopType))
+				|| (card1.troopType.equals("Wildcard")
+				&& card2.troopType.equals(card3.troopType))
+				|| (card3.troopType.equals("Wildcard")
+				&& card1.troopType.equals(card2.troopType))
+				||
+				(!card1.troopType.equals(card2.troopType)
+						&& !card1.troopType.equals(card3.troopType)
+						&& !card2.troopType.equals(card3.troopType)));
 	}
 
 	public ArrayList<Card> getCurrentPlayerCards() {

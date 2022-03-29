@@ -25,7 +25,7 @@ public class Territory {
 	}
 
 	public void setPlayer(int newplayer) {
-		if (newplayer > 4 || newplayer < 0) {
+		if (newplayer > 6 || newplayer < 0) {
 			throw new IllegalArgumentException("Invalid player number");
 		}
 		this.player = newplayer;
