@@ -44,15 +44,10 @@ public class PlayerController {
 		
 		
 		if (territory.getPlayer() == currentPlayer.getId()) {
-			currentPlayer.removePlayerArmies(armies);
-			territory.addArmies(armies);
-
+			transferToOwnedTerritory(territory, armies, currentPlayer);
 		}
 		if (territory.getPlayer() == 0) {
-			setTerritoryOwnership(territory);
-			currentPlayer.removePlayerArmies(armies);
-			territory.addArmies(armies);
-			currentPlayer.addTerritory();
+			transferToNewTerritory(territory, armies, currentPlayer);
 		}
 		if (territory.getPlayer() != currentPlayer.getId()) {
 			return;
@@ -69,6 +64,18 @@ public class PlayerController {
 			nextPlayer();
 		}
 
+	}
+
+	private void transferToOwnedTerritory(Territory territory, int armies, Player currPlayer){
+		currPlayer.removePlayerArmies(armies);
+		territory.addArmies(armies);
+	}
+
+	private void transferToNewTerritory(Territory territory, int armies, Player currPlayer){
+		setTerritoryOwnership(territory);
+		currPlayer.removePlayerArmies(armies);
+		territory.addArmies(armies);
+		currPlayer.addTerritory();
 	}
 
 	public void setTerritoryOwnership(Territory territory) {
