@@ -26,10 +26,10 @@ public class PopUpLauncher implements ActionListener {
                 }
 
                 JPanel panel = new JPanel();
-                panel.add(new JLabel(gfController.messages.getString("changeLangPrompt")));
+                panel.add(new JLabel(gfController.getMessage("changeLangPrompt")));
                 DefaultComboBoxModel model = new DefaultComboBoxModel();
-                model.addElement(gfController.messages.getString("eng"));
-                model.addElement(gfController.messages.getString("ger"));
+                model.addElement(gfController.getMessage("eng"));
+                model.addElement(gfController.getMessage("ger"));
                 JComboBox comboBox = new JComboBox(model);
                 panel.add(comboBox);
 
@@ -43,13 +43,13 @@ public class PopUpLauncher implements ActionListener {
                 if(result == JOptionPane.OK_OPTION) {
                     String lang = (String) comboBox.getSelectedItem();
                     Locale l;
-                    if (lang == gfController.messages.getString("eng")) {
+                    if (lang != null && lang.equals(gfController.getMessage("eng"))) {
                         l = new Locale("en", "US");
                     } else {
                         l = new Locale("de", "DE");
                     }
-                    gfController.messages = ResourceBundle.getBundle("MessagesBundle", l);
-                    gfController.gui.setLanguage(gfController.messages, gfController.getPhase());
+                    gfController.setMessages(ResourceBundle.getBundle("MessagesBundle", l));
+                    gfController.setLanguage();
                     gfController.updateCardsOnGui();
                 }
             }

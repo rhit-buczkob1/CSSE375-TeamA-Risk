@@ -217,4 +217,16 @@ public class GameFlowController {
 	public void setPhase(String phase) {
 		this.phase = phase;
 	}
+
+	public String getMessage(String key) {
+		return messages.getString(key);
+	}
+
+	public void setMessages(ResourceBundle messagesBundle) {
+		messages = messagesBundle;
+	}
+
+	public void setLanguage() {
+		gui.setLanguage(messages, getPhase());
+	}
 }
