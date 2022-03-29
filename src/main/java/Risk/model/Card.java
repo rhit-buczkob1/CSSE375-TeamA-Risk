@@ -10,6 +10,7 @@ public class Card {
 	}
 
 	public Card(String territory, String troopType) {
+		if(!isValidTroopType(troopType)) throw new IllegalArgumentException(troopType + "is not a valid troop type.");
 		this.territory = territory;
 		this.troopType = troopType;
 	}
@@ -20,5 +21,9 @@ public class Card {
 
 	public String getTroopType() {
 		return this.troopType;
+	}
+
+	private boolean isValidTroopType(String inputString){
+		return inputString.equals("Infantry") || inputString.equals("Cavalry") || inputString.equals("Artillery");
 	}
 }

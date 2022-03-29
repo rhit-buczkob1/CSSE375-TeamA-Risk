@@ -157,7 +157,7 @@ public class PlayerController {
 		}
 		
 		
-		if (validateTroopTypes(card1, card2, card3)) {
+		if (cardsAreValid(card1, card2, card3)) {
 			ArrayList<Card> tocheck
 				= new ArrayList<Card>(this.getCurrentPlayer().getDeck());
 			for (Card card : tocheck) {
@@ -171,7 +171,7 @@ public class PlayerController {
 		}
 	}
 
-	private boolean validateTroopTypes(Card card1, Card card2, Card card3){
+	private boolean cardsAreValid(Card card1, Card card2, Card card3){
 		return ((card1.troopType.equals(card2.troopType)
 				&& card2.troopType.equals(card3.troopType))
 				|| (card2.troopType.equals("Wildcard")
