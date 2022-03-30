@@ -8,9 +8,11 @@
 
 plugins {
 	id 'jacoco'
+	id 'java'
     id 'java-library'
     id 'info.solidsoft.pitest' version '1.5.1'
     id "application"
+    id 'org.openjfx.javafxplugin' version '0.0.12'
 }
 
 
@@ -21,8 +23,9 @@ repositories {
     mavenCentral()
 }
 
-task application {
+application {
     mainClassName = 'Risk.controller.Main'
+    mainModule.set("Risk.controller")
 }
 
 dependencies {
@@ -34,7 +37,7 @@ dependencies {
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12', 'org.easymock:easymock:3.4'
-    // testCompile 'junit:junit:4.+', 'org.easymock:easymock:3.4'
+    //testCompile
 }
 /*
 // Checkstyle plugin
@@ -56,6 +59,17 @@ pitest {
     outputFormats = ['XML', 'HTML']
     timestampedReports = false
 }
+
+configurations {
+   testCompile
+}
+
+javafx {
+	version = '12'
+	modules = [ 'javafx.controls' , 'javafx.fxml' ]
+	configuration = 'compileOnly'
+}
+
 /*
 task jacoco {
 	toolVersion = "0.7.5+"
