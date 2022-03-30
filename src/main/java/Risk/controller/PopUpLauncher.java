@@ -43,7 +43,7 @@ public class PopUpLauncher implements ActionListener {
                 if(result == JOptionPane.OK_OPTION) {
                     String lang = (String) comboBox.getSelectedItem();
                     Locale l;
-                    if (lang != null && lang.equals(gfController.getMessage("eng"))) {
+                    if (selectedEnglish(lang)) {
                         l = new Locale("en", "US");
                     } else {
                         l = new Locale("de", "DE");
@@ -54,5 +54,9 @@ public class PopUpLauncher implements ActionListener {
                 }
             }
         });
+    }
+
+    private boolean selectedEnglish(String languageSelected) {
+        return languageSelected != null && languageSelected.equals(gfController.getMessage("eng"));
     }
 }
