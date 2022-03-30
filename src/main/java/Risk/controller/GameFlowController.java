@@ -245,4 +245,17 @@ public class GameFlowController {
 	public void setCurrentTerritoryPlayer(int player) {
 		gui.currentTerritoryPlayer = player;
 	}
+
+	public void performCardTransaction() {
+		int card1Index = gui.card1.getSelectedIndex();
+		int card2Index = gui.card2.getSelectedIndex();
+		int card3Index = gui.card3.getSelectedIndex();
+		ArrayList<Card> availableCards = playercontroller.getCurrentPlayer().getDeck();
+		turnInCards(availableCards.get(card1Index),
+				availableCards.get(card2Index),
+				availableCards.get(card3Index));
+		gui.setCurrentPlayerArmies(Integer.toString(playercontroller.getCurrentPlayer().getPlayerArmies()));
+		gui.setCurrentPlayer(String.valueOf(playercontroller.getCurrentPlayer().getId()));
+		gui.component.repaint();
+	}
 }

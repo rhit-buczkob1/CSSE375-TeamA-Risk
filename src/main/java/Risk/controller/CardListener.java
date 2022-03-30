@@ -16,15 +16,7 @@ public class CardListener implements ActionListener {
         if (!(gfController.phase.equals("assignment"))) {
             return;
         }
-        int card1Index = gfController.gui.card1.getSelectedIndex();
-        int card2Index = gfController.gui.card2.getSelectedIndex();
-        int card3Index = gfController.gui.card3.getSelectedIndex();
-        ArrayList<Card> availableCards = gfController.playercontroller.getCurrentPlayer().getDeck();
-        gfController.turnInCards(availableCards.get(card1Index),
-                availableCards.get(card2Index),
-                availableCards.get(card3Index));
-        gfController.gui.setCurrentPlayerArmies(Integer.toString(gfController.playercontroller.getCurrentPlayer().getPlayerArmies()));
-        gfController.gui.setCurrentPlayer(String.valueOf(gfController.playercontroller.getCurrentPlayer().getId()));
-        gfController.gui.component.repaint();
+
+        gfController.performCardTransaction();
     }
 }

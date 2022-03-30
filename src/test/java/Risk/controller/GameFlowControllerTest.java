@@ -29,7 +29,6 @@ public class GameFlowControllerTest {
 		gfc.init_turn();
 
 		assertEquals(gfc.getPhase(), "setup");
-
 	}
 
 	@Test
@@ -65,7 +64,6 @@ public class GameFlowControllerTest {
 		EasyMock.verify(playercontroller);
 		EasyMock.verify(player);
 		EasyMock.verify(gfc);
-
 	}
 
 	@Test
@@ -98,7 +96,6 @@ public class GameFlowControllerTest {
 
 		EasyMock.verify(gfc);
 		EasyMock.verify(playercontroller);
-
 	}
 
 	@Test
@@ -130,7 +127,6 @@ public class GameFlowControllerTest {
 		EasyMock.expect(playercontroller.playerDoneWithCards()).andReturn(true);
 		gfc.updateCardsOnGui();
 
-
 		gfc.attack_phase();
 		gfc.updateCardsOnGui();
 		
@@ -155,7 +151,6 @@ public class GameFlowControllerTest {
 		EasyMock.verify(playercontroller);
 		EasyMock.verify(gbcontroller);
 		EasyMock.verify(player);
-
 	}
 
 	@Test
@@ -176,8 +171,6 @@ public class GameFlowControllerTest {
 		EasyMock.expect(playercontroller.getCurrentPlayer()).andReturn(player);
 		EasyMock.expect(player.getId()).andReturn(1);
 		EasyMock.expect(gbcontroller.getNewContinentPlayerArmies(1)).andReturn(1);
-		
-		
 
 		playercontroller.addArmiesToCurrentPlayer(1);
 		gbcontroller.updateGameBoard();
@@ -210,7 +203,6 @@ public class GameFlowControllerTest {
 		EasyMock.verify(playercontroller);
 		EasyMock.verify(gbcontroller);
 		EasyMock.verify(player);
-
 	}
 
 	@Test
@@ -230,7 +222,6 @@ public class GameFlowControllerTest {
 		assertEquals(gfc.getPhase(), "attack");
 
 		EasyMock.verify(playercontroller);
-
 	}
 
 	@Test
@@ -274,7 +265,6 @@ public class GameFlowControllerTest {
 		gfc.initiateCombat("test1", "test2", rand, 1, 1);
 
 		EasyMock.verify(pc, gbc, rand);
-
 	}
 	
 	@Test
@@ -316,12 +306,10 @@ public class GameFlowControllerTest {
 
 		assertEquals(1, test2.getPlayer());
 		EasyMock.verify(gbc, rand);
-
 	}
 
 	@Test
 	public void testInitiateCombat_notattackphase() {
-
 		GameFlowController gfc = new GameFlowController(new PlayerController(), new GameBoardController(),
 				new AttackerDefenderController(), new GraphicalUserInterface(msg), msg);
 
@@ -331,7 +319,6 @@ public class GameFlowControllerTest {
 		} catch (Exception e) {
 			assertEquals(e.getMessage(), "It's not Attack Phase");
 		}
-
 	}
 
 	@Test
@@ -351,7 +338,6 @@ public class GameFlowControllerTest {
 		EasyMock.verify(pc);
 		EasyMock.verify(adc);
 		EasyMock.verify(gbc);
-
 	}
 
 	@Test
@@ -372,7 +358,6 @@ public class GameFlowControllerTest {
 		assertEquals(gfc.getPhase(), "fortify");
 
 		EasyMock.verify(playercontroller);
-
 	}
 
 	@Test
@@ -456,7 +441,6 @@ public class GameFlowControllerTest {
 		assertFalse(p1.hasCaughtTerritory());
 
 		EasyMock.verify(adc);
-
 	}
 
 	@Test
@@ -484,7 +468,6 @@ public class GameFlowControllerTest {
 				new GraphicalUserInterface(msg), msg);
 		gfc.turnInCards(card1, card2, card3);
 		EasyMock.verify(playercontroller, gameBoard);
-
 	}
 
 	@Test
@@ -517,7 +500,6 @@ public class GameFlowControllerTest {
 				new GraphicalUserInterface(msg), msg);
 		gfc.turnInCards(card1, card2, card3);
 		EasyMock.verify(playercontroller, gameBoard, player);
-
 	}
 
 	@Test
@@ -542,7 +524,6 @@ public class GameFlowControllerTest {
 			assertEquals(e.getMessage(), "Invalid cards played");
 		}
 		EasyMock.verify(playercontroller, gameBoard);
-
 	}
 
 	@Test
@@ -560,7 +541,6 @@ public class GameFlowControllerTest {
 		} catch (Exception e) {
 			assertEquals(e.getMessage(), "Cannot play duplicate cards");
 		}
-
 	}
 
 	@Test
@@ -579,7 +559,6 @@ public class GameFlowControllerTest {
 		} catch (Exception e) {
 			assertEquals(e.getMessage(), "Cannot play duplicate cards");
 		}
-
 	}
 
 	@Test
@@ -598,7 +577,6 @@ public class GameFlowControllerTest {
 		} catch (Exception e) {
 			assertEquals(e.getMessage(), "Cannot play duplicate cards");
 		}
-
 	}
 
 	@Test
@@ -617,7 +595,6 @@ public class GameFlowControllerTest {
 		} catch (Exception e) {
 			assertEquals(e.getMessage(), "Cannot play duplicate cards");
 		}
-
 	}
 
 	@Test
@@ -632,8 +609,6 @@ public class GameFlowControllerTest {
 		} catch (MissingResourceException e) {
 			System.err.println(e.getMessage());
 		}
-		
-
 	}
 
 	@Test
@@ -644,7 +619,6 @@ public class GameFlowControllerTest {
 		Card card = new Card("Russia", "Infantry");
 
 		assertTrue(gfc.convertCardForGui(card).equals("<html>Russia<br>Infantry<html/>"));
-
 	}
 
 	@Test
@@ -690,12 +664,10 @@ public class GameFlowControllerTest {
 		gfc.initiateCombat("test1", "test2", rand, 1, 1);
 
 		EasyMock.verify(pc, gbc, rand);
-
 	}
 
 	@Test
 	public void attackPhaseFortifyPhaseTest() {
-
 		GameFlowController gfc = EasyMock.partialMockBuilder(GameFlowController.class).addMockedMethod("fortify_phase")
 				.withConstructor(new PlayerController(), new GameBoardController(), new AttackerDefenderController(),
 						new GraphicalUserInterface(msg), msg)
@@ -710,12 +682,10 @@ public class GameFlowControllerTest {
 		gfc.next_phase();
 
 		EasyMock.verify(gfc);
-
 	}
 
 	@Test
 	public void fortifyPhaseAssignmentPhaseTest() {
-
 		PlayerController playercontroller = EasyMock.strictMock(PlayerController.class);
 
 		GameFlowController gfc = EasyMock.partialMockBuilder(GameFlowController.class)
@@ -734,7 +704,6 @@ public class GameFlowControllerTest {
 
 		EasyMock.verify(gfc);
 		EasyMock.verify(playercontroller);
-
 	}
 
 	@Test
@@ -749,7 +718,6 @@ public class GameFlowControllerTest {
 		assertEquals(false, gfc.verifyAdjacent("", ""));
 
 		EasyMock.verify(gameBoard);
-
 	}
 
 	@Test
@@ -764,7 +732,6 @@ public class GameFlowControllerTest {
 		assertEquals(true, gfc.verifyAdjacent("North_America", "South_America"));
 
 		EasyMock.verify(gameBoard);
-
 	}
 
 	@Test
@@ -780,10 +747,8 @@ public class GameFlowControllerTest {
 		} catch (Exception e) {
 			assertEquals(e.getMessage(), "Invalid Phase");
 		}
-
 	}
-	
-	
+
 	@Test
 	public void testInvalidPhase() {
 		GameFlowController gfc = new GameFlowController(new PlayerController(), new GameBoardController(),
@@ -797,7 +762,5 @@ public class GameFlowControllerTest {
 		} catch (Exception e) {
 			assertEquals(e.getMessage(), "Invalid Phase");
 		}
-
 	}
-
 }
