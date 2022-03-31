@@ -1,6 +1,7 @@
 package Risk.controller;
 
 public abstract class Phase {
+    protected GameFlowController gameFlowController;
     protected String phaseName;
 
     public Phase(String phaseName) {
