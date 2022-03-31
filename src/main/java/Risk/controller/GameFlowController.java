@@ -105,8 +105,8 @@ public class GameFlowController {
 	}
 
 	public String getPhase() {
+		this.phase = phaseController.getPhase();
 		return this.phase;
-
 	}
 
 	public void turnInCards(Card card1, Card card2, Card card3) {
@@ -146,10 +146,6 @@ public class GameFlowController {
 			this.gui.card2.addItem(convertCardForGui(card));
 			this.gui.card3.addItem(convertCardForGui(card));
 		}
-	}
-
-	public void setPhase(String phase) {
-		this.phase = phase;
 	}
 
 	public String getMessage(String key) {

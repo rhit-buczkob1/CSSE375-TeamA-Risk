@@ -25,6 +25,10 @@ public class PhaseController {
         System.out.println("Doing phase " + phase);
     }
 
+    public void setPhase(String phase) {
+        this.phase = phase;
+    }
+
     public String getPhase() {
         return phase;
     }

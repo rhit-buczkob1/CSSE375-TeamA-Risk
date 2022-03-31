@@ -27,7 +27,7 @@ public class PlayerController {
 	public void initializePlayer() {
 		if (players.size() == 4) {
 			for (Player player : players) {
-				player.addPlayerArmies(2);
+				player.addPlayerArmies(30);
 			}
 		}
 		if (players.size() == 3) {
@@ -80,6 +80,10 @@ public class PlayerController {
 			currentIndex = 0;
 		}
 
+	}
+
+	public void setInitSetup(boolean initSetup) {
+		this.initSetup = initSetup;
 	}
 
 	public int calculateTurnArmies() {
