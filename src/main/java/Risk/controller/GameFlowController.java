@@ -287,4 +287,10 @@ public class GameFlowController {
 		gui.currentTerritoryPlayer = territory.getPlayer();
 		gui.component.repaint();
 	}
+
+	public void next() {
+		next_phase();
+		gui.setCurrentPlayerArmies(Integer.toString(playercontroller.getCurrentPlayer().getPlayerArmies()));
+		gui.setCurrentPlayer(String.valueOf(playercontroller.getCurrentPlayer().getId()));
+	}
 }

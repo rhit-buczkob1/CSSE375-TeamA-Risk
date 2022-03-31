@@ -12,8 +12,6 @@ public class NextButtonListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        gfController.next_phase();
-        gfController.gui.setCurrentPlayerArmies(Integer.toString(gfController.playercontroller.getCurrentPlayer().getPlayerArmies()));
-        gfController.gui.setCurrentPlayer(String.valueOf(gfController.playercontroller.getCurrentPlayer().getId()));
+        gfController.next();
     }
 }
