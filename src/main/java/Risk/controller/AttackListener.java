@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class AttackListener implements ActionListener {
-    private String attackingterritory = "";
+    private String attackingTerritory = "";
     private GameFlowController gfController;
     public AttackListener(GameFlowController gfController) {
         this.gfController = gfController;
@@ -14,18 +14,18 @@ public class AttackListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (gfController.phase.equals("attack") && attackingterritory.equals("")) {
+        if (gfController.phase.equals("attack") && attackingTerritory.equals("")) {
             if (!(gfController.gui.clickedTerritory.equals(""))) {
                 if (!gfController.verifyOwnership(gfController.gui.clickedTerritory)) {
                     return;
                 }
 
-                attackingterritory = gfController.gui.clickedTerritory;
+                attackingTerritory = gfController.gui.clickedTerritory;
             }
         } else if (gfController.phase.equals("attack")) {
             if (!(gfController.gui.clickedTerritory.equals(""))) {
-                String attack = this.attackingterritory;
-                this.attackingterritory = "";
+                String attack = this.attackingTerritory;
+                this.attackingTerritory = "";
 
                 gfController.initiateCombat(attack, gfController.gui.clickedTerritory, GameFlowController.rand, gfController.gui.attackerDiceSlider.getValue(),
                         gfController.gui.defenderDiceSlider.getValue());
