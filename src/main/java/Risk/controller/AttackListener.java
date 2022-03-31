@@ -15,7 +15,7 @@ public class AttackListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (selectingAttackingTerritory()) {
-            if (clickedOnValidLocation()) {
+            if (gfController.clickedOnValidLocation()) {
                 if (!gfController.verifyOwnership(gfController.gui.clickedTerritory)) {
                     return;
                 }
@@ -23,7 +23,7 @@ public class AttackListener implements ActionListener {
                 attackingTerritory = gfController.gui.clickedTerritory;
             }
         } else if (gfController.phase.equals("attack")) {
-            if (clickedOnValidLocation()) {
+            if (gfController.clickedOnValidLocation()) {
                 String attack = this.attackingTerritory;
                 this.attackingTerritory = "";
 
@@ -37,10 +37,6 @@ public class AttackListener implements ActionListener {
                 gfController.gui.territoryPlayerNumber.setText(String.valueOf(defendingTerritory.getPlayer()));
             }
         }
-    }
-
-    private boolean clickedOnValidLocation() {
-        return !(gfController.gui.clickedTerritory.equals(""));
     }
 
     private boolean selectingAttackingTerritory() {

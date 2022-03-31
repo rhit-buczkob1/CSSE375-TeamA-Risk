@@ -258,4 +258,33 @@ public class GameFlowController {
 		gui.setCurrentPlayer(String.valueOf(playercontroller.getCurrentPlayer().getId()));
 		gui.component.repaint();
 	}
+
+	public boolean clickedOnValidLocation() {
+			return !(gui.clickedTerritory.equals(""));
+	}
+
+	public void fortifyTerritory(String fromTerritory, String toTerritory) {
+		try {
+			playercontroller.moveArmy(gbcontroller.getTerritory(fromTerritory), gbcontroller.getTerritory(toTerritory), 1);
+			gui.territoryArmiesNumber
+					.setText(String.valueOf(gbcontroller.getTerritory(gui.clickedTerritory).getArmyCount()));
+		} catch (IllegalArgumentException e1) {
+			System.err.println(e1.getMessage());
+		}
+	}
+
+	public void addArmy() {
+		int player = playercontroller.getCurrentPlayer().getId();
+		addInfantrytoTerritoryfromString(gui.clickedTerritory);
+		if (player == gbcontroller.getTerritoryOwner(gui.clickedTerritory)) {
+			gui.setTerritoryColor(gui.clickedTerritory, player);
+		}
+		Territory territory = gbcontroller.getTerritory(gui.clickedTerritory);
+
+		gui.setCurrentPlayerArmies(Integer.toString(playercontroller.getCurrentPlayer().getPlayerArmies()));
+		gui.setCurrentPlayer(String.valueOf(playercontroller.getCurrentPlayer().getId()));
+		gui.currentTerritoryArmyCount = territory.getArmyCount();
+		gui.currentTerritoryPlayer = territory.getPlayer();
+		gui.component.repaint();
+	}
 }
