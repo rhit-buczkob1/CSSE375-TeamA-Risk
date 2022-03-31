@@ -48,7 +48,12 @@ public class GameFlowController {
 		playercontroller.addInfantryToTerritory(territory, 1);
 	}
 
+	public void updatePhase() {
+		this.phase = phaseController.getPhase();
+	}
+
 	public void initiateCombat(String string, String string2, Random rand2, int attackerdice, int defenderdice) {
+		this.phase = phaseController.getPhase();
 		if (!this.phase.equals("attack")) {
 			throw new IllegalArgumentException("It's not Attack Phase");
 		}

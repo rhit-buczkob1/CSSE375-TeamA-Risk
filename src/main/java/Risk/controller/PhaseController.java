@@ -9,9 +9,10 @@ public class PhaseController {
     private PlayerController playerController;
     private GameBoardController gameBoardController;
 
-    public PhaseController(PlayerController playerController) {
+    public PhaseController(PlayerController playerController, GameBoardController gameBoardController) {
         phase = "setup";
         this.playerController = playerController;
+        this.gameBoardController = gameBoardController;
         phases.put("assignment", new AssignmentPhase());
         phases.put("attack", new AttackPhase());
         phases.put("fortify", new FortifyPhase());

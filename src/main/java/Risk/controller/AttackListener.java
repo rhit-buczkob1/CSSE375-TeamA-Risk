@@ -14,6 +14,7 @@ public class AttackListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        gfController.updatePhase();
         if (selectingAttackingTerritory()) {
             if (gfController.clickedOnValidLocation()) {
                 if (!gfController.verifyOwnership(gfController.gui.clickedTerritory)) {

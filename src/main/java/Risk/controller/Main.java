@@ -10,8 +10,8 @@ public class Main {
 	
 	public static void main(String[] args) {
 		PlayerController pc = new PlayerController();
-		PhaseController phc = new PhaseController(pc);
 		GameBoardController gameBoard = new GameBoardController();
+		PhaseController phc = new PhaseController(pc, gameBoard);
 		Locale l = new Locale("en", "US");
 		ResourceBundle msg = ResourceBundle.getBundle("MessagesBundle", l);
 		GraphicalUserInterface gui = new GraphicalUserInterface(msg);
