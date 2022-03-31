@@ -40,7 +40,6 @@ public class PhaseController {
 
         @Override
         public void doPhase() {
-//            gameFlowController.updateCardsOnGui();
             updateCards = true;
             boolean donePlacing = playerController.playerDonePlacingNew();
             boolean doneCards = playerController.playerDoneWithCards();
@@ -78,7 +77,6 @@ public class PhaseController {
                 playerController.addCardToCurrentPlayer(gameBoardController.gameBoardDeck.drawCard());
                 playerController.getCurrentPlayer().caughtTerritory(false);
             }
-//            gameFlowController.updateCardsOnGui();
             updateCards = true;
         }
     }
@@ -103,7 +101,6 @@ public class PhaseController {
                     .getNewContinentPlayerArmies(playerController.getCurrentPlayer().getId());
             playerController.addArmiesToCurrentPlayer(toaddarmies);
             gameBoardController.updateGameBoard();
-//            gameFlowController.updateCardsOnGui();
             updateCards = true;
         }
     }
@@ -134,7 +131,6 @@ public class PhaseController {
             playerController.addArmiesToCurrentPlayer(toaddarmies);
             gameBoardController.updateGameBoard();
 
-//            gameFlowController.updateCardsOnGui();
             updateCards = true;
         }
     }
