@@ -8,7 +8,6 @@
 
 plugins {
 	id 'jacoco'
-	id 'java'
     id 'java-library'
     id 'info.solidsoft.pitest' version '1.5.1'
     id "application"
@@ -25,7 +24,6 @@ repositories {
 
 application {
     mainClassName = 'Risk.controller.Main'
-    mainModule.set("Risk.controller")
 }
 
 dependencies {
@@ -66,8 +64,8 @@ configurations {
 
 javafx {
 	version = '12'
-	modules = [ 'javafx.controls' , 'javafx.fxml' ]
-	configuration = 'compileOnly'
+	modules = [ 'javafx.graphics' ]
+	//configuration = 'compileOnly'
 }
 
 /*
