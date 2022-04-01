@@ -63,7 +63,6 @@ public class PlayerController {
 		if (initSetup) {
 			nextPlayer();
 		}
-
 	}
 
 	private void transferToOwnedTerritory(Territory territory, int armies, Player currPlayer){
@@ -90,10 +89,12 @@ public class PlayerController {
 		}
 
 	}
-	
+
+	public void setInitSetup(boolean initSetup) {
+		this.initSetup = initSetup;
+	}
 
 	public int calculateTurnArmies() {
-
 		int toaddarmies = players.get(currentIndex).getTerritories() / 3;
 		if (toaddarmies < 4) {
 			return 3;
@@ -129,8 +130,6 @@ public class PlayerController {
 	}
 
 	public boolean playerDoneWithCards() {
-		// Trainwreck(its only really reaching into the player class so its probably
-		// fine)
 		return (players.get(currentIndex).getDeck().size() < 5);
 	}
 
@@ -158,6 +157,7 @@ public class PlayerController {
 		
 		
 		if (cardsAreValid(card1, card2, card3)) {
+
 			ArrayList<Card> tocheck
 				= new ArrayList<Card>(this.getCurrentPlayer().getDeck());
 			for (Card card : tocheck) {
@@ -171,19 +171,23 @@ public class PlayerController {
 		}
 	}
 
+	public boolean checkAllCardsAreSameType(Card card1, Card card2, Card card3) {
+		return card1.troopType.equals(card2.troopType) && card2.troopType.equals(card3.troopType);
+	}
+
+	public boolean checkTwoSameAndOneWildcard(Card wild, Card card1, Card card2) {
+		return wild.troopType.equals("Wildcard") && card1.troopType.equals(card2.troopType);
+	}
+
+	public boolean checkAllCardsAreUniqueType(Card card1, Card card2, Card card3){
+			return !card1.troopType.equals(card2.troopType) && !card1.troopType.equals(card3.troopType) && !card2.troopType.equals(card3.troopType);
+		}
 	private boolean cardsAreValid(Card card1, Card card2, Card card3){
-		return ((card1.troopType.equals(card2.troopType)
-				&& card2.troopType.equals(card3.troopType))
-				|| (card2.troopType.equals("Wildcard")
-				&& card1.troopType.equals(card3.troopType))
-				|| (card1.troopType.equals("Wildcard")
-				&& card2.troopType.equals(card3.troopType))
-				|| (card3.troopType.equals("Wildcard")
-				&& card1.troopType.equals(card2.troopType))
-				||
-				(!card1.troopType.equals(card2.troopType)
-						&& !card1.troopType.equals(card3.troopType)
-						&& !card2.troopType.equals(card3.troopType)));
+		return (checkAllCardsAreSameType(card1, card2, card3)
+				|| checkTwoSameAndOneWildcard(card2, card1, card3)
+				|| checkTwoSameAndOneWildcard(card1, card2, card3)
+				|| checkTwoSameAndOneWildcard(card3, card1, card2)
+				|| checkAllCardsAreUniqueType(card1, card2, card3));
 	}
 
 	public ArrayList<Card> getCurrentPlayerCards() {
@@ -197,14 +201,9 @@ public class PlayerController {
 				playerLoss();
 			}
 		}
-		return;
-		
-		
-		
 	}
 
 	public Player getPlayer(int player) {
-		// TODO Auto-generated method stub
 		for (Player p : players) {
 			if (p.getId() == player) {
 				return p;
@@ -214,7 +213,6 @@ public class PlayerController {
 	}
 
 	public int getNumberOfPlayers() {
-		// TODO Auto-generated method stub
 		return players.size();
 	}
 
