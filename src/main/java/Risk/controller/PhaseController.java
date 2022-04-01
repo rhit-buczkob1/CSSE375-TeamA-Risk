@@ -100,7 +100,6 @@ public class PhaseController {
 
         public void nextPhase() {
             phase = "assignment";
-
             playerController.addNewArmiestoPlayer();
             int toaddarmies = gameBoardController
                     .getNewContinentPlayerArmies(playerController.getCurrentPlayer().getId());
