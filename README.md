@@ -48,7 +48,10 @@ Distributed under the Github Default License.
 
 **Contact**
 
-Joe Krisciunas - kriscija@rose-hulman.edu
+Brandon Jackson - jacksob1@rose-hulman.edu
+Brock Buczkowski - buczkob1@rose-hulman.edu
+Jordan Ansari - ansarij@rose-hulman.edu
+Jamari Morrison - morrisjj@rose-hulman.edu
 
 
 
