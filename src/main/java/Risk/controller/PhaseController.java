@@ -50,7 +50,6 @@ public class PhaseController {
             boolean doneCards = playerController.playerDoneWithCards();
 
             if (donePlacing && doneCards) {
-                System.out.println("Done");
                 nextPhase();
 
                 return;
