@@ -3,20 +3,20 @@ package Risk.model;
 import java.util.ArrayList;
 
 public class Territory {
-	String name;
+	TerritoryName name;
 	int player;
 	int armies;
 	ArrayList<Territory> neighboringterritories;
 
 	public Territory(String territoryName) {
-		this.name = territoryName;
+		this.name = new TerritoryName(territoryName);
 		this.player = 0;
 		this.armies = 0;
 		this.neighboringterritories = new ArrayList<Territory>();
 	}
 
 	public String getName() {
-		return this.name;
+		return this.name.getName();
 
 	}
 
@@ -77,7 +77,7 @@ public class Territory {
 	public String toString() {
 		return "\n\tTerritory{"
 				+ "name='"
-				+ name
+				+ this.name.getName()
 				+ '\''
 				+ ", player=" + player
 				+ ", armies=" + armies
