@@ -1,0 +1,294 @@
+@startuml
+package controller {
+    class AddTerritoryListener {
+        -fromTerritory: String
+        -toTerritory: String
+        +AddTerritoryListener(GameFlowController gfController)
+        +actionPerformed(ActionEvent e)
+        +setTerritoryToFortify()
+    }
+    class AttackerDefenderController {
+        attackerArmies: int
+        defenderArmies: int
+        +setAttacker(Player player)
+        +getAttacker(): Player
+        +setDefender(Player player)
+        +getDefender(): Player
+        +rollDice(int numDice, Random rand): Integer[]
+        +setAttackingTerritory(Territory t)
+        +getAttackingTerritory(): Territory
+        +setDefendingTerritory(Territory t)
+        +getDefendingTerritory(): Territory
+        +setArmies(int i)
+        +combat(int i, int j, Random rand)
+        +update()
+        +defenderLoses()
+        +attack(Integer[] attackerDice, Integer[] defenderDice)
+        +sortDice(Integer[] dice)
+    }
+    class AttackListener {
+        -attackingTerritory: String
+        +AttackListener(GameFlowController gfController)
+        +actionPerformed(ActionEvent e)
+        +selectingAttackingTerritory()
+    }
+    class CardListener {
+        +CardListener(GameFlowController gfController)
+        +actionPerformed(ActionEvent e)
+    }
+    class ClickListener {}
+    class GameBoardController {
+        tradeCounter: int
+        +initGame()
+        +loadGameBoard()
+        +loadTerritoryNeighboring()
+        +updatePlayer(Continent continent)
+        +getTerritoryOwner(String territoryName): int
+        +isAdjacent(String firstTerritory, String secondTerritory): boolean
+        +getTerritory(String territoryName): Territory
+        +populateGameBoardDeckTroops()
+        +getNewContinentPlayerArmies(int i): int
+        +getGameBoard(): GameBoard
+        +initializeNewBoardForTest()
+        +updateGameBoard()
+        +getTradeCounter(): int
+        +incrementTradeCounter()
+        +checkOwnedTerritory(String territory1, String territory2, String territory3, int player): Boolean
+    }
+    class GameFlowController {
+        -{static}rand: Random
+        phase: String
+        +GameFlowController(PhaseController phaseController, PlayerController playerController, GameBoardController gbcontroller, AttackerDefenderController adc, GraphicUserInterface gui, ResourceBundle msg)
+        +connectToGui()
+        +addInfantrytoTerritoryfromString(String string)
+        +updatePhase()
+        +initiateCombat(String string, String string2, Random rand2, int attackerdice, int defenderdice)
+        +verifyOwnership(String territoryName): boolean
+        +verifyAdjacent(String firstName, String secondName): boolean
+        +next_phase()
+        +getPhase(): String
+        +turnInCards(Card card1, Card card2, Card card3)
+        +convertCardForGui(Card toconvert): String
+        +updateCardsOnGui()
+        +getMessage(String key): String
+        +setMessages(ResourceBundle messagesBundle)
+        +setLanguage()
+        +checkForPointOnTerritory(): String
+        +getTerritory(String lastclickedstring): Territory
+        +setCurrentTerritoryArmyCount(int armyCount)
+        +setCurrentTerritoryPlayer(int player)
+        +performCardTransaction()
+        +clickedOnValidLocation(): boolean
+        +fortifyTerritory(String fromTerritory, String toTerritory)
+        +addArmy()
+        +next()
+    }
+    class Main {
+        +{static}main(String[] args)
+        +{static}runMain(PlayerController pc, GameBoardController gameBoard) throws Exception
+    }
+    class NextButtonListener {
+        +NextButtonListener(GameFlowController gfController)
+        +actionPerformed(ActionEvent e)
+    }
+    abstract class Phase {
+        #phaseName: String
+        +Phase(String phaseName)
+        +doPhase()
+        +{abstract}nextPhase()
+        +getPhaseName(): String
+    }
+    class PhaseController {
+        -phase: String
+        -updateCards: boolean
+        +PhaseController(PlayerController playerController, GameBoardController gameBoardController)
+        +next_phase()
+        +setPhase(String phase)
+        +getPhase(): String
+        +getUpdateCards(): boolean
+    }
+    class AssignmentPhase extends Phase {
+        +AssignmentPhase()
+        +doPhase()
+        +nextPhase()
+    }
+    class AttackPhase extends Phase {
+        +AttackPhase()
+        +doPhase()
+        +nextPhase()
+    }
+    class FortifyPhase extends Phase {
+        +FortifyPhase()
+        +doPhase()
+        +nextPhase()
+    }
+    class SetupPhase extends Phase {
+        +SetupPhase()
+        +doPhase()
+        +nextPhase()
+    }
+    class PlayerController {
+        currentIndex: int
+        initSetup: boolean
+        +addPlayer(Player player)
+        +getCurrentPlayer(): Player
+        +getcurrentIndex(): int
+        +initializePlayer()
+        +addInfantryToTerritory(Territory territory, int armies)
+        +transferToOwnedTerritory(Territory territory, int armies, Player currPlayer)
+        +transferToNewTerritory(Territory territory, int armies, Player currPlayer)
+        +setTerritoryOwnership(Territory territory)
+        +nextPlayer()
+        +setInitSetup(boolean initSetup)
+        +calculateTurnArmies(): int
+        +addNewArmiestoPlayer()
+        +moveArmy(Territory territoryFrom, Territory territoryTo, int pieces)
+        +getInit(): boolean
+        +playerDonePlacingNew(): boolean
+        +playerDoneWithCards(): boolean
+        +addArmiesToCurrentPlayer(int i)
+        +addCardToCurrentPlayer(Card card)
+        +spendCards(Card card1, Card card2, Card card3)
+        +checkAllCardsAreSameType(Card card1, Card card2, Card card3): boolean
+        +checkTwoSameAndOneWildcard(Card wild, Card card1, Card card2): boolean
+        +checkAllCardsAreUniqueType(Card card1, Card card2, Card card3): boolean
+        +cardsAreValid(Card card1, Card card2, Card card3): boolean
+        +getCurrentPlayerCards(): ArrayList<Card>
+        +playerLoss()
+        +getPlayer(int player): Player
+        +getNumberOfPlayers(): int
+    }
+    class PopUpLauncher {
+        +PopUpLauncher(GameFlowController gfController)
+        +actionPerformed(ActionEvent arg0)
+        +selectedEnglish(String languageSelected): boolean
+    }
+
+    AddTerritoryListener->GameFlowController
+    AttackerDefenderController-UP->"*"model.Player
+    AttackerDefenderController-UP->"*"model.Territory
+    AttackListener-->GameFlowController
+    CardListener-->GameFlowController
+    GameBoardController-UP->model.GameBoard
+    GameBoardController-UP->model.Deck
+    GameFlowController-DOWN->PhaseController
+    GameFlowController-RIGHT->PlayerController
+    GameFlowController-RIGHT->GameBoardController
+    GameFlowController-->view.GraphicUserInterface
+    GameFlowController-UP->AttackerDefenderController
+    NextButtonListener-->GameFlowController
+    Phase->GameFlowController
+    PhaseController-UP->"*"Phase
+    PhaseController-UP->PlayerController
+    PhaseController-UP->GameBoardController
+    PlayerController-UP->"*"model.Player
+    PopUpLauncher-UP->GameFlowController
+}
+
+package model {
+    class Card {
+        +troopType: String
+        +Card(String territory)
+        +Card(String territory, String troopType)
+        +getTerritory(): String
+        +getTroopType(): String
+        +isValidTroopType(String inputString): boolean
+    }
+    class Continent {
+        +Continent(ArrayList<Territory> territories, String name)
+        +getPlayer(): int
+        +getName(): String
+        +setPlayer(int player)
+        +isPlayerControlled(): int
+        +isTerritoryExist(Territory territory): boolean
+        +toString(): String
+        +setValue(int i)
+        +getValue(): int
+    }
+    class Deck {
+        +Deck()
+        +drawCard(): Card
+        +addCard(Card card)
+        +shuffle()
+        +copyDeck(): ArrayList<Card>
+        +checkForInvalidShuffle(ArrayList<Card> original, ArrayList<Card> shuffleDeck): boolean
+    }
+    class GameBoard {
+        +getGameBoard(): GameBoard
+        +getDeck(): Deck
+        +addContinent(Continent continent)
+        +toString(): String
+        +addArmiesToTerritory(Territory territory, int armies)
+        +getTerritoryArmies(Territory territory): int
+        +getContinentPlayer(Continent continent): int
+        +setPlayer(Territory territory, int player)
+        +getTerritoryPlayer(Territory territory): int
+        +doesContinentExist(Continent continent): boolean
+        +doesTerritoryExist(Territory territory): boolean
+        +getTerritoryFromString(String name): Territory
+        +isAdjacent(String firstTerritory, String secondTerritory): boolean
+        +setDeck(Deck deck)
+        +drawFromMainDeck(): Card
+        +getContinentFromString(String string): Continent
+    }
+    class Player {
+        armies: int
+        playerId: int
+        territories: int
+        countries: int
+        caughtTerritory: boolean
+        +Player()
+        +setDeck(ArrayList<Card> deck)
+        +Player(int id)
+        +addPlayerArmies(int armies)
+        +removePlayerArmies(int armies)
+        +getPlayerArmies(): int
+        +addTerritory()
+        +getTerritories(): int
+        +removeTerritory()
+        +getId(): int
+        +getDeck(): ArrayList<Card>
+        +caughtTerritory(boolean val)
+        +hasCaughtTerritory(): boolean
+        +addCardToPlayer(Card card1)
+    }
+    class Territory {
+        player: int
+        armies: int
+        +Territory(String territoryName)
+        +getName(): String
+        +getPlayer(): int
+        +setPlayer(int newplayer)
+        +addArmies(int i)
+        +getArmyCount()
+        +addNeighboring(Territory territory)
+        +removeArmies(int i)
+        +setArmyCount(int armies)
+        +toString(): String
+    }
+    class TerritoryName {
+        -name: String
+        -validTerritoryNames: Set<String>
+        +TerritoryName(String newName)
+        +getName(): String
+        +isValidTerritoryName(String terriory): boolean
+        +populateValidTerritoryNames()
+    }
+
+    Continent-->"*"Territory
+    Card->TerritoryName
+    Deck-->"*"Card
+    GameBoard->GameBoard
+    GameBoard-->"*"Continent
+    GameBoard->Deck
+    Player->"*"Card
+    Territory->TerritoryName
+    Territory-->"*"Territory
+}
+
+package view {
+    class GraphicUserInterface {
+
+    }
+}
+@enduml
