@@ -60,7 +60,9 @@ public class GameFlowControllerTest {
 		pc.addPlayer(player2);
 
 		phc.setPhase("attack");
-		gfc.initiateCombat("test1", "test2", rand, 1, 1);
+		gfc.initiateCombat("test1", "test2");
+		gfc.randomizeCombat( rand, 1, 1);
+		gfc.finishCombat();
 
 		EasyMock.verify(pc, gbc, rand);
 	}
@@ -101,7 +103,9 @@ public class GameFlowControllerTest {
 		pc.addPlayer(player2);
 
 		phc.setPhase("attack");
-		gfc.initiateCombat("test1", "test2", rand, 1, 1);
+		gfc.initiateCombat("test1", "test2");
+		gfc.randomizeCombat(rand, 1, 1);
+		gfc.finishCombat();
 
 		assertEquals(1, test2.getPlayer());
 		EasyMock.verify(gbc, rand);
@@ -116,7 +120,10 @@ public class GameFlowControllerTest {
 				new AttackerDefenderController(), new GraphicalUserInterface(msg), msg);
 
 		try {
-			gfc.initiateCombat("test", "test2", gfc.rand, 0, 0);
+			gfc.initiateCombat("test", "test2");
+			gfc.randomizeCombat( gfc.rand, 0, 0);
+			gfc.finishCombat();
+
 			fail("shouldn't reach this point");
 		} catch (Exception e) {
 			assertEquals(e.getMessage(), "It's not Attack Phase");
@@ -279,7 +286,7 @@ public class GameFlowControllerTest {
 		EasyMock.expect(playercontroller.getCurrentPlayer()).andReturn(player);
 		EasyMock.expect(player.getId()).andReturn(1);
 		EasyMock.expect(player.getDeck()).andReturn(deck);
-		EasyMock.expect(gameBoard.checkOwnedTerritory(card1.territory, card2.territory, card3.territory, 1))
+		EasyMock.expect(gameBoard.checkOwnedTerritory(card1.getTerritory(), card2.getTerritory(), card3.getTerritory(), 1))
 				.andReturn(true);
 		playercontroller.addArmiesToCurrentPlayer(2);
 		EasyMock.expect(playercontroller.getCurrentPlayer()).andReturn(player);
@@ -424,7 +431,7 @@ public class GameFlowControllerTest {
 
 		assertTrue(gfc.convertCardForGui(card).equals("<html>Russia<br>Infantry<html/>"));
 	}
-//
+	//
 //	@Test
 //	public void initiateCombatPaintTest_shouldwin() {
 //		PlayerController pc = EasyMock.strictMock(PlayerController.class);

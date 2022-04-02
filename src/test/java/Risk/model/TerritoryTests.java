@@ -91,7 +91,7 @@ public class TerritoryTests {
 		}
 
 		try {
-			territorytotest.setPlayer(5);
+			territorytotest.setPlayer(9);
 			fail("shouldn't reach this point");
 
 		} catch (Exception e) {

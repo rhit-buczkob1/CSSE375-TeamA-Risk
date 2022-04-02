@@ -7,8 +7,8 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class Main {
-	
-	public static void main(String[] args) {
+
+	public static void main(String[] args) throws Exception {
 		PlayerController pc = new PlayerController();
 		GameBoardController gameBoard = new GameBoardController();
 		PhaseController phc = new PhaseController(pc, gameBoard);
@@ -25,7 +25,7 @@ public class Main {
 
 	}
 
-	public static void runMain(PlayerController pc, GameBoardController gameBoard) {
+	public static void runMain(PlayerController pc, GameBoardController gameBoard) throws Exception {
 
 		for (int i = 0; i < 4; i++) {
 			Player p = new Player(i + 1);
