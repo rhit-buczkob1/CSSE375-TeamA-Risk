@@ -16,7 +16,7 @@ public class GameBoard {
 		}
 		return gameBoard;
 	}
-	
+
 	public Deck getDeck() {
 		return mainDeck;
 	}
@@ -87,7 +87,7 @@ public class GameBoard {
 	public Territory getTerritoryFromString(String name) {
 		for (Continent continent : this.continents) {
 			for (Territory territory : continent.territories) {
-				if (territory.name.equals(name)) {
+				if (territory.getName().equals(name)) {
 					return territory;
 				}
 			}

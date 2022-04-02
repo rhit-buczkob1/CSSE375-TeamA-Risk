@@ -26,7 +26,7 @@ public class Continent {
 	}
 
 	public void setPlayer(int player) {
-		if (player > 4 || player < 0) {
+		if (player > 6 || player < 0) {
 			this.player = player;
 			throw new IllegalArgumentException("Invalid Player");
 

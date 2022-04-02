@@ -45,7 +45,11 @@ public class PlayerControllerTest {
 		pc.addPlayer(player);
 		pc.addPlayer(player2);
 		pc.addPlayer(player3);
-		pc.initializePlayer();
+		try {
+			pc.initializePlayer();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 
 		assertEquals(35, player.getPlayerArmies());
 	}
@@ -61,9 +65,13 @@ public class PlayerControllerTest {
 		pc.addPlayer(player2);
 		pc.addPlayer(player3);
 		pc.addPlayer(player4);
-		pc.initializePlayer();
+		try {
+			pc.initializePlayer();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 
-		assertEquals(30, player.getPlayerArmies());
+		assertEquals(40, player.getPlayerArmies());
 	}
 
 	@Test
@@ -87,7 +95,11 @@ public class PlayerControllerTest {
 		t1.setPlayer(1);
 		pc.addPlayer(player);
 		pc.addPlayer(player2);
-		pc.initializePlayer();
+		try {
+			pc.initializePlayer();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 		pc.nextPlayer();
 		pc.addInfantryToTerritory(t1, 1);
 
