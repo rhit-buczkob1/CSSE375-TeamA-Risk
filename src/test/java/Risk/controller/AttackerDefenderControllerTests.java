@@ -45,8 +45,8 @@ public class AttackerDefenderControllerTests {
 
 		Integer[] actual = adc.rollDice(2, rand);
 		Integer[] expected = new Integer[3];
-		expected[0] = 3;
-		expected[1] = 4;
+		expected[0] = 4;
+		expected[1] = 3;
 
 		EasyMock.verify(rand);
 		assertEquals(expected[0], actual[0]);
@@ -66,9 +66,9 @@ public class AttackerDefenderControllerTests {
 
 		Integer[] actual = adc.rollDice(3, rand);
 		Integer[] expected = new Integer[3];
-		expected[0] = 3;
+		expected[0] = 6;
 		expected[1] = 4;
-		expected[2] = 6;
+		expected[2] = 3;
 
 		EasyMock.verify(rand);
 		assertEquals(expected[0], actual[0]);
@@ -280,7 +280,7 @@ public class AttackerDefenderControllerTests {
 		adc.setAttackingTerritory(test1);
 		adc.setDefendingTerritory(test2);
 		try {
-			adc.setArmies(19);
+			adc.setArmies(20);
 			fail();
 		} catch (IllegalArgumentException e) {
 			System.err.println(e.getMessage());

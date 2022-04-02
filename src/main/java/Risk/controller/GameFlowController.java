@@ -3,35 +3,34 @@ package Risk.controller;
 import Risk.model.Card;
 import Risk.model.Territory;
 import Risk.view.GraphicalUserInterface;
-import Risk.view.GraphicalUserInterface.GuiComponent;
+import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
+import javafx.scene.control.ComboBox;
+import javafx.scene.input.MouseEvent;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Random;
 import java.util.ResourceBundle;
 
 public class GameFlowController {
+	PhaseController phaseController;
 	PlayerController playercontroller;
 	String phase;
 	GameBoardController gbcontroller;
 	GraphicalUserInterface gui;
 	AttackerDefenderController adcontroller;
+	Territory attackingTerritory;
+	Territory defendingTerritory;
 	public static Random rand = new Random();
-	
-	private ResourceBundle messages;
 
-	public GameFlowController(PlayerController playercontroller,
-				  GameBoardController gbcontroller,
-				  AttackerDefenderController adc,
-				  GraphicalUserInterface gui,
-				  ResourceBundle msg) {
+	ResourceBundle messages;
+
+	public GameFlowController(PhaseController phaseController, PlayerController playercontroller,
+							  GameBoardController gbcontroller,
+							  AttackerDefenderController adc,
+							  GraphicalUserInterface gui,
+							  ResourceBundle msg) {
+		this.phaseController = phaseController;
 		this.playercontroller = playercontroller;
 		this.phase = "setup";
 		this.gbcontroller = gbcontroller;
@@ -42,12 +41,25 @@ public class GameFlowController {
 	}
 
 	public void connectToGui() {
-		this.gui.nextTurn.addActionListener(new NextButtonListener());
-		this.gui.addArmy.addActionListener(new AddTerritoryListener());
-		this.gui.attack.addActionListener(new AttackListener());
-		this.gui.language.addActionListener(new PopUpLauncher());
-		this.gui.setMouseListener(new ClickListener());
-		this.gui.spendCards.addActionListener(new CardListener());
+		this.gui.nextTurn.setOnMouseClicked(new NextButtonListener(this));
+		this.gui.addArmy.setOnAction(new AddTerritoryListener(this));
+		this.gui.attack.setOnMouseClicked(new AttackListener(this));
+		this.gui.language.setOnMouseClicked(new PopUpLauncher(this));
+		this.gui.setMouseListener(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				String clicked = gui.checkForPointOnTerritory(new Point2D(event.getX(), event.getY()));
+				gui.paintTerritoryBounds();
+				if (!clicked.equals("")) {
+					Territory territory = gbcontroller.getTerritory(clicked.replace('_', ' '));
+					gui.setTerritoryArmyCount(territory.getArmyCount());
+					gui.setCurrentTerritoryOwner(territory.getPlayer());
+				}
+			}
+			
+		});
+		this.gui.spendCards.setOnMouseClicked(new CardListener(this));
 	}
 
 	public void addInfantrytoTerritoryfromString(String string) {
@@ -56,29 +68,38 @@ public class GameFlowController {
 		playercontroller.addInfantryToTerritory(territory, 1);
 	}
 
-	public void initiateCombat(String string, String string2, Random rand2, int attackerdice, int defenderdice) {
+	public void updatePhase() {
+		this.phase = phaseController.getPhase();
+	}
+
+	public void initiateCombat(String string, String string2) {
+		this.phase = phaseController.getPhase();
 		if (!this.phase.equals("attack")) {
 			throw new IllegalArgumentException("It's not Attack Phase");
 		}
 
-		Territory attackingTerritory = gbcontroller.getTerritory(string);
-		Territory defendingTerritory = gbcontroller.getTerritory(string2);
+		this.attackingTerritory = gbcontroller.getTerritory(string);
+		this.defendingTerritory = gbcontroller.getTerritory(string2);
 		adcontroller.setAttacker(playercontroller.getCurrentPlayer());
 		adcontroller.setDefender(playercontroller.getPlayer(defendingTerritory.getPlayer()));
 		adcontroller.setAttackingTerritory(attackingTerritory);
 		adcontroller.setDefendingTerritory(defendingTerritory);
+	}
 
+	public void randomizeCombat(Random rand2, int attackerdice, int defenderdice){
 		adcontroller.setArmies(attackerdice);
 		adcontroller.combat(attackerdice, defenderdice, rand2);
 		playercontroller.playerLoss();
+	}
 
-		if (this.gbcontroller.getTerritoryOwner(string2) == this.playercontroller.getCurrentPlayer().getId()) {
-			this.gui.setTerritoryColor(string2, this.playercontroller.getCurrentPlayer().getId());
+	public void finishCombat(){
+		if (this.gbcontroller.getTerritoryOwner(defendingTerritory.getName()) == this.playercontroller.getCurrentPlayer().getId()) {
+			this.gui.setTerritoryColor(defendingTerritory.getName(), this.playercontroller.getCurrentPlayer().getId());
 			gui.currentTerritoryArmyCount = defendingTerritory.getArmyCount();
 			gui.currentTerritoryPlayer = defendingTerritory.getPlayer();
-			this.gui.component.repaint();
+			this.gui.paintTerritoryBounds();
 		}
-		
+
 		if (playercontroller.getNumberOfPlayers() == 1) {
 			gui.victoryScreen();
 		}
@@ -94,97 +115,22 @@ public class GameFlowController {
 	}
 
 	public void next_phase() {
-		String input = this.getPhase();
-
-		switch (input) {
-
-		case "setup":
-			if (!this.playercontroller.getInit()) {
-
-				this.assignment_phase();
-				
-				return;
-			}
-
-			throw new IllegalArgumentException("Init Phase isn't over");
-
-		case "assignment":
-			this.updateCardsOnGui();
-			boolean donePlacing = this.playercontroller.playerDonePlacingNew();
-			boolean doneCards = this.playercontroller.playerDoneWithCards();
-
-			if (donePlacing && doneCards) {
-				this.attack_phase();
-
-				return;
-			}
-			if (!donePlacing) {
-				throw new IllegalArgumentException("Player has unplaced armies");
-			} else {
-				throw new IllegalArgumentException("Player has too many cards in hand");
-			}
-
-		case "attack":
-			this.fortify_phase();
-			return;
-
-		case "fortify":
-			this.playercontroller.nextPlayer();
-			this.assignment_phase();
-			return;
-
-		default:
-			
-			throw new IllegalArgumentException("Invalid Phase");
-
+		if (phaseController.getUpdateCards()) {
+			updateCardsOnGui();
 		}
-
+		phaseController.next_phase();
+		if (phaseController.getUpdateCards()) {
+			updateCardsOnGui();
+		}
+		this.gui.currentPhase.setText(this.messages.getString(phaseController.getPhase()));
+		if (!gui.testMode) {
+			gui.paintTerritoryBounds();
+		}
 	}
 
 	public String getPhase() {
+		this.phase = phaseController.getPhase();
 		return this.phase;
-
-	}
-
-	public void init_turn() {
-		this.phase = "setup";
-
-	}
-
-	public void assignment_phase() {
-		this.phase = "assignment";
-		this.updateCardsOnGui();
-
-		this.playercontroller.addNewArmiestoPlayer();
-		int toaddarmies = this.gbcontroller
-				.getNewContinentPlayerArmies(this.playercontroller.getCurrentPlayer().getId());
-		this.playercontroller.addArmiesToCurrentPlayer(toaddarmies);
-		this.gbcontroller.updateGameBoard();
-		this.gui.currentPhase = messages.getString(this.phase);
-		if (!gui.testMode) {
-			this.gui.component.repaint();
-		}
-	}
-
-	public void attack_phase() {
-		this.phase = "attack";
-		this.gui.currentPhase = messages.getString(this.phase);
-		if (!gui.testMode) {
-			this.gui.component.repaint();
-		}
-	}
-
-	public void fortify_phase() {
-		this.phase = "fortify";
-		if (this.playercontroller.getCurrentPlayer().hasCaughtTerritory()) {
-			this.playercontroller.addCardToCurrentPlayer(this.gbcontroller.gameBoardDeck.drawCard());
-			this.playercontroller.getCurrentPlayer().caughtTerritory(false);
-		}
-		this.updateCardsOnGui();
-		this.gui.currentPhase = messages.getString(this.phase);
-		if (!gui.testMode) {
-			this.gui.component.repaint();
-		}
 	}
 
 	public void turnInCards(Card card1, Card card2, Card card3) {
@@ -205,277 +151,7 @@ public class GameFlowController {
 
 		this.gbcontroller.incrementTradeCounter();
 		this.updateCardsOnGui();
-
 	}
-
-	// FOR YIJI: These listeners couldn't be TDD'd fully because that would involve
-	// GUI mocking, however
-	// they delegate all real logic to TDD'd methods in GameFlowController. They
-	// mainly just call logic in the gameflowcontroller class and then
-	// set gui fields for display. They don't really have any original logic in
-	// them, and as thus we believed they were acceptable
-	// They follow the MVC because the gui doesn't know about the model/controller
-	// it just gets set by the logic and listeners in this controller.
-
-	public class NextButtonListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			next_phase();
-			gui.setCurrentPlayerArmies(Integer.toString(playercontroller.getCurrentPlayer().getPlayerArmies()));
-			gui.setCurrentPlayer(String.valueOf(playercontroller.getCurrentPlayer().getId()));
-		}
-	}
-
-	public class TurnInCardListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-
-		}
-
-	}
-
-	public class AttackListener implements ActionListener {
-
-		String attackingterritory = "";
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JButton toset = (JButton) e.getSource();
-			if (phase.equals("attack") && attackingterritory.equals("")) {
-				if (!(gui.clickedTerritory.equals(""))) {
-					if (!verifyOwnership(gui.clickedTerritory)) {
-						return;
-					}
-
-					attackingterritory = gui.clickedTerritory;
-				}
-			} else if (phase.equals("attack")) {
-				if (!(gui.clickedTerritory.equals(""))) {
-					String attack = this.attackingterritory;
-					this.attackingterritory = "";
-
-					initiateCombat(attack, gui.clickedTerritory, rand, gui.attackerDiceSlider.getValue(),
-							gui.defenderDiceSlider.getValue());
-					Territory defendingTerritory = gbcontroller.getTerritory(gui.clickedTerritory);
-
-					gui.setCurrentPlayerArmies(Integer.toString(playercontroller.getCurrentPlayer().getPlayerArmies()));
-					gui.setCurrentPlayer(String.valueOf(playercontroller.getCurrentPlayer().getId()));
-					gui.territoryArmiesNumber.setText(String.valueOf(defendingTerritory.getArmyCount()));
-					gui.territoryPlayerNumber.setText(String.valueOf(defendingTerritory.getPlayer()));
-
-				}
-			}
-
-		}
-
-	}
-
-	public class AddTerritoryListener implements ActionListener {
-		String fromTerritory = "";
-		String toTerritory = "";
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JButton toset = (JButton) e.getSource();
-			if (phase.equals("fortify") && fromTerritory.equals("")) {
-				if (!(gui.clickedTerritory.equals(""))) {
-					fromTerritory = gui.clickedTerritory;
-				}
-			} else if (phase.equals("fortify") && toTerritory.equals("")) {
-				if (!(gui.clickedTerritory.equals(""))) {
-					toTerritory = gui.clickedTerritory;
-
-					if (!verifyOwnership(fromTerritory) || !verifyOwnership(toTerritory)
-							|| !verifyAdjacent(fromTerritory, toTerritory)) {
-						fromTerritory = "";
-						toTerritory = "";
-						return;
-					}
-
-				}
-			} else if (phase.equals("fortify")) {
-				try {
-					playercontroller.moveArmy(gbcontroller.getTerritory(fromTerritory),
-							gbcontroller.getTerritory(toTerritory), 1);
-					gui.territoryArmiesNumber
-							.setText(String.valueOf(gbcontroller.getTerritory(gui.clickedTerritory).getArmyCount()));
-				} catch (IllegalArgumentException e1) {
-					System.err.println(e1.getMessage());
-				}
-
-			} else if (toset.getText().equals(messages.getString("addArmy"))) {
-				if (!(gui.clickedTerritory.equals(""))) {
-					int player = playercontroller.getCurrentPlayer().getId();
-					addInfantrytoTerritoryfromString(gui.clickedTerritory);
-					if (player == gbcontroller.getTerritoryOwner(gui.clickedTerritory)) {
-						gui.setTerritoryColor(gui.clickedTerritory, player);
-					}
-					Territory territory = gbcontroller.getTerritory(gui.clickedTerritory);
-
-					gui.setCurrentPlayerArmies(Integer.toString(playercontroller.getCurrentPlayer().getPlayerArmies()));
-					gui.setCurrentPlayer(String.valueOf(playercontroller.getCurrentPlayer().getId()));
-					gui.currentTerritoryArmyCount = territory.getArmyCount();
-					gui.currentTerritoryPlayer = territory.getPlayer();
-					gui.component.repaint();
-				} else {
-					throw new IllegalArgumentException("Mouse not clicked");
-				}
-
-			}
-
-		}
-	}
-	
-	public class CardListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (!(phase.equals("assignment"))) {
-				return;
-			}
-			int card1Index = gui.card1.getSelectedIndex();
-			int card2Index = gui.card2.getSelectedIndex();
-			int card3Index = gui.card3.getSelectedIndex();
-			ArrayList<Card> availableCards = playercontroller.getCurrentPlayer().getDeck();
-			turnInCards(availableCards.get(card1Index),
-				availableCards.get(card2Index),
-				availableCards.get(card3Index));
-			gui.setCurrentPlayerArmies(Integer.toString(playercontroller.getCurrentPlayer().getPlayerArmies()));
-			gui.setCurrentPlayer(String.valueOf(playercontroller.getCurrentPlayer().getId()));
-			gui.component.repaint();
-		
-		}
-		
-	}
-
-	public class ClickListener implements MouseListener {
-
-		private Point lastClick = null;
-		private GuiComponent guiComponent;
-		private String lastclickedstring;
-
-		/*
-		 * Returns the point that was most recently clicked, and then sets lastClick to
-		 * null.
-		 */
-		public Point getLastClick() {
-			if (lastClick == null) {
-				return null;
-			}
-			Point toReturn = new Point(lastClick.x, lastClick.y);
-			lastClick = null;
-
-			return toReturn;
-		}
-
-		@Override
-		public void mousePressed(MouseEvent event) {
-			int x = event.getX();
-			int y = event.getY();
-			lastClick = new Point(x, y);
-			this.lastclickedstring = gui.checkForPointOnTerritory();
-			this.lastclickedstring = this.lastclickedstring.replace("_", " ");
-			Territory toupdate = gbcontroller.getTerritory(this.lastclickedstring);
-			gui.currentTerritoryArmyCount = toupdate.getArmyCount();
-			gui.currentTerritoryPlayer = toupdate.getPlayer();
-			if (this.guiComponent != null) {
-				this.guiComponent.repaint();
-			}
-		}
-
-		/*
-		 * Unused, but needed to be added to the file due to extends
-		 */
-		@Override
-		public void mouseClicked(MouseEvent event) {
-			// TODO Auto-generated method stub
-
-		}
-
-		/*
-		 * Unused, but needed to be added to the file due to extends
-		 */
-		@Override
-		public void mouseEntered(MouseEvent event) {
-			// TODO Auto-generated method stub
-
-		}
-
-		/*
-		 * Unused, but needed to be added to the file due to extends
-		 */
-		@Override
-		public void mouseExited(MouseEvent event) {
-			// TODO Auto-generated method stub
-
-		}
-
-		/*
-		 * Unused, but needed to be added to the file due to extends
-		 */
-		@Override
-		public void mouseReleased(MouseEvent event) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void addComponent(GuiComponent component) {
-			this.guiComponent = component;
-		}
-
-	}
-	
-	public class PopUpLauncher implements ActionListener {
-        
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			EventQueue.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-					} catch (Exception ex) {
-						System.err.println(ex.getMessage());
-					}
-
-					JPanel panel = new JPanel();
-					panel.add(new JLabel(messages.getString("changeLangPrompt")));
-					DefaultComboBoxModel model = new DefaultComboBoxModel();
-					model.addElement(messages.getString("eng"));
-					model.addElement(messages.getString("ger"));
-					JComboBox comboBox = new JComboBox(model);
-					panel.add(comboBox);
-
-					int result = JOptionPane.showConfirmDialog(
-						null,
-						panel,
-						"Language",
-						JOptionPane.OK_CANCEL_OPTION,
-						JOptionPane.QUESTION_MESSAGE);
-
-					switch (result) {
-					case JOptionPane.OK_OPTION:
-						String lang = (String) comboBox.getSelectedItem();
-						Locale l;
-						if (lang == messages.getString("eng")) {
-							l = new Locale("en", "US");
-						} else {
-							l = new Locale("de", "DE");
-						}
-						messages = ResourceBundle.getBundle("MessagesBundle", l);
-						gui.setLanguage(messages, getPhase());
-						updateCardsOnGui();
-						break;
-						
-					default:
-						break;
-					}
-				}
-			});
-		}
-    	}
 
 	public String convertCardForGui(Card toconvert) {
 		String territoryToDisplay = messages.getString(toconvert.getTerritory().replace(" ", "_"));
@@ -484,23 +160,75 @@ public class GameFlowController {
 		return toreturn;
 	}
 
-	// GUI method so not tdd'd
 	public void updateCardsOnGui() {
-		this.gui.card1.removeAllItems();
-		this.gui.card2.removeAllItems();
-		this.gui.card3.removeAllItems();
+		this.gui.card1 = new ComboBox<String>();
+		this.gui.card2 = new ComboBox<String>();
+		this.gui.card3 = new ComboBox<String>();
 		ArrayList<Card> deckToUpdate = this.playercontroller.getCurrentPlayer().getDeck();
 		for (Card card : deckToUpdate) {
-			this.gui.card1.addItem(convertCardForGui(card));
-			this.gui.card2.addItem(convertCardForGui(card));
-			this.gui.card3.addItem(convertCardForGui(card));
+			this.gui.card1.getItems().add(convertCardForGui(card));
+			this.gui.card2.getItems().add(convertCardForGui(card));
+			this.gui.card3.getItems().add(convertCardForGui(card));
 
 		}
 	}
 
-	public void setPhase(String phase) {
-		this.phase = phase;
-		
+	public String getMessage(String key) {
+		return messages.getString(key);
 	}
 
+	public void setMessages(ResourceBundle messagesBundle) {
+		messages = messagesBundle;
+	}
+
+	public void setLanguage() {
+		gui.setLanguage(messages, getPhase());
+	}
+
+	public Territory getTerritory(String lastclickedstring) {
+		return gbcontroller.getTerritory(lastclickedstring);
+	}
+
+	public void setCurrentTerritoryArmyCount(int armyCount) {
+		gui.currentTerritoryArmyCount = armyCount;
+	}
+
+	public void setCurrentTerritoryPlayer(int player) {
+		gui.currentTerritoryPlayer = player;
+	}
+
+	public boolean clickedOnValidLocation() {
+		return !(gui.clickedTerritory.equals(""));
+	}
+
+	public void fortifyTerritory(String fromTerritory, String toTerritory) {
+		try {
+			playercontroller.moveArmy(gbcontroller.getTerritory(fromTerritory), gbcontroller.getTerritory(toTerritory), 1);
+			gui.territoryArmiesNumber
+					.setText(String.valueOf(gbcontroller.getTerritory(gui.clickedTerritory.getText()).getArmyCount()));
+		} catch (IllegalArgumentException e1) {
+			System.err.println(e1.getMessage());
+		}
+	}
+
+	public void addArmy() {
+		int player = playercontroller.getCurrentPlayer().getId();
+		addInfantrytoTerritoryfromString(gui.clickedTerritory.getText());
+		if (player == gbcontroller.getTerritoryOwner(gui.clickedTerritory.getText())) {
+			gui.setTerritoryColor(gui.clickedTerritory.getText(), player);
+		}
+		Territory territory = gbcontroller.getTerritory(gui.clickedTerritory.getText());
+
+		gui.setCurrentPlayerArmies(Integer.toString(playercontroller.getCurrentPlayer().getPlayerArmies()));
+		gui.setCurrentPlayer(String.valueOf(playercontroller.getCurrentPlayer().getId()));
+		gui.currentTerritoryArmyCount = territory.getArmyCount();
+		gui.currentTerritoryPlayer = territory.getPlayer();
+		gui.paintTerritoryBounds();
+	}
+
+	public void next() {
+		next_phase();
+		gui.setCurrentPlayerArmies(Integer.toString(playercontroller.getCurrentPlayer().getPlayerArmies()));
+		gui.setCurrentPlayer(String.valueOf(playercontroller.getCurrentPlayer().getId()));
+	}
 }
