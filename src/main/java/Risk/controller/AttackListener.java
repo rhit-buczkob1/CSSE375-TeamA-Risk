@@ -20,9 +20,9 @@ public class AttackListener implements EventHandler<MouseEvent> {
 	@Override
 	public void handle(MouseEvent event) {
 		
-		gfc.gui.territoryArmiesNumber.setText(attackingterritory);
+		gfc.gui.territoryArmiesNumber.setText(gfc.phase);
 		
-		if (gfc.phase.equals("attack") && attackingterritory.equals("")) {
+		if (gfc.phaseController.getPhase().equals("attack") && attackingterritory.equals("")) {
 			if (!(gfc.gui.clickedTerritory.getText().equals(""))) {
 				if (!gfc.verifyOwnership(gfc.gui.clickedTerritory.getText())) {
 					return;
@@ -30,7 +30,7 @@ public class AttackListener implements EventHandler<MouseEvent> {
 
 				attackingterritory = gfc.gui.clickedTerritory.getText();
 			}
-		} else if (gfc.phase.equals("attack")) {
+		} else if (gfc.phaseController.getPhase().equals("attack")) {
 			if (!(gfc.gui.clickedTerritory.getText().equals(""))) {
 				String attack = this.attackingterritory;
 				this.attackingterritory = "";
