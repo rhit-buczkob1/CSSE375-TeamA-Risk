@@ -1,62 +1,71 @@
 package Risk.controller;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class PopUpLauncher implements ActionListener {
-    private GameFlowController gfController;
+public class PopUpLauncher implements EventHandler<MouseEvent> {
+    
+	GameFlowController gfc;
+	
+	public PopUpLauncher(GameFlowController gfc) {
+		this.gfc = gfc;
+	}
+	
+	@Override
+	public void handle(MouseEvent event) {
+			Stage panel = new Stage();
+			Text prompt = new Text(gfc.messages.getString("changeLangPrompt"));
+			ComboBox<String> box = new ComboBox<String>();
+			box.getItems().add(gfc.messages.getString("eng"));
+			box.getItems().add(gfc.messages.getString("ger"));
+			
+			Button confirm = new Button(gfc.messages.getString("confirm"));
+			Button cancel = new Button(gfc.messages.getString("cancel"));
+			
+			confirm.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
-    public PopUpLauncher(GameFlowController gfController) {
-        this.gfController = gfController;
-    }
+				@Override
+				public void handle(MouseEvent event) {
+					String lang = box.getValue();
+					Locale l;
+					if (lang == gfc.messages.getString("eng")) {
+						l = new Locale("en", "US");
+					} else {
+						l = new Locale("de", "DE");
+					}
+					gfc.messages = ResourceBundle.getBundle("MessagesBundle", l);
+					gfc.gui.setLanguage(gfc.messages, gfc.getPhase());
+					gfc.updateCardsOnGui();
+					panel.close();
+				}
+				
+			});
+			
+			cancel.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
-    @Override
-    public void actionPerformed(ActionEvent arg0) {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                } catch (Exception ex) {
-                    System.err.println(ex.getMessage());
-                }
-
-                JPanel panel = new JPanel();
-                panel.add(new JLabel(gfController.getMessage("changeLangPrompt")));
-                DefaultComboBoxModel model = new DefaultComboBoxModel();
-                model.addElement(gfController.getMessage("eng"));
-                model.addElement(gfController.getMessage("ger"));
-                JComboBox comboBox = new JComboBox(model);
-                panel.add(comboBox);
-
-                int result = JOptionPane.showConfirmDialog(
-                        null,
-                        panel,
-                        "Language",
-                        JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.QUESTION_MESSAGE);
-
-                if(result == JOptionPane.OK_OPTION) {
-                    String lang = (String) comboBox.getSelectedItem();
-                    Locale l;
-                    if (selectedEnglish(lang)) {
-                        l = new Locale("en", "US");
-                    } else {
-                        l = new Locale("de", "DE");
-                    }
-                    gfController.setMessages(ResourceBundle.getBundle("MessagesBundle", l));
-                    gfController.setLanguage();
-                    gfController.updateCardsOnGui();
-                }
-            }
-        });
-    }
-
-    private boolean selectedEnglish(String languageSelected) {
-        return languageSelected != null && languageSelected.equals(gfController.getMessage("eng"));
-    }
+				@Override
+				public void handle(MouseEvent event) {
+					panel.close();
+				}
+				
+			});
+			
+			GridPane grid = new GridPane();
+			grid.add(prompt, 0, 0);
+			grid.add(box, 1, 0);
+			grid.add(confirm, 0, 1);
+			grid.add(cancel, 1, 1);
+			
+			panel.setScene(new Scene(grid));
+			panel.show();
+	}
 }

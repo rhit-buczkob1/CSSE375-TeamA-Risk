@@ -1,17 +1,21 @@
 package Risk.controller;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 
-public class NextButtonListener implements ActionListener {
+public class NextButtonListener implements EventHandler<MouseEvent> {
 
-    private GameFlowController gfController;
-    public NextButtonListener(GameFlowController gfController) {
-        this.gfController = gfController;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        gfController.next();
-    }
+	GameFlowController gfc;
+	
+	public NextButtonListener(GameFlowController gfc) {
+		this.gfc = gfc;
+	}
+	
+	@Override
+	public void handle(MouseEvent event) {
+		gfc.next_phase();
+		gfc.gui.setCurrentPlayerArmies(Integer.toString(gfc.playercontroller.getCurrentPlayer().getPlayerArmies()));
+		gfc.gui.setCurrentPlayer(String.valueOf(gfc.playercontroller.getCurrentPlayer().getId()));
+		
+	}
 }

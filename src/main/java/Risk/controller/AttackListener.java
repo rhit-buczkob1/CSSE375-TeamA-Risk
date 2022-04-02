@@ -1,48 +1,54 @@
 package Risk.controller;
 
 import Risk.model.Territory;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AttackListener implements ActionListener {
-    private String attackingTerritory = "";
-    private GameFlowController gfController;
-    public AttackListener(GameFlowController gfController) {
-        this.gfController = gfController;
-    }
+public class AttackListener implements EventHandler<MouseEvent> {
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        gfController.updatePhase();
-        if (selectingAttackingTerritory()) {
-            if (gfController.clickedOnValidLocation()) {
-                if (!gfController.verifyOwnership(gfController.gui.clickedTerritory)) {
-                    return;
-                }
+	String attackingterritory = "";
+	GameFlowController gfc;
+	
+	public AttackListener(GameFlowController gfc) {
+		this.gfc = gfc;
+	}
+	
+	
+	@Override
+	public void handle(MouseEvent event) {
+		
+		gfc.gui.territoryArmiesNumber.setText(attackingterritory);
+		
+		if (gfc.phase.equals("attack") && attackingterritory.equals("")) {
+			if (!(gfc.gui.clickedTerritory.getText().equals(""))) {
+				if (!gfc.verifyOwnership(gfc.gui.clickedTerritory.getText())) {
+					return;
+				}
 
-                attackingTerritory = gfController.gui.clickedTerritory;
-            }
-        } else if (gfController.phase.equals("attack")) {
-            if (gfController.clickedOnValidLocation()) {
-                String attack = this.attackingTerritory;
-                this.attackingTerritory = "";
+				attackingterritory = gfc.gui.clickedTerritory.getText();
+			}
+		} else if (gfc.phase.equals("attack")) {
+			if (!(gfc.gui.clickedTerritory.getText().equals(""))) {
+				String attack = this.attackingterritory;
+				this.attackingterritory = "";
+				Territory defendingTerritory = gfc.gbcontroller.getTerritory(gfc.gui.clickedTerritory.getText());
+				gfc.initiateCombat(attack, defendingTerritory.getName());
+				
+				gfc.randomizeCombat(gfc.rand, (int)gfc.gui.attackerDiceSlider.getValue(), (int)gfc.gui.defenderDiceSlider.getValue());
+				
+				gfc.finishCombat();
+				
+				gfc.gui.setCurrentPlayerArmies(Integer.toString(gfc.playercontroller.getCurrentPlayer().getPlayerArmies()));
+				gfc.gui.setCurrentPlayer(String.valueOf(gfc.playercontroller.getCurrentPlayer().getId()));
+				gfc.gui.territoryArmiesNumber.setText(String.valueOf(defendingTerritory.getArmyCount()));
+				gfc.gui.territoryPlayerNumber.setText(String.valueOf(defendingTerritory.getPlayer()));
+				gfc.gui.paintTerritoryBounds();
 
-                gfController.initiateCombat(attack, gfController.gui.clickedTerritory);
-                gfController.randomizeCombat(GameFlowController.rand, gfController.gui.attackerDiceSlider.getValue(),
-                        gfController.gui.defenderDiceSlider.getValue());
-                gfController.finishCombat();
+			}
+		}
+	}
 
-                Territory defendingTerritory = gfController.gbcontroller.getTerritory(gfController.gui.clickedTerritory);
-                gfController.gui.setCurrentPlayerArmies(Integer.toString(gfController.playercontroller.getCurrentPlayer().getPlayerArmies()));
-                gfController.gui.setCurrentPlayer(String.valueOf(gfController.playercontroller.getCurrentPlayer().getId()));
-                gfController.gui.territoryArmiesNumber.setText(String.valueOf(defendingTerritory.getArmyCount()));
-                gfController.gui.territoryPlayerNumber.setText(String.valueOf(defendingTerritory.getPlayer()));
-            }
-        }
-    }
-
-    private boolean selectingAttackingTerritory() {
-        return gfController.phase.equals("attack") && attackingTerritory.equals("");
-    }
 }
