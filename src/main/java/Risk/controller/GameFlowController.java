@@ -14,6 +14,8 @@ public class GameFlowController {
 	GameBoardController gbcontroller;
 	GraphicalUserInterface gui;
 	AttackerDefenderController adcontroller;
+	Territory attackingTerritory;
+	Territory defendingTerritory;
 	public static Random rand = new Random();
 	
 	ResourceBundle messages;
@@ -52,30 +54,38 @@ public class GameFlowController {
 		this.phase = phaseController.getPhase();
 	}
 
-	public void initiateCombat(String string, String string2, Random rand2, int attackerdice, int defenderdice) {
+	public void initiateCombat(String string, String string2) {
 		this.phase = phaseController.getPhase();
 		if (!this.phase.equals("attack")) {
 			throw new IllegalArgumentException("It's not Attack Phase");
 		}
 
-		Territory attackingTerritory = gbcontroller.getTerritory(string);
-		Territory defendingTerritory = gbcontroller.getTerritory(string2);
+		this.attackingTerritory = gbcontroller.getTerritory(string);
+		this.defendingTerritory = gbcontroller.getTerritory(string2);
 		adcontroller.setAttacker(playercontroller.getCurrentPlayer());
 		adcontroller.setDefender(playercontroller.getPlayer(defendingTerritory.getPlayer()));
 		adcontroller.setAttackingTerritory(attackingTerritory);
 		adcontroller.setDefendingTerritory(defendingTerritory);
 
+
+
+
+	}
+
+	public void randomizeCombat(Random rand2, int attackerdice, int defenderdice){
 		adcontroller.setArmies(attackerdice);
 		adcontroller.combat(attackerdice, defenderdice, rand2);
 		playercontroller.playerLoss();
+	}
 
-		if (this.gbcontroller.getTerritoryOwner(string2) == this.playercontroller.getCurrentPlayer().getId()) {
-			this.gui.setTerritoryColor(string2, this.playercontroller.getCurrentPlayer().getId());
+	public void finishCombat(){
+		if (this.gbcontroller.getTerritoryOwner(defendingTerritory.getName()) == this.playercontroller.getCurrentPlayer().getId()) {
+			this.gui.setTerritoryColor(defendingTerritory.getName(), this.playercontroller.getCurrentPlayer().getId());
 			gui.currentTerritoryArmyCount = defendingTerritory.getArmyCount();
 			gui.currentTerritoryPlayer = defendingTerritory.getPlayer();
 			this.gui.component.repaint();
 		}
-		
+
 		if (playercontroller.getNumberOfPlayers() == 1) {
 			gui.victoryScreen();
 		}

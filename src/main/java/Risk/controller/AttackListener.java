@@ -28,10 +28,12 @@ public class AttackListener implements ActionListener {
                 String attack = this.attackingTerritory;
                 this.attackingTerritory = "";
 
-                gfController.initiateCombat(attack, gfController.gui.clickedTerritory, GameFlowController.rand, gfController.gui.attackerDiceSlider.getValue(),
+                gfController.initiateCombat(attack, gfController.gui.clickedTerritory);
+                gfController.randomizeCombat(GameFlowController.rand, gfController.gui.attackerDiceSlider.getValue(),
                         gfController.gui.defenderDiceSlider.getValue());
-                Territory defendingTerritory = gfController.gbcontroller.getTerritory(gfController.gui.clickedTerritory);
+                gfController.finishCombat();
 
+                Territory defendingTerritory = gfController.gbcontroller.getTerritory(gfController.gui.clickedTerritory);
                 gfController.gui.setCurrentPlayerArmies(Integer.toString(gfController.playercontroller.getCurrentPlayer().getPlayerArmies()));
                 gfController.gui.setCurrentPlayer(String.valueOf(gfController.playercontroller.getCurrentPlayer().getId()));
                 gfController.gui.territoryArmiesNumber.setText(String.valueOf(defendingTerritory.getArmyCount()));
