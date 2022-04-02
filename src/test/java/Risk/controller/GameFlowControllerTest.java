@@ -21,13 +21,16 @@ public class GameFlowControllerTest {
 	Locale locale = new Locale("en", "US");
 	ResourceBundle msg = ResourceBundle.getBundle("MessagesBundle", locale);
 
+
+	PlayerController pc = EasyMock.strictMock(PlayerController.class);
+	AttackerDefenderController adc = new AttackerDefenderController();
+	GameBoardController gbc = EasyMock.mock(GameBoardController.class);
+	Random rand = EasyMock.strictMock(Random.class);
+	PhaseController phc = new PhaseController(pc, gbc);
+
+
 	@Test
 	public void testInitiateCombat() {
-		PlayerController pc = EasyMock.strictMock(PlayerController.class);
-		AttackerDefenderController adc = new AttackerDefenderController();
-		GameBoardController gbc = EasyMock.mock(GameBoardController.class);
-		Random rand = EasyMock.strictMock(Random.class);
-		PhaseController phc = new PhaseController(pc, gbc);
 		GameFlowController gfc = new GameFlowController(phc, pc, gbc, adc, new GraphicalUserInterface(msg), msg);
 
 		Territory test1 = new Territory("test1");
