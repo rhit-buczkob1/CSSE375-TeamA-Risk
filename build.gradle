@@ -66,7 +66,7 @@ configurations {
 
 javafx {
 	version = '12'
-	modules = [ 'javafx.graphics' ]
+	modules = [ 'javafx.graphics', 'javafx.controls' ]
 	//configuration = 'compileOnly'
 }
 
