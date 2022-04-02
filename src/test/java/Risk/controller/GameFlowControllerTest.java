@@ -21,13 +21,16 @@ public class GameFlowControllerTest {
 	Locale locale = new Locale("en", "US");
 	ResourceBundle msg = ResourceBundle.getBundle("MessagesBundle", locale);
 
+
+	PlayerController pc = EasyMock.strictMock(PlayerController.class);
+	AttackerDefenderController adc = new AttackerDefenderController();
+	GameBoardController gbc = EasyMock.mock(GameBoardController.class);
+	Random rand = EasyMock.strictMock(Random.class);
+	PhaseController phc = new PhaseController(pc, gbc);
+
+
 	@Test
 	public void testInitiateCombat() {
-		PlayerController pc = EasyMock.strictMock(PlayerController.class);
-		AttackerDefenderController adc = new AttackerDefenderController();
-		GameBoardController gbc = EasyMock.mock(GameBoardController.class);
-		Random rand = EasyMock.strictMock(Random.class);
-		PhaseController phc = new PhaseController(pc, gbc);
 		GameFlowController gfc = new GameFlowController(phc, pc, gbc, adc, new GraphicalUserInterface(msg), msg);
 
 		Territory test1 = new Territory("test1");
@@ -286,7 +289,7 @@ public class GameFlowControllerTest {
 		EasyMock.expect(playercontroller.getCurrentPlayer()).andReturn(player);
 		EasyMock.expect(player.getId()).andReturn(1);
 		EasyMock.expect(player.getDeck()).andReturn(deck);
-		EasyMock.expect(gameBoard.checkOwnedTerritory(card1.territory, card2.territory, card3.territory, 1))
+		EasyMock.expect(gameBoard.checkOwnedTerritory(card1.getTerritory(), card2.getTerritory(), card3.getTerritory(), 1))
 				.andReturn(true);
 		playercontroller.addArmiesToCurrentPlayer(2);
 		EasyMock.expect(playercontroller.getCurrentPlayer()).andReturn(player);
@@ -431,7 +434,7 @@ public class GameFlowControllerTest {
 
 		assertTrue(gfc.convertCardForGui(card).equals("<html>Russia<br>Infantry<html/>"));
 	}
-//
+	//
 //	@Test
 //	public void initiateCombatPaintTest_shouldwin() {
 //		PlayerController pc = EasyMock.strictMock(PlayerController.class);

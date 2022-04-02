@@ -17,14 +17,14 @@ public class GameFlowController {
 	Territory attackingTerritory;
 	Territory defendingTerritory;
 	public static Random rand = new Random();
-	
+
 	ResourceBundle messages;
 
 	public GameFlowController(PhaseController phaseController, PlayerController playercontroller,
-				  GameBoardController gbcontroller,
-				  AttackerDefenderController adc,
-				  GraphicalUserInterface gui,
-				  ResourceBundle msg) {
+							  GameBoardController gbcontroller,
+							  AttackerDefenderController adc,
+							  GraphicalUserInterface gui,
+							  ResourceBundle msg) {
 		this.phaseController = phaseController;
 		this.playercontroller = playercontroller;
 		this.phase = "setup";
@@ -200,7 +200,7 @@ public class GameFlowController {
 	}
 
 	public boolean clickedOnValidLocation() {
-			return !(gui.clickedTerritory.equals(""));
+		return !(gui.clickedTerritory.equals(""));
 	}
 
 	public void fortifyTerritory(String fromTerritory, String toTerritory) {

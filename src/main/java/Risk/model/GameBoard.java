@@ -16,7 +16,7 @@ public class GameBoard {
 		}
 		return gameBoard;
 	}
-	
+
 	public Deck getDeck() {
 		return mainDeck;
 	}

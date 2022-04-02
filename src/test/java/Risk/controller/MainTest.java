@@ -25,12 +25,16 @@ public class MainTest {
 
 		GameFlowController gameflowcontroller = new GameFlowController(phc, pc, gameBoard, adc, gui, msg);
 		Main main = new Main();
-		main.runMain(pc, gameBoard);
+		try {
+			main.runMain(pc, gameBoard);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 		int playercount = 0;
 		int index = 1;
 		for (Player player : pc.players) {
 			assertEquals(index, player.getId());
-			assertEquals(30, player.getPlayerArmies());
+			assertEquals(40, player.getPlayerArmies());
 			playercount++;
 			index++;
 		}

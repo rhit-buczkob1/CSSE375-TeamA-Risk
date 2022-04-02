@@ -12,12 +12,12 @@ public class Card {
 	}
 
 	public Card(String territory, String troopType) {
-		if(!isValidTroopType(troopType)) throw new IllegalArgumentException(troopType + " is not a valid troop type.");
+//		if(!isValidTroopType(troopType)) throw new IllegalArgumentException(troopType + " is not a valid troop type.");
 
-		else {
+//		else {
 			this.territory = new TerritoryName(territory);
 			this.troopType = troopType;
-		}
+//		}
 	}
 
 	public String getTerritory() {

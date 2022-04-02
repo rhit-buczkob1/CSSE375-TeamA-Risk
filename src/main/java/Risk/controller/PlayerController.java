@@ -30,6 +30,7 @@ public class PlayerController {
 		}
 		else if(players.size() > 6){
 			throw new Exception("Cannot initialize with more than six players");
+
 		}
 		int numArmiesPerPlayer = 35 - (3 - players.size())*5;
 
@@ -41,8 +42,7 @@ public class PlayerController {
 	public void addInfantryToTerritory(Territory territory, int armies) {
 
 		Player currentPlayer = players.get(currentIndex);
-		
-		
+
 		if (territory.getPlayer() == currentPlayer.getId()) {
 			transferToOwnedTerritory(territory, armies, currentPlayer);
 		}
@@ -54,8 +54,8 @@ public class PlayerController {
 		}
 
 		if ((currentIndex == players.size() - 1)
-			&& (players.get(currentIndex).getPlayerArmies()
-			== 0) && initSetup) {
+				&& (players.get(currentIndex).getPlayerArmies()
+				== 0) && initSetup) {
 			initSetup = false;
 			nextPlayer();
 		}
@@ -159,7 +159,7 @@ public class PlayerController {
 		if (cardsAreValid(card1, card2, card3)) {
 
 			ArrayList<Card> tocheck
-				= new ArrayList<Card>(this.getCurrentPlayer().getDeck());
+					= new ArrayList<Card>(this.getCurrentPlayer().getDeck());
 			for (Card card : tocheck) {
 				if (card == card1 || card == card2 || card == card3) {
 					this.getCurrentPlayer().getDeck().remove(card);
@@ -180,8 +180,9 @@ public class PlayerController {
 	}
 
 	public boolean checkAllCardsAreUniqueType(Card card1, Card card2, Card card3){
-			return !card1.troopType.equals(card2.troopType) && !card1.troopType.equals(card3.troopType) && !card2.troopType.equals(card3.troopType);
-		}
+
+		return !card1.troopType.equals(card2.troopType) && !card1.troopType.equals(card3.troopType) && !card2.troopType.equals(card3.troopType);
+	}
 	private boolean cardsAreValid(Card card1, Card card2, Card card3){
 		return (checkAllCardsAreSameType(card1, card2, card3)
 				|| checkTwoSameAndOneWildcard(card2, card1, card3)

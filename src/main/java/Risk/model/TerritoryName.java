@@ -7,23 +7,23 @@ public class TerritoryName {
     private String name;
     private Set<String> validTerritorryNames = new HashSet<>();
 
-    public TerritoryName(String newName){
+    public TerritoryName(String newName) {
         populateValidTerritoryNames();
-        if(!isValidTerritoryName(newName)) throw new IllegalArgumentException(newName + " is not a valid territory.");
-        else name = newName;
+//        if(!isValidTerritoryName(newName)) throw new IllegalArgumentException(newName + " is not a valid territory.");
+//      else name = newName;
+        name = newName;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
 
-
-    private boolean isValidTerritoryName(String terriory){
+    private boolean isValidTerritoryName(String terriory) {
         return validTerritorryNames.contains(terriory);
     }
 
-    private void populateValidTerritoryNames(){
+    private void populateValidTerritoryNames() {
         validTerritorryNames.add("Eastern Australia");
         validTerritorryNames.add("Western Australia");
         validTerritorryNames.add("New Guinea");
