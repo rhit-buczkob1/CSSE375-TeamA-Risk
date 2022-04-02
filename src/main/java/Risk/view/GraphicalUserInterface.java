@@ -23,15 +23,6 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
-import javax.swing.*;
-
-import Risk.model.Card;
-
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
-//import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -195,24 +186,6 @@ public class GraphicalUserInterface {
 		victory.setScene(new Scene(pane));
 		
 		victory.show();
-		
-//		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); // this is your screen size
-//
-//		f.setUndecorated(true); // removes the surrounding border
-//
-//		ImageIcon image = new ImageIcon("src/main/resources/victoryscreen.jpg"); //imports the image
-//
-//		JLabel lbl = new JLabel(image); // puts the image into a jlabel
-//
-//		f.getContentPane().add(lbl); // puts label inside the jframe
-//
-//		f.setSize(image.getIconWidth(), image.getIconHeight()); // gets h and w of image and sets jframe to the size
-//
-//		int x = (screenSize.width - f.getSize().width) / 2; // These two lines are the dimensions
-//		int y = (screenSize.height - f.getSize().height) / 2; // of the center of the screen
-//
-//		f.setLocation(x, y); // sets the location of the jframe
-//		f.setVisible(true); // makes the jframe visible
 	}
 
 	/*
