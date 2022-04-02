@@ -1,6 +1,5 @@
 package Risk.view;
 
-import Risk.controller.GameFlowController.ClickListener;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -8,18 +7,27 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 import javax.swing.*;
-import java.awt.*;
+
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
+//import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -29,7 +37,7 @@ import java.util.Scanner;
 
 public class GraphicalUserInterface {
 
-	private ClickListener mouseListener;
+	private EventHandler<MouseEvent> mouseListener;
 	public ArrayList<Rectangle> territoriesBounds = new ArrayList<Rectangle>(42);
 	public ArrayList<Rectangle> currentBounds = new ArrayList<Rectangle>(42);
 	public ArrayList<String> territoryNames = new ArrayList<String>(42);
@@ -42,23 +50,23 @@ public class GraphicalUserInterface {
 	public int currentTerritoryPlayer = 0;
 	private ResourceBundle messages;
 	
-	private int xShift = 9;
-	private int yShift = 38;
+//	private int xShift = 9;
+//	private int yShift = 38;
 	
 	public GuiComponent component;
-	public JButton nextTurn;
-	public JLabel currentPlayer;
-	public JLabel currentPlayerId = new JLabel("1");
-	public JLabel playerArmies;
-	public JLabel playerArmiesNumber = new JLabel("30");
-	public JLabel territoryArmies;
-	public JLabel territoryArmiesNumber = new JLabel("0");
-	public JLabel territoryPlayer;
-	public JLabel territoryPlayerNumber = new JLabel("0");
+	public Button nextTurn;
+	public Text currentPlayer;
+	public Text currentPlayerId = new Text("1");
+	public Text playerArmies;
+	public Text playerArmiesNumber = new Text("30");
+	public Text territoryArmies;
+	public Text territoryArmiesNumber = new Text("0");
+	public Text territoryPlayer;
+	public Text territoryPlayerNumber = new Text("0");
 	public JButton attack;
-	public JButton language;
+	public Button language;
 	public JLabel info = new JLabel("");
-	public JButton addArmy;
+	public Button addArmy;
 	public JLabel attackerDice;
 	public JLabel defenderDice;
 	public JSlider attackerDiceSlider = new JSlider(1, 3, 1);
@@ -70,54 +78,58 @@ public class GraphicalUserInterface {
 	public String currentPhase = "Setup";
 
 
-	public Point2D click;
-	public String clickedTerritory;
+	public Text currentTerritoryDesc;
+	public Text clickedTerritory;
 	public boolean testMode = false;
 	public int clickedIndex = -1;
+	private ArrayList<Rectangle> territoryInsides = new ArrayList<Rectangle>();
 	
 	
 
 	public GraphicalUserInterface(ResourceBundle msg) {
 		this.setUpTerritoryNamesAndLocation("src/main/resources/TerritoryNamesAndLocations.txt");
+		
 		this.messages = msg;
-		this.click = new Point2D(0, 0);
-		clickedTerritory = "";
+		clickedTerritory = new Text("");
 		for (int i = 0; i < 42; i++) {
 			territoryColors.add(Color.DARKGRAY);
 		}
 		
-		this.language = new JButton(messages.getString("lang"));
-		this.nextTurn = new JButton(messages.getString("nextPhase"));
-		this.currentPlayer = new JLabel(messages.getString("player"));
-		this.playerArmies = new JLabel(messages.getString("armiesInPlayersHands"));
-		this.territoryArmies = new JLabel(messages.getString("armiesTerr"));
-		this.territoryPlayer = new JLabel(messages.getString("terrPlayer"));
+		this.language = new Button(messages.getString("lang"));
+		this.nextTurn = new Button(messages.getString("nextPhase"));
+		this.currentPlayer = new Text(messages.getString("player"));
+		this.playerArmies = new Text(messages.getString("armiesInPlayersHands"));
+		this.territoryArmies = new Text(messages.getString("armiesTerr"));
+		this.territoryPlayer = new Text(messages.getString("terrPlayer"));
 		this.attack = new JButton(messages.getString("attack"));
-		this.addArmy = new JButton(messages.getString("addArmy"));
+		this.addArmy = new Button(messages.getString("addArmy"));
 		this.attackerDice = new JLabel(messages.getString("selectAttDice"));
 		this.defenderDice = new JLabel(messages.getString("selectDefDice"));
 		this.spendCards = new JButton(messages.getString("spendCards"));
 	}
 	
 	public GraphicalUserInterface(ResourceBundle msg, Stage stage) {
-		this.setUpTerritoryNamesAndLocation("src/main/resources/TerritoryNamesAndLocations.txt");
+		
 		this.messages = msg;
-		this.click = new Point2D(0, 0);
-		clickedTerritory = "";
+		clickedTerritory = new Text("");
+		
 		for (int i = 0; i < 42; i++) {
 			territoryColors.add(Color.DARKGRAY);
 		}
 		
 		this.stage = stage;
 		
-		this.language = new JButton(messages.getString("lang"));
-		this.nextTurn = new JButton(messages.getString("nextPhase"));
-		this.currentPlayer = new JLabel(messages.getString("player"));
-		this.playerArmies = new JLabel(messages.getString("armiesInPlayersHands"));
-		this.territoryArmies = new JLabel(messages.getString("armiesTerr"));
-		this.territoryPlayer = new JLabel(messages.getString("terrPlayer"));
+		this.setUpTerritoryNamesAndLocation("src/main/resources/TerritoryNamesAndLocations.txt");
+		
+		currentTerritoryDesc = new Text(messages.getString("select"));
+		this.language = new Button(messages.getString("lang"));
+		this.nextTurn = new Button(messages.getString("nextPhase"));
+		this.currentPlayer = new Text(messages.getString("player"));
+		this.playerArmies = new Text(messages.getString("armiesInPlayersHands"));
+		this.territoryArmies = new Text(messages.getString("armiesTerr"));
+		this.territoryPlayer = new Text(messages.getString("terrPlayer"));
 		this.attack = new JButton(messages.getString("attack"));
-		this.addArmy = new JButton(messages.getString("addArmy"));
+		this.addArmy = new Button(messages.getString("addArmy"));
 		this.attackerDice = new JLabel(messages.getString("selectAttDice"));
 		this.defenderDice = new JLabel(messages.getString("selectDefDice"));
 		this.spendCards = new JButton(messages.getString("spendCards"));
@@ -125,6 +137,7 @@ public class GraphicalUserInterface {
 	
 	public void setLanguage(ResourceBundle msg, String phase) {
 		this.messages = msg;
+		this.currentTerritoryDesc.setText(messages.getString("select"));
 		this.nextTurn.setText(messages.getString("nextPhase"));
 		this.currentPlayer.setText(messages.getString("player"));
 		this.playerArmies.setText(messages.getString("armiesInPlayersHands"));
@@ -141,7 +154,7 @@ public class GraphicalUserInterface {
 //		this.component.repaint();
 	}
 
-	public void setMouseListener(ClickListener listener) {
+	public void setMouseListener(EventHandler<MouseEvent> listener) {
 		this.mouseListener = listener;
 	}
 
@@ -190,22 +203,14 @@ public class GraphicalUserInterface {
 	 * Returns the name of the territory that the mouse recently clicked on. Returns
 	 * the empty string if no territory was clicked.
 	 */
-	public String checkForPointOnTerritory() {
+	public String checkForPointOnTerritory(Point2D click) {
 		if (click == null) {
 			return "";
 		}
 		for (int i = 0; i < territoriesBounds.size(); i++) {
-			if (territoriesBounds.get(i) != null
-//					&& click.x >= territoriesBounds.get(i).getX() * ((int) stage.getWidth()) / screenWidth
-//					&& click.x <= territoriesBounds.get(i).getX() * ((int) stage.getWidth()) / screenWidth + stage.getWidth() / 50
-//							- 1
-//					&& click.y >= territoriesBounds.get(i).getY() * stage.getHeight() / screenHeight
-//					&& click.y <= territoriesBounds.get(i).getY() * stage.getHeight() / screenHeight + stage.getHeight() / 25
-//							- 1
-					&& this.getTerritoryBox(i).contains(click)) {
-				clickedTerritory = territoryNames.get(i);
+			if (territoriesBounds.get(i) != null && this.territoriesBounds.get(i).contains(click)) {
+				clickedTerritory.setText(messages.getString(territoryNames.get(i)));
 				this.clickedIndex  = i;
-				clickedTerritory = clickedTerritory.replace('_', ' ');
 				return territoryNames.get(i);
 			}
 		}
@@ -225,8 +230,17 @@ public class GraphicalUserInterface {
 				} else if (i == 1) {
 					x = Integer.parseInt(line);
 				} else if (i == 2) {
-					this.territoriesBounds.add(
-						new Rectangle(x, Integer.parseInt(line), this.boxWidthAndHeight, this.boxWidthAndHeight));
+					int y = Integer.parseInt(line);
+					this.territoriesBounds.add(this.getTerritoryBox(x, y));
+					
+					Rectangle rect = this.getTerritoryBox(x, y);
+					rect.widthProperty().bind(stage.widthProperty().divide(37.5).subtract(5));
+					rect.heightProperty().bind(stage.heightProperty().divide(18.75).subtract(5));
+					
+					rect.xProperty().bind(stage.widthProperty().divide(2000.0).multiply(x).add(2.5));
+					rect.yProperty().bind(stage.heightProperty().divide(1000.0).multiply(y).add(2.5));
+					
+					this.territoryInsides.add(rect);
 				}
 				i++;
 				if (i == 3) {
@@ -263,21 +277,13 @@ public class GraphicalUserInterface {
 		}
 		
 		Group root = new Group();
-		this.paintTerritoryBounds(root);
+		this.addTerritoryBoundsToPane(root);
+		this.paintTerritoryBounds();
 		
 		pane.vgapProperty().bind(stage.heightProperty().divide(15));
 		pane.hgapProperty().bind(stage.widthProperty().divide(33.33));
 		
-		pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-			@Override
-			public void handle(MouseEvent event) {
-				click = new Point2D(event.getX(), event.getY());
-				checkForPointOnTerritory();
-				paintTerritoryBounds(root);
-			}
-			
-		});
+		pane.setOnMouseClicked(this.mouseListener);
 		
 		JPanel currentPlayerPanel = new JPanel();
 		JPanel currentTerritoryAndCardsPanel = new JPanel();
@@ -288,11 +294,58 @@ public class GraphicalUserInterface {
 		currentTerritoryAndCardsPanel.add(spendCards);
 		
 		currentPlayerPanel.setLayout(new GridLayout(2, 6));
-		currentPlayerPanel.add(currentPlayer);
-		currentPlayerPanel.add(currentPlayerId);
-		currentPlayerPanel.add(playerArmies);
-		currentPlayerPanel.add(playerArmiesNumber);
-		currentPlayerPanel.add(nextTurn);
+//		currentPlayerPanel.add(currentPlayer);
+		
+		GridPane options = new GridPane();
+		
+		Group player = new Group();
+		
+		player.getChildren().add(currentPlayer);
+		player.getChildren().add(currentPlayerId);
+		player.getChildren().add(playerArmies);
+		player.getChildren().add(playerArmiesNumber);
+		
+		player.getChildren().add(currentTerritoryDesc);
+		player.getChildren().add(clickedTerritory);
+		player.getChildren().add(territoryPlayer);
+		player.getChildren().add(territoryPlayerNumber);
+		player.getChildren().add(territoryArmies);
+		player.getChildren().add(territoryArmiesNumber);
+		
+		Font standard = Font.font("Tahoma", FontWeight.NORMAL, 20);
+		
+		currentPlayer.setFont(standard);
+		currentPlayerId.setFont(standard);
+		
+		playerArmies.setFont(standard);
+		playerArmiesNumber.setFont(standard);
+		
+		territoryPlayer.setFont(standard);
+		territoryPlayerNumber.setFont(standard);
+		
+		territoryArmies.setFont(standard);
+		territoryArmiesNumber.setFont(standard);
+		
+		currentTerritoryDesc.setFont(standard);
+		clickedTerritory.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));
+		
+		currentPlayerId.setX(220);
+		
+		playerArmies.setY(35);
+		playerArmiesNumber.setY(35);
+		playerArmiesNumber.setX(300);
+		
+		currentTerritoryDesc.setY(70);
+		clickedTerritory.setY(105);
+		
+		territoryPlayer.setY(150);
+		territoryPlayerNumber.setY(150);
+		territoryPlayerNumber.setX(300);
+		
+		territoryArmies.setY(185);
+		territoryArmiesNumber.setY(185);
+		territoryArmiesNumber.setX(300);
+
 		currentPlayerPanel.add(attack);
 		
 		
@@ -311,26 +364,27 @@ public class GraphicalUserInterface {
 
 		currentPlayerPanel.add(defenderDice);
 		currentPlayerPanel.add(defenderDiceSlider);
-
-
-		//frame.add(currentPlayerPanel, BorderLayout.SOUTH);
+		
+		Group buttons = new Group();
+		
+		buttons.getChildren().add(addArmy);
+		buttons.getChildren().add(nextTurn);
+		buttons.getChildren().add(language);
+		
+		nextTurn.setTranslateY(30);
+		language.setTranslateY(60);
+		
 		currentTerritoryAndCardsPanel.setLayout(new GridLayout(5, 1));
-		currentTerritoryAndCardsPanel.add(territoryPlayer);
-		currentTerritoryAndCardsPanel.add(territoryPlayerNumber);
-		currentTerritoryAndCardsPanel.add(territoryArmies);
-		currentTerritoryAndCardsPanel.add(territoryArmiesNumber);
-		currentTerritoryAndCardsPanel.add(addArmy);
-		currentTerritoryAndCardsPanel.add(language);
+//		currentTerritoryAndCardsPanel.add(language);
 		currentTerritoryAndCardsPanel.setPreferredSize(new Dimension((int) stage.getWidth() / 8, (int) stage.getHeight()));
-		//frame.add(currentTerritoryAndCardsPanel, BorderLayout.EAST);
-		
-		
-//		this.mouseListener.addComponent(component);
-		//frame.addMouseListener(this.mouseListener);
 		
 		pane.setAlignment(Pos.TOP_LEFT);
 		
+		options.add(player, 0, 0);
+		options.add(buttons, 0, 1);
+		
 		pane.add(root, 1, 1);
+		pane.add(options, 2, 1);
 		
 		Scene scene = new Scene(pane);
 		
@@ -338,20 +392,22 @@ public class GraphicalUserInterface {
 		
 		stage.show();
 	}
-
-	private void paintTerritoryBounds(Group root) {
+	
+	private void addTerritoryBoundsToPane(Group root) {
+		for (int i = 0; i < this.territoriesBounds.size(); i++) {
+			root.getChildren().add(this.territoriesBounds.get(i));
+			root.getChildren().add(this.territoryInsides.get(i));
+		}
+	}
+	
+	public void paintTerritoryBounds() {
 		for (int i = 0; i < this.territoriesBounds.size(); i++) {
 			
-			Rectangle border = getTerritoryBox(i);
+			Rectangle border = this.territoriesBounds.get(i);
 			
-			Rectangle rect = getTerritoryBox(i);
-			rect.widthProperty().bind(stage.widthProperty().divide(37.5).subtract(5));
-			rect.heightProperty().bind(stage.heightProperty().divide(18.75).subtract(5));
+			Rectangle rect = this.territoryInsides.get(i);
 			
-			rect.xProperty().bind(stage.widthProperty().divide(2000.0).multiply(territoriesBounds.get(i).getX()).add(2.5));
-			rect.yProperty().bind(stage.heightProperty().divide(1000.0).multiply(territoriesBounds.get(i).getY()).add(2.5));
-			
-			Color color = Color.DARKGRAY;
+			Color color = Color.BLACK;
 			if (clickedIndex == i) {
 				color = Color.WHITE;
 			}
@@ -359,33 +415,18 @@ public class GraphicalUserInterface {
 			border.setFill(color);
 			color = territoryColors.get(i);
 			rect.setFill(color);
-			root.getChildren().add(border);
-			root.getChildren().add(rect);
 		}
 	}
 
-	private Color setColor(int player) {
-		if (player == 1) {
-			return Color.RED;
-		} else if (player == 2) {
-			return Color.BLUE;
-		} else if (player == 3) {
-			return Color.YELLOW;
-		} else if (player == 4) {
-			return Color.GREEN;
-		}
-		return Color.DARKGRAY;
-	}
+	private Rectangle getTerritoryBox(int x, int y) {
 
-	private Rectangle getTerritoryBox(int pos) {
-
-		Rectangle rect = new Rectangle(0,0,0,0);
+		Rectangle rect = new Rectangle(0, 0, 0, 0);
 		
 		rect.widthProperty().bind(stage.widthProperty().divide(37.5).add(10));
 		rect.heightProperty().bind(stage.heightProperty().divide(18.75).add(10));
 		
-		rect.xProperty().bind(stage.widthProperty().divide(2000.0).multiply(territoriesBounds.get(pos).getX()).subtract(5));
-		rect.yProperty().bind(stage.heightProperty().divide(1000.0).multiply(territoriesBounds.get(pos).getY()).subtract(5));
+		rect.xProperty().bind(stage.widthProperty().divide(2000.0).multiply(x).subtract(5));
+		rect.yProperty().bind(stage.heightProperty().divide(1000.0).multiply(y).subtract(5));
 
 		return rect;
 	}
@@ -474,25 +515,35 @@ public class GraphicalUserInterface {
 //	}
 	}
 	public Color getColorForPlayer(int player) {
-//		if (player == 1) {
-//			return Color.RED;
-//		} else if (player == 2) {
-//			return Color.BLUE;
-//		} else if (player == 3) {
-//			return Color.YELLOW;
-//		} else if (player == 4) {
-//			return Color.GREEN;
-//		}
-		return Color.DARKGRAY;
+		if (player == 1) {
+			return Color.RED;
+		} else if (player == 2) {
+			return Color.BLUE;
+		} else if (player == 3) {
+			return Color.YELLOW;
+		} else if (player == 4) {
+			return Color.GREEN;
+		}
+		return Color.BLACK;
 	}
 
 	public void setTerritoryColor(String territory, int player) {
-//		territory = territory.replace(' ', '_');
-//		Color playerColor = this.getColorForPlayer(player);
-//		for (int i = 0; i < this.territoryNames.size(); i++) {
-//			if (this.territoryNames.get(i).equals(territory)) {
-//				this.territoryColors.set(i, playerColor);
-//			}
+		territory = territory.replace(' ', '_');
+		Color playerColor = this.getColorForPlayer(player);
+		for (int i = 0; i < this.territoryNames.size(); i++) {
+			if (this.territoryNames.get(i).equals(territory)) {
+				this.territoryColors.set(i, playerColor);
+				return;
+			}
+		}
+	}
+
+	public void setTerritoryArmyCount(int armyCount) {
+		this.territoryArmiesNumber.setText("" + armyCount);
+	}
+
+	public void setCurrentTerritoryOwner(int player) {
+		this.setTerritoryPlayer("" + player);
 	}
 
 
