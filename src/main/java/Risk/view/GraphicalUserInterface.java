@@ -73,8 +73,6 @@ public class GraphicalUserInterface {
 	public boolean testMode = false;
 	public int clickedIndex = -1;
 	private ArrayList<Rectangle> territoryInsides = new ArrayList<Rectangle>();
-	
-	
 
 	public GraphicalUserInterface(ResourceBundle msg) {
 		this.setUpTerritoryNamesAndLocation("src/main/resources/TerritoryNamesAndLocations.txt");
@@ -469,4 +467,19 @@ public class GraphicalUserInterface {
 	}
 
 
+	public void changeNextTurnButton(boolean disabled) {
+		nextTurn.setDisable(disabled);
+	}
+
+	public void changeAttackButton(boolean disabled) {
+		attack.setDisable(disabled);
+	}
+
+	public void changeAddArmyButton(boolean disabled) {
+		addArmy.setDisable(disabled);
+	}
+
+	public void changeSpendCardsButton(boolean disabled) {
+		spendCards.setDisable(disabled);
+	}
 }

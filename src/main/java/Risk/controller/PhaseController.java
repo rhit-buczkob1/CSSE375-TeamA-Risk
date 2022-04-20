@@ -22,11 +22,6 @@ public class PhaseController {
     public void next_phase() {
         updateCards = false;
         phases.get(phase).doPhase();
-        System.out.println("Doing phase " + phase);
-    }
-
-    public void setPhase(String phase) {
-        this.phase = phase;
     }
 
     public String getPhase() {

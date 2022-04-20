@@ -38,6 +38,8 @@ public class GameFlowController {
 		this.gui = gui;
 		this.messages = msg;
 		connectToGui();
+
+		changeGuiButtons(false, true, true, true);
 	}
 
 	public void connectToGui() {
@@ -55,6 +57,18 @@ public class GameFlowController {
 					Territory territory = gbcontroller.getTerritory(clicked.replace('_', ' '));
 					gui.setTerritoryArmyCount(territory.getArmyCount());
 					gui.setCurrentTerritoryOwner(territory.getPlayer());
+					System.out.println(territory.getPlayer() + " " + playercontroller.getCurrentPlayer().getId());
+					if (phaseController.getPhase().equals("attack")) {
+						gui.changeAttackButton(false);
+					} else if ((territory.getPlayer() == playercontroller.getCurrentPlayer().getId() ||
+								territory.getPlayer() == 0) && playercontroller.getCurrentPlayer().getPlayerArmies() != 0) {
+						gui.changeAddArmyButton(false);
+					} else {
+						gui.changeAddArmyButton(true);
+					}
+				} else {
+					gui.changeAttackButton(true);
+					gui.changeAddArmyButton(true);
 				}
 			}
 			
@@ -126,6 +140,25 @@ public class GameFlowController {
 		if (!gui.testMode) {
 			gui.paintTerritoryBounds();
 		}
+		switch (phaseController.getPhase()) {
+			case "assignment":
+				changeGuiButtons(false, true, true, false);
+				break;
+			case "attack":
+				changeGuiButtons(true, false, false, true);
+				break;
+			case "fortify":
+				changeGuiButtons(false, false, true, false);
+				break;
+		}
+	}
+
+	public void changeGuiButtons(boolean addArmy, boolean nextTurn,
+								 boolean attack, boolean spendCards) {
+		this.gui.changeAddArmyButton(addArmy);
+		this.gui.changeNextTurnButton(nextTurn);
+		this.gui.changeAttackButton(attack);
+		this.gui.changeSpendCardsButton(spendCards);
 	}
 
 	public String getPhase() {
@@ -171,64 +204,5 @@ public class GameFlowController {
 			this.gui.card3.getItems().add(convertCardForGui(card));
 
 		}
-	}
-
-	public String getMessage(String key) {
-		return messages.getString(key);
-	}
-
-	public void setMessages(ResourceBundle messagesBundle) {
-		messages = messagesBundle;
-	}
-
-	public void setLanguage() {
-		gui.setLanguage(messages, getPhase());
-	}
-
-	public Territory getTerritory(String lastclickedstring) {
-		return gbcontroller.getTerritory(lastclickedstring);
-	}
-
-	public void setCurrentTerritoryArmyCount(int armyCount) {
-		gui.currentTerritoryArmyCount = armyCount;
-	}
-
-	public void setCurrentTerritoryPlayer(int player) {
-		gui.currentTerritoryPlayer = player;
-	}
-
-	public boolean clickedOnValidLocation() {
-		return !(gui.clickedTerritory.equals(""));
-	}
-
-	public void fortifyTerritory(String fromTerritory, String toTerritory) {
-		try {
-			playercontroller.moveArmy(gbcontroller.getTerritory(fromTerritory), gbcontroller.getTerritory(toTerritory), 1);
-			gui.territoryArmiesNumber
-					.setText(String.valueOf(gbcontroller.getTerritory(gui.clickedTerritory.getText()).getArmyCount()));
-		} catch (IllegalArgumentException e1) {
-			System.err.println(e1.getMessage());
-		}
-	}
-
-	public void addArmy() {
-		int player = playercontroller.getCurrentPlayer().getId();
-		addInfantrytoTerritoryfromString(gui.clickedTerritory.getText());
-		if (player == gbcontroller.getTerritoryOwner(gui.clickedTerritory.getText())) {
-			gui.setTerritoryColor(gui.clickedTerritory.getText(), player);
-		}
-		Territory territory = gbcontroller.getTerritory(gui.clickedTerritory.getText());
-
-		gui.setCurrentPlayerArmies(Integer.toString(playercontroller.getCurrentPlayer().getPlayerArmies()));
-		gui.setCurrentPlayer(String.valueOf(playercontroller.getCurrentPlayer().getId()));
-		gui.currentTerritoryArmyCount = territory.getArmyCount();
-		gui.currentTerritoryPlayer = territory.getPlayer();
-		gui.paintTerritoryBounds();
-	}
-
-	public void next() {
-		next_phase();
-		gui.setCurrentPlayerArmies(Integer.toString(playercontroller.getCurrentPlayer().getPlayerArmies()));
-		gui.setCurrentPlayer(String.valueOf(playercontroller.getCurrentPlayer().getId()));
 	}
 }
