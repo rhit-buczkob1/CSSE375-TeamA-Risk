@@ -43,6 +43,7 @@ public class GameModePopUpLauncher implements EventHandler<MouseEvent> {
                     gfc.gameMode = "HEADQUARTERS";
                 }
                 // might have to do some game reset stuff
+                gfc.swapToAlternatePhaseController();
                 panel.close();
             }
 

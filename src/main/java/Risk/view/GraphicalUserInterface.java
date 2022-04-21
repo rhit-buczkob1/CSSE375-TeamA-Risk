@@ -59,11 +59,11 @@ public class GraphicalUserInterface {
 	public Button addArmy;
 	public Text attackerDice;
 	public Text defenderDice;
-	public Slider attackerDiceSlider = new Slider(1, 3, 1);
-	public Slider defenderDiceSlider = new Slider(1, 2, 1);
-	public ComboBox<String> card1 = new ComboBox<String>();
-	public ComboBox<String> card2 = new ComboBox<String>();
-	public ComboBox<String> card3 = new ComboBox<String>();
+	public Slider attackerDiceSlider;
+	public Slider defenderDiceSlider;
+	public ComboBox<String> card1;
+	public ComboBox<String> card2;
+	public ComboBox<String> card3;
 	public Button spendCards;
 	public Text currentPhase = new Text("Setup");
 	public Button chooseGameMode;
@@ -125,6 +125,11 @@ public class GraphicalUserInterface {
 		this.defenderDice = new Text(messages.getString("selectDefDice"));
 		this.spendCards = new Button(messages.getString("spendCards"));
 		this.chooseGameMode = new Button("Choose Game Mode"); //add to language resource file
+		this.attackerDiceSlider = new Slider(1, 3, 1);
+		this.defenderDiceSlider = new Slider(1, 2, 1);
+		this.card1 = new ComboBox<String>();
+		this.card2 = new ComboBox<String>();
+		this.card3 = new ComboBox<String>();
 	}
 	
 	public void setLanguage(ResourceBundle msg, String phase) {

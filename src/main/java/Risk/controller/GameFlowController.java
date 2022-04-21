@@ -233,4 +233,10 @@ public class GameFlowController {
 		gui.setCurrentPlayerArmies(Integer.toString(playercontroller.getCurrentPlayer().getPlayerArmies()));
 		gui.setCurrentPlayer(String.valueOf(playercontroller.getCurrentPlayer().getId()));
 	}
+
+	public void swapToAlternatePhaseController() {
+		String phase = this.phaseController.getPhase();
+		this.phaseController = new AlternatePhaseController(this.playercontroller, this.gbcontroller);
+		this.phaseController.setPhase(phase);
+	}
 }
