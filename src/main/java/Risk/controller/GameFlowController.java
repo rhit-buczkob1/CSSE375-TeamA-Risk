@@ -47,6 +47,7 @@ public class GameFlowController {
 		this.gui.addArmy.setOnAction(new AddTerritoryListener(this));
 		this.gui.attack.setOnMouseClicked(new AttackListener(this));
 		this.gui.language.setOnMouseClicked(new PopUpLauncher(this));
+		this.gui.setNumPlayers.setOnMouseClicked(new PlayerSetListener(this));
 		this.gui.setMouseListener(new EventHandler<MouseEvent>() {
 
 			@Override
@@ -62,7 +63,7 @@ public class GameFlowController {
 					} else if ((territory.getPlayer() == playercontroller.getCurrentPlayer().getId() ||
 								territory.getPlayer() == 0) && playercontroller.getCurrentPlayer().getPlayerArmies() != 0) {
 						gui.changeAddArmyButton(false);
-					} else {
+					} else if (!phaseController.getPhase().equals("fortify")){
 						gui.changeAddArmyButton(true);
 					}
 				} else {
