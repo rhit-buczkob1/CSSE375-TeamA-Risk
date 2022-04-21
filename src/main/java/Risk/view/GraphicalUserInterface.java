@@ -66,6 +66,7 @@ public class GraphicalUserInterface {
 	public ComboBox<String> card3 = new ComboBox<String>();
 	public Button spendCards;
 	public Text currentPhase = new Text("Setup");
+	public Button chooseGameMode;
 
 
 	public Text currentTerritoryDesc;
@@ -123,6 +124,7 @@ public class GraphicalUserInterface {
 		this.attackerDice = new Text(messages.getString("selectAttDice"));
 		this.defenderDice = new Text(messages.getString("selectDefDice"));
 		this.spendCards = new Button(messages.getString("spendCards"));
+		this.chooseGameMode = new Button("Choose Game Mode"); //add to language resource file
 	}
 	
 	public void setLanguage(ResourceBundle msg, String phase) {
@@ -350,6 +352,7 @@ public class GraphicalUserInterface {
 		buttons.getChildren().add(nextTurn);
 		buttons.getChildren().add(language);
 		buttons.getChildren().add(attack);
+		buttons.getChildren().add(chooseGameMode);
 		
 		buttons.getChildren().add(attackerDiceSlider);
 		buttons.getChildren().add(defenderDiceSlider);
@@ -359,11 +362,12 @@ public class GraphicalUserInterface {
 		nextTurn.setTranslateY(30);
 		attack.setTranslateY(60);
 		language.setTranslateY(90);
+		chooseGameMode.setTranslateY(120);
 		
-		attackerDice.setTranslateY(140);
-		defenderDice.setTranslateY(170);
-		attackerDiceSlider.setTranslateY(130);
-		defenderDiceSlider.setTranslateY(170);
+		attackerDice.setTranslateY(170);
+		defenderDice.setTranslateY(200);
+		attackerDiceSlider.setTranslateY(160);
+		defenderDiceSlider.setTranslateY(200);
 		attackerDiceSlider.setTranslateX(125);
 		defenderDiceSlider.setTranslateX(125);
 		
@@ -380,7 +384,7 @@ public class GraphicalUserInterface {
 		
 		card2.setTranslateX(100);
 		card3.setTranslateX(200);
-		spendCards.setTranslateY(150);
+		spendCards.setTranslateY(120);
 		
 		pane.setAlignment(Pos.TOP_LEFT);
 		
@@ -467,6 +471,5 @@ public class GraphicalUserInterface {
 	public void setCurrentTerritoryOwner(int player) {
 		this.setTerritoryPlayer("" + player);
 	}
-
 
 }

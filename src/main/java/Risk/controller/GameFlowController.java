@@ -24,6 +24,7 @@ public class GameFlowController {
 	public static Random rand = new Random();
 
 	ResourceBundle messages;
+	String gameMode = "NORMAL";
 
 	public GameFlowController(PhaseController phaseController, PlayerController playercontroller,
 							  GameBoardController gbcontroller,
@@ -45,6 +46,7 @@ public class GameFlowController {
 		this.gui.addArmy.setOnAction(new AddTerritoryListener(this));
 		this.gui.attack.setOnMouseClicked(new AttackListener(this));
 		this.gui.language.setOnMouseClicked(new PopUpLauncher(this));
+		this.gui.chooseGameMode.setOnMouseClicked(new GameModePopUpLauncher(this));
 		this.gui.setMouseListener(new EventHandler<MouseEvent>() {
 
 			@Override
