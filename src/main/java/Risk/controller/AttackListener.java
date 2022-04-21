@@ -19,9 +19,6 @@ public class AttackListener implements EventHandler<MouseEvent> {
 	
 	@Override
 	public void handle(MouseEvent event) {
-		
-		gfc.gui.territoryArmiesNumber.setText(gfc.phase);
-		
 		if (gfc.phaseController.getPhase().equals("attack") && attackingterritory.equals("")) {
 			if (!(gfc.gui.clickedTerritory.getText().equals(""))) {
 				if (!gfc.verifyOwnership(gfc.gui.clickedTerritory.getText())) {

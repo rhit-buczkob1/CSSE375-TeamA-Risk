@@ -23,6 +23,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
+import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -47,9 +48,9 @@ public class GraphicalUserInterface {
 	
 	public Button nextTurn;
 	public Text currentPlayer;
-	public Text currentPlayerId = new Text("1");
+	public Text currentPlayerId = new Text("");
 	public Text playerArmies;
-	public Text playerArmiesNumber = new Text("30");
+	public Text playerArmiesNumber = new Text("");
 	public Text territoryArmies;
 	public Text territoryArmiesNumber = new Text("0");
 	public Text territoryPlayer;
@@ -57,10 +58,14 @@ public class GraphicalUserInterface {
 	public Button attack;
 	public Button language;
 	public Button addArmy;
+	public Button setNumPlayers;
 	public Text attackerDice;
 	public Text defenderDice;
+	public Text numPlayers;
 	public Slider attackerDiceSlider = new Slider(1, 3, 1);
 	public Slider defenderDiceSlider = new Slider(1, 2, 1);
+	public Slider numPlayersSlider = new Slider(3, 6, 1);
+
 	public ComboBox<String> card1 = new ComboBox<String>();
 	public ComboBox<String> card2 = new ComboBox<String>();
 	public ComboBox<String> card3 = new ComboBox<String>();
@@ -73,8 +78,6 @@ public class GraphicalUserInterface {
 	public boolean testMode = false;
 	public int clickedIndex = -1;
 	private ArrayList<Rectangle> territoryInsides = new ArrayList<Rectangle>();
-	
-	
 
 	public GraphicalUserInterface(ResourceBundle msg) {
 		this.setUpTerritoryNamesAndLocation("src/main/resources/TerritoryNamesAndLocations.txt");
@@ -87,15 +90,17 @@ public class GraphicalUserInterface {
 		
 		this.language = new Button(messages.getString("lang"));
 		this.nextTurn = new Button(messages.getString("nextPhase"));
-		this.currentPlayer = new Text(messages.getString("player"));
+		this.currentPlayer = new Text("Set # of players");
 		this.playerArmies = new Text(messages.getString("armiesInPlayersHands"));
 		this.territoryArmies = new Text(messages.getString("armiesTerr"));
 		this.territoryPlayer = new Text(messages.getString("terrPlayer"));
 		this.attack = new Button(messages.getString("attack"));
 		this.addArmy = new Button(messages.getString("addArmy"));
+		this.setNumPlayers = new Button("Set # Players");
 		this.attackerDice = new Text(messages.getString("selectAttDice"));
 		this.defenderDice = new Text(messages.getString("selectDefDice"));
 		this.spendCards = new Button(messages.getString("spendCards"));
+		this.numPlayers = new Text("Number of Players");
 	}
 	
 	public GraphicalUserInterface(ResourceBundle msg, Stage stage) {
@@ -114,15 +119,19 @@ public class GraphicalUserInterface {
 		currentTerritoryDesc = new Text(messages.getString("select"));
 		this.language = new Button(messages.getString("lang"));
 		this.nextTurn = new Button(messages.getString("nextPhase"));
-		this.currentPlayer = new Text(messages.getString("player"));
+		this.currentPlayer = new Text("Set # of players");
 		this.playerArmies = new Text(messages.getString("armiesInPlayersHands"));
 		this.territoryArmies = new Text(messages.getString("armiesTerr"));
 		this.territoryPlayer = new Text(messages.getString("terrPlayer"));
 		this.attack = new Button(messages.getString("attack"));
 		this.addArmy = new Button(messages.getString("addArmy"));
+		this.setNumPlayers = new Button("Set # Players");
+
 		this.attackerDice = new Text(messages.getString("selectAttDice"));
 		this.defenderDice = new Text(messages.getString("selectDefDice"));
 		this.spendCards = new Button(messages.getString("spendCards"));
+		this.numPlayers = new Text("Number of Players");
+
 	}
 	
 	public void setLanguage(ResourceBundle msg, String phase) {
@@ -343,30 +352,47 @@ public class GraphicalUserInterface {
 		defenderDiceSlider.setMajorTickUnit(1);
 		defenderDiceSlider.setShowTickMarks(true);
 		defenderDiceSlider.setShowTickLabels(true);
+
+
+		numPlayersSlider.setSnapToTicks(true);
+		numPlayersSlider.setMinorTickCount(0);
+		numPlayersSlider.setMajorTickUnit(1);
+		numPlayersSlider.setShowTickMarks(true);
+		numPlayersSlider.setShowTickLabels(true);
 		
 		Group buttons = new Group();
 		
 		buttons.getChildren().add(addArmy);
+		buttons.getChildren().add(setNumPlayers);
 		buttons.getChildren().add(nextTurn);
 		buttons.getChildren().add(language);
 		buttons.getChildren().add(attack);
 		
 		buttons.getChildren().add(attackerDiceSlider);
 		buttons.getChildren().add(defenderDiceSlider);
+		buttons.getChildren().add(numPlayersSlider);
 		buttons.getChildren().add(attackerDice);
 		buttons.getChildren().add(defenderDice);
-		
+		buttons.getChildren().add(numPlayers);
+
+
 		nextTurn.setTranslateY(30);
 		attack.setTranslateY(60);
 		language.setTranslateY(90);
 		
 		attackerDice.setTranslateY(140);
 		defenderDice.setTranslateY(170);
+		numPlayers.setTranslateY(200);
+
 		attackerDiceSlider.setTranslateY(130);
 		defenderDiceSlider.setTranslateY(170);
+		numPlayersSlider.setTranslateY(200);
+
 		attackerDiceSlider.setTranslateX(125);
 		defenderDiceSlider.setTranslateX(125);
-		
+		numPlayersSlider.setTranslateX(125);
+
+
 		Group cards = new Group();
 		
 		cards.getChildren().add(card1);
@@ -390,11 +416,13 @@ public class GraphicalUserInterface {
 		
 		pane.add(root, 1, 1);
 		pane.add(options, 2, 1);
-		
+
+
 		Scene scene = new Scene(pane);
 		
 		stage.setScene(scene);
-		
+
+		setControlsVisibility(false);
 		stage.show();
 	}
 	
@@ -446,6 +474,12 @@ public class GraphicalUserInterface {
 		} else if (player == 4) {
 			return Color.GREEN;
 		}
+		else if (player == 5){
+			return Color.ORANGE;
+		}
+		else if (player == 6){
+			return Color.WHITE;
+		}
 		return Color.BLACK;
 	}
 
@@ -468,5 +502,48 @@ public class GraphicalUserInterface {
 		this.setTerritoryPlayer("" + player);
 	}
 
+	public void setNumPlayers(String numArmies){
+		this.currentPlayerId.setText("1");
+		this.currentPlayer.setText("Current Player:");
+		this.numPlayersSlider.setVisible(false);
+		this.numPlayers.setVisible(false);
+		this.setNumPlayers.setVisible(false);
+		this.playerArmiesNumber.setText(numArmies);
+		setControlsVisibility(true);
+	}
 
+	private void setControlsVisibility(boolean b){
+		 nextTurn.setVisible(b);
+		 playerArmies.setVisible(b);
+		 playerArmiesNumber.setVisible(b);
+		 territoryArmies.setVisible(b);
+		 territoryArmiesNumber.setVisible(b);
+		 territoryPlayer.setVisible(b);
+		 territoryPlayerNumber.setVisible(b);
+		 attack.setVisible(b);
+		 language.setVisible(b);
+		 addArmy.setVisible(b);
+		 attackerDice.setVisible(b);
+		 defenderDice.setVisible(b);
+		 attackerDiceSlider.setVisible(b);
+		 currentTerritoryDesc.setVisible(b);
+		 clickedTerritory.setVisible(b);
+		 defenderDiceSlider.setVisible(b);
+	}
+
+	public void changeNextTurnButton(boolean disabled) {
+		nextTurn.setDisable(disabled);
+	}
+
+	public void changeAttackButton(boolean disabled) {
+		attack.setDisable(disabled);
+	}
+
+	public void changeAddArmyButton(boolean disabled) {
+		addArmy.setDisable(disabled);
+	}
+
+	public void changeSpendCardsButton(boolean disabled) {
+		spendCards.setDisable(disabled);
+	}
 }

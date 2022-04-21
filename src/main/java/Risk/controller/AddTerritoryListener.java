@@ -14,11 +14,11 @@ public class AddTerritoryListener implements EventHandler<javafx.event.ActionEve
 	
 	@Override
 	public void handle(javafx.event.ActionEvent event) {
-		if (gfc.phase.equals("fortify") && fromTerritory.equals("")) {
+		if (gfc.getPhase().equals("fortify") && fromTerritory.equals("")) {
 			if (!(gfc.gui.clickedTerritory.getText().equals(""))) {
 				fromTerritory = gfc.gui.clickedTerritory.getText();
 			}
-		} else if (gfc.phase.equals("fortify") && toTerritory.equals("")) {
+		} else if (gfc.getPhase().equals("fortify") && toTerritory.equals("")) {
 			if (!(gfc.gui.clickedTerritory.equals(""))) {
 				toTerritory = gfc.gui.clickedTerritory.getText();
 
@@ -30,7 +30,7 @@ public class AddTerritoryListener implements EventHandler<javafx.event.ActionEve
 				}
 
 			}
-		} else if (gfc.phase.equals("fortify")) {
+		} else if (gfc.getPhase().equals("fortify")) {
 			try {
 				gfc.playercontroller.moveArmy(gfc.gbcontroller.getTerritory(fromTerritory),
 						gfc.gbcontroller.getTerritory(toTerritory), 1);
@@ -49,11 +49,18 @@ public class AddTerritoryListener implements EventHandler<javafx.event.ActionEve
 				}
 				Territory territory = gfc.gbcontroller.getTerritory(gfc.gui.clickedTerritory.getText());
 
-				gfc.gui.setCurrentPlayerArmies(Integer.toString(gfc.playercontroller.getCurrentPlayer().getPlayerArmies()));
+				int playerArmyCount = gfc.playercontroller.getCurrentPlayer().getPlayerArmies();
+
+				gfc.gui.setCurrentPlayerArmies(Integer.toString(playerArmyCount));
 				gfc.gui.setCurrentPlayer(String.valueOf(gfc.playercontroller.getCurrentPlayer().getId()));
 				gfc.gui.setTerritoryArmyCount(territory.getArmyCount());
 				gfc.gui.setCurrentTerritoryOwner(territory.getPlayer());
 				gfc.gui.paintTerritoryBounds();
+
+				if (playerArmyCount == 0) {
+					gfc.gui.changeNextTurnButton(false);
+					gfc.gui.changeAddArmyButton(true);
+				}
 			} else {
 				throw new IllegalArgumentException("Mouse not clicked");
 			}
