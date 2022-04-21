@@ -19,6 +19,10 @@ public class PhaseController {
         phases.put("setup", new SetupPhase());
     }
 
+    public void setPhase(String phase) {
+        this.phase = phase;
+    }
+
     public void next_phase() {
         updateCards = false;
         phases.get(phase).doPhase();

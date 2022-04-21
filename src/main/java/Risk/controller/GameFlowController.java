@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 public class GameFlowController {
 	PhaseController phaseController;
 	PlayerController playercontroller;
-	String phase;
+	private String phase;
 	GameBoardController gbcontroller;
 	GraphicalUserInterface gui;
 	AttackerDefenderController adcontroller;
@@ -57,7 +57,6 @@ public class GameFlowController {
 					Territory territory = gbcontroller.getTerritory(clicked.replace('_', ' '));
 					gui.setTerritoryArmyCount(territory.getArmyCount());
 					gui.setCurrentTerritoryOwner(territory.getPlayer());
-					System.out.println(territory.getPlayer() + " " + playercontroller.getCurrentPlayer().getId());
 					if (phaseController.getPhase().equals("attack")) {
 						gui.changeAttackButton(false);
 					} else if ((territory.getPlayer() == playercontroller.getCurrentPlayer().getId() ||

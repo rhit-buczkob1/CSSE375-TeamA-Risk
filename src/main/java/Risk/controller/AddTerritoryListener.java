@@ -14,11 +14,11 @@ public class AddTerritoryListener implements EventHandler<javafx.event.ActionEve
 	
 	@Override
 	public void handle(javafx.event.ActionEvent event) {
-		if (gfc.phase.equals("fortify") && fromTerritory.equals("")) {
+		if (gfc.getPhase().equals("fortify") && fromTerritory.equals("")) {
 			if (!(gfc.gui.clickedTerritory.getText().equals(""))) {
 				fromTerritory = gfc.gui.clickedTerritory.getText();
 			}
-		} else if (gfc.phase.equals("fortify") && toTerritory.equals("")) {
+		} else if (gfc.getPhase().equals("fortify") && toTerritory.equals("")) {
 			if (!(gfc.gui.clickedTerritory.equals(""))) {
 				toTerritory = gfc.gui.clickedTerritory.getText();
 
@@ -30,7 +30,7 @@ public class AddTerritoryListener implements EventHandler<javafx.event.ActionEve
 				}
 
 			}
-		} else if (gfc.phase.equals("fortify")) {
+		} else if (gfc.getPhase().equals("fortify")) {
 			try {
 				gfc.playercontroller.moveArmy(gfc.gbcontroller.getTerritory(fromTerritory),
 						gfc.gbcontroller.getTerritory(toTerritory), 1);

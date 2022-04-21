@@ -16,7 +16,7 @@ public class CardListener implements EventHandler<MouseEvent> {
     
     @Override
 	public void handle(MouseEvent event) {
-		if (!(gfc.phase.equals("assignment"))) {
+		if (!(gfc.getPhase().equals("assignment"))) {
 			return;
 		}
 		ArrayList<Card> playerHand = gfc.playercontroller.getCurrentPlayer().getDeck();
