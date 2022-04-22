@@ -99,9 +99,6 @@ public class AttackerDefenderController {
 		attacker.addTerritory();
 		attacker.caughtTerritory(true);
 		defenderTerritory.setArmyCount(attackerArmies);
-		if(defenderTerritory.isHQ) {
-
-		}
 		defenderTerritory.setPlayer(attacker.getId());
 	}
 
