@@ -71,7 +71,7 @@ public class PlayerControllerTest {
 			e.printStackTrace();
 		}
 
-		assertEquals(40, player.getPlayerArmies());
+		assertEquals(30, player.getPlayerArmies());
 	}
 
 	@Test
