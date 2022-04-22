@@ -71,7 +71,8 @@ public class GameFlowController {
 								territory.getPlayer() == 0) && playercontroller.getCurrentPlayer().getPlayerArmies() != 0) {
 						gui.changeAddArmyButton(false);
 					} else if (!phaseController.getPhase().equals("fortify")){
-						gui.changeAddArmyButton(true);
+						if (!phaseController.getPhase().equals("assignment") || playercontroller.getCurrentPlayer().getPlayerArmies() != 0)
+							gui.changeAddArmyButton(true);
 					} else if (phaseController.getPhase().equals("fortify")) {
 						if (gui.clickedTerritory.getText().equals("") || !verifyOwnership(gui.clickedTerritory.getText())) {
 							changeGuiButtons(true, false, true, true, true);
@@ -89,6 +90,7 @@ public class GameFlowController {
 				} else {
 					gui.changeAttackButton(true);
 					gui.changeAddArmyButton(true);
+					gui.changeAttackFromButton(true);
 				}
 			}
 			
@@ -163,8 +165,8 @@ public class GameFlowController {
 		switch (phaseController.getPhase()) {
 			case "assignment":
 				if (gui.clickedTerritory.getText().equals("") || !verifyOwnership(gui.clickedTerritory.getText())) 
-					changeGuiButtons(true, false, true, false, true);
-				else changeGuiButtons(false, false, true, false, true);
+					changeGuiButtons(true, true, true, false, true);
+				else changeGuiButtons(false, true, true, false, true);
 				gui.changeMoveFrom(true);
 				gui.transportingTerritory = "";
 				gui.paintTerritoryBounds();
@@ -187,6 +189,8 @@ public class GameFlowController {
 						gui.changeMoveFrom(false);
 					}
 				}
+				gui.attackingTerritory = "";
+				gui.paintTerritoryBounds();
 				break;
 		}
 	}
