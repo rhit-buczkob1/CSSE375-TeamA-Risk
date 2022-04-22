@@ -21,9 +21,10 @@ public class 	GameBoardControllerTest {
 	public void loadshuffletest() {
 		
 		GameBoardController controller = new GameBoardController();
-		
-		
-		
+		controller.map = "-globe";
+
+
+
 		controller.loadGameBoard();
 		controller.loadTerritoryNeighboring();
 		controller.populateGameBoardDeckTroops();
@@ -50,6 +51,7 @@ public class 	GameBoardControllerTest {
 	public void initGameTest_allterritories() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
 
 		controller.initGame();
 		assertEquals(controller.getGameBoard().continents.size(), 6);
@@ -105,6 +107,8 @@ public class 	GameBoardControllerTest {
 	public void getTerritoryOwner_input2() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
+
 		controller.initGame();
 
 		try {
@@ -122,9 +126,10 @@ public class 	GameBoardControllerTest {
 	public void getTerritoryOwner_inputvalid() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
 		controller.initGame();
 		
-		
+
 		controller.getTerritory("Alberta").setPlayer(2);
 
 		try {
@@ -141,6 +146,7 @@ public class 	GameBoardControllerTest {
 	public void testIsAdjacent_input1() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
 
 		controller.initGame();
 		try {
@@ -155,6 +161,7 @@ public class 	GameBoardControllerTest {
 	public void testIsAdjacent_input2() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
 
 		controller.initGame();
 		try {
@@ -168,6 +175,7 @@ public class 	GameBoardControllerTest {
 	public void testIsAdjacent_input3() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
 
 		controller.initGame();
 		try {
@@ -182,6 +190,7 @@ public class 	GameBoardControllerTest {
 	public void testGetTerritory_input1() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
 
 		controller.initGame();
 		try {
@@ -198,6 +207,7 @@ public class 	GameBoardControllerTest {
 	public void testGetTerritory_input2() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
 
 		controller.initGame();
 		try {
@@ -212,6 +222,7 @@ public class 	GameBoardControllerTest {
 	public void testPopulateGameBoardDeckTerritory() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
 
 		controller.initGame();
 		controller.populateGameBoardDeckTroops();
@@ -223,6 +234,7 @@ public class 	GameBoardControllerTest {
 	public void testPopulateGameBoardDeckTroops() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
 
 		controller.initGame();
 		controller.populateGameBoardDeckTroops();
@@ -237,6 +249,7 @@ public class 	GameBoardControllerTest {
 	public void testgetNewContinentPlayerArmies_toolow() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
 
 		controller.initGame();
 		controller.populateGameBoardDeckTroops();
@@ -253,6 +266,7 @@ public class 	GameBoardControllerTest {
 	public void testgetNewContinentPlayerArmies_toohigh() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
 
 		controller.initGame();
 		controller.populateGameBoardDeckTroops();
@@ -269,6 +283,7 @@ public class 	GameBoardControllerTest {
 	public void testgetNewContinentPlayerArmies_max() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
 
 		controller.initGame();
 		controller.populateGameBoardDeckTroops();
@@ -287,6 +302,7 @@ public class 	GameBoardControllerTest {
 	public void testgetNewContinentPlayerArmies_min() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
 
 		controller.initGame();
 
@@ -495,6 +511,8 @@ public class 	GameBoardControllerTest {
 	public void checkOwnedTerritorytest_valid() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
+
 		controller.initGame();
 
 		assertEquals(true, controller.checkOwnedTerritory("Peru", "Argentina", "Russia", 0));
@@ -505,6 +523,8 @@ public class 	GameBoardControllerTest {
 	public void checkOwnedTerritorytest_invalidplayer() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
+
 		controller.initGame();
 
 		assertEquals(false, controller.checkOwnedTerritory("Peru", "Argentina", "Russia", 1));
@@ -515,6 +535,8 @@ public class 	GameBoardControllerTest {
 	public void checkOwnedTerritorytest_invalidterritories() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
+
 		controller.initGame();
 
 		assertEquals(false, controller.checkOwnedTerritory("not", "real", "territories", 0));
@@ -525,6 +547,8 @@ public class 	GameBoardControllerTest {
 	public void checkOwnedTerritorytest_invalidterritories_1and2() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
+
 		controller.initGame();
 
 		assertEquals(true, controller.checkOwnedTerritory("not", "real", "Russia", 0));
@@ -535,6 +559,8 @@ public class 	GameBoardControllerTest {
 	public void checkOwnedTerritorytest_invalidterritories_1and3() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
+
 		controller.initGame();
 
 		assertEquals(true, controller.checkOwnedTerritory("not", "Russia", "territories", 0));
@@ -545,6 +571,8 @@ public class 	GameBoardControllerTest {
 	public void checkOwnedTerritorytest_invalidterritories_allnullstring() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
+
 		controller.initGame();
 
 		assertEquals(false, controller.checkOwnedTerritory("", "", "", 0));
@@ -555,6 +583,8 @@ public class 	GameBoardControllerTest {
 	public void checkOwnedTerritorytest_invalidterritories_invalid_player() {
 		GameBoardController controller = new GameBoardController();
 		controller.initializeNewBoardForTest();
+		controller.map = "-globe";
+
 		controller.initGame();
 
 		assertEquals(false, controller.checkOwnedTerritory("Peru", "Argentina", "Russia", -1));
