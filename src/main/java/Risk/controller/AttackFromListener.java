@@ -47,7 +47,7 @@ public class AttackFromListener implements EventHandler<MouseEvent> {
 			}
 
 			gfc.gui.setAttacking(gfc.gui.clickedTerritory.getText());
-			gfc.changeGuiButtons(false, true, true, false, true);
+			gfc.changeGuiButtons(true, true, true, false, true);
 			gfc.gui.paintTerritoryBounds();
 		}
 	}
