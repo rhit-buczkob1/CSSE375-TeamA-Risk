@@ -78,7 +78,7 @@ public class ContinentTests {
 		continenttotest.setPlayer(4);
 		assertEquals(4, continenttotest.getPlayer());
 		try {
-			continenttotest.setPlayer(5);
+			continenttotest.setPlayer(7);
 			fail("Shouldn't reach this point");
 		} catch (Exception e) {
 			assertEquals("Invalid Player", e.getMessage());
