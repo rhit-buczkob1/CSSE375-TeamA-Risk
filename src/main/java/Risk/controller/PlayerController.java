@@ -11,6 +11,7 @@ public class PlayerController {
 	ArrayList<Player> players = new ArrayList<>();
 	int currentIndex = 0;
 	boolean initSetup = true;
+	private String gameMode;
 
 	public void addPlayer(Player player) {
 		this.players.add(player);
@@ -79,6 +80,9 @@ public class PlayerController {
 
 	public void setTerritoryOwnership(Territory territory) {
 		Player currentPlayer = players.get(currentIndex);
+		if(currentPlayer.getTerritories() == 0 && gameMode.equals("HEADQUARTERS")) {
+			territory.setHQ(true);
+		}
 		territory.setPlayer(currentPlayer.getId());
 	}
 
@@ -217,4 +221,7 @@ public class PlayerController {
 		return players.size();
 	}
 
+	public void setGameMode(String gameMode) {
+		this.gameMode = gameMode;
+	}
 }

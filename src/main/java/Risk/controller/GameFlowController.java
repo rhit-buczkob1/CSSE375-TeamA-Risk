@@ -99,6 +99,10 @@ public class GameFlowController {
 			this.gui.setTerritoryColor(defendingTerritory.getName(), this.playercontroller.getCurrentPlayer().getId());
 			gui.currentTerritoryArmyCount = defendingTerritory.getArmyCount();
 			gui.currentTerritoryPlayer = defendingTerritory.getPlayer();
+			if(defendingTerritory.isHQ) {
+				gbcontroller.transferAllTerritories(this.adcontroller.defender.getId(), this.playercontroller.getCurrentPlayer().getId(), gui);
+				playercontroller.players.remove(this.adcontroller.defender);
+			}
 			this.gui.paintTerritoryBounds();
 		}
 
@@ -236,6 +240,7 @@ public class GameFlowController {
 
 	public void swapToAlternatePhaseController() {
 		String phase = this.phaseController.getPhase();
+		this.playercontroller.setGameMode(this.gameMode);
 		this.phaseController = new AlternatePhaseController(this.playercontroller, this.gbcontroller);
 		this.phaseController.setPhase(phase);
 	}

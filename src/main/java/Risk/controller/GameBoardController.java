@@ -1,6 +1,7 @@
 package Risk.controller;
 
 import Risk.model.*;
+import Risk.view.GraphicalUserInterface;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -238,4 +239,14 @@ public class GameBoardController {
 		return false;
 	}
 
+    public void transferAllTerritories(int fromId, int toId, GraphicalUserInterface gui) {
+		for(Continent continent : this.gameBoard.continents) {
+			for(Territory territory : continent.territories) {
+				if(territory.getPlayer() == fromId) {
+					territory.setPlayer(toId);
+					gui.setTerritoryColor(territory.getName(), toId);
+				}
+			}
+		}
+    }
 }
