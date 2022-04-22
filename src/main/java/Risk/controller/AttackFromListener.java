@@ -7,30 +7,21 @@ import javafx.scene.input.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AttackListener implements EventHandler<MouseEvent> {
+public class AttackFromListener implements EventHandler<MouseEvent> {
 
-	String attackingterritory = "";
 	GameFlowController gfc;
 	
-	public AttackListener(GameFlowController gfc) {
+	public AttackFromListener(GameFlowController gfc) {
 		this.gfc = gfc;
 	}
 	
-	
-	@Override
-	public void handle(MouseEvent event) {
-		if (gfc.phaseController.getPhase().equals("attack") && attackingterritory.equals("")) {
-			if (!(gfc.gui.clickedTerritory.getText().equals(""))) {
-				if (!gfc.verifyOwnership(gfc.gui.clickedTerritory.getText())) {
-					return;
-				}
+	public class AttackListener implements EventHandler<MouseEvent> {
 
-				attackingterritory = gfc.gui.clickedTerritory.getText();
-			}
-		} else if (gfc.phaseController.getPhase().equals("attack")) {
+		@Override
+		public void handle(MouseEvent event) {
 			if (!(gfc.gui.clickedTerritory.getText().equals(""))) {
-				String attack = this.attackingterritory;
-				this.attackingterritory = "";
+				String attack = gfc.gui.attackingTerritory.replace('_', ' ');
+				gfc.gui.attackingTerritory = "";
 				Territory defendingTerritory = gfc.gbcontroller.getTerritory(gfc.gui.clickedTerritory.getText());
 				gfc.initiateCombat(attack, defendingTerritory.getName());
 				
@@ -47,5 +38,17 @@ public class AttackListener implements EventHandler<MouseEvent> {
 			}
 		}
 	}
+	
+	@Override
+	public void handle(MouseEvent event) {
+		if (!(gfc.gui.clickedTerritory.getText().equals(""))) {
+			if (!gfc.verifyOwnership(gfc.gui.clickedTerritory.getText())) {
+				return;
+			}
 
+			gfc.gui.setAttacking(gfc.gui.clickedTerritory.getText());
+			gfc.changeGuiButtons(false, true, true, false, true);
+			gfc.gui.paintTerritoryBounds();
+		}
+	}
 }

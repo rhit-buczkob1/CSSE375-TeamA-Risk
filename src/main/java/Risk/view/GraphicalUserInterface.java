@@ -23,7 +23,6 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
-import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -56,8 +55,10 @@ public class GraphicalUserInterface {
 	public Text territoryPlayer;
 	public Text territoryPlayerNumber = new Text("0");
 	public Button attack;
+	public Button attackFrom;
 	public Button language;
 	public Button addArmy;
+	public Button moveFrom;
 	public Button setNumPlayers;
 	public Text attackerDice;
 	public Text defenderDice;
@@ -78,6 +79,8 @@ public class GraphicalUserInterface {
 	public boolean testMode = false;
 	public int clickedIndex = -1;
 	private ArrayList<Rectangle> territoryInsides = new ArrayList<Rectangle>();
+	public String attackingTerritory = "";
+	public String transportingTerritory = "";
 
 	public GraphicalUserInterface(ResourceBundle msg) {
 		this.setUpTerritoryNamesAndLocation("src/main/resources/TerritoryNamesAndLocations.txt");
@@ -124,7 +127,9 @@ public class GraphicalUserInterface {
 		this.territoryArmies = new Text(messages.getString("armiesTerr"));
 		this.territoryPlayer = new Text(messages.getString("terrPlayer"));
 		this.attack = new Button(messages.getString("attack"));
+		this.attackFrom = new Button(messages.getString("attackFrom"));
 		this.addArmy = new Button(messages.getString("addArmy"));
+		this.moveFrom = new Button(messages.getString("moveFrom"));
 		this.setNumPlayers = new Button("Set # Players");
 
 		this.attackerDice = new Text(messages.getString("selectAttDice"));
@@ -143,7 +148,9 @@ public class GraphicalUserInterface {
 		this.territoryArmies.setText(messages.getString("armiesTerr"));
 		this.territoryPlayer.setText(messages.getString("terrPlayer"));
 		this.attack.setText(messages.getString("attack"));
+		this.attackFrom.setText(messages.getString("attackFrom"));
 		this.addArmy.setText(messages.getString("addArmy"));
+		this.moveFrom.setText(messages.getString("moveFrom"));
 		this.attackerDice.setText(messages.getString("selectAttDice"));
 		this.defenderDice.setText(messages.getString("selectDefDice"));
 		this.spendCards.setText(messages.getString("spendCards"));
@@ -363,10 +370,12 @@ public class GraphicalUserInterface {
 		Group buttons = new Group();
 		
 		buttons.getChildren().add(addArmy);
+		buttons.getChildren().add(moveFrom);
 		buttons.getChildren().add(setNumPlayers);
 		buttons.getChildren().add(nextTurn);
 		buttons.getChildren().add(language);
 		buttons.getChildren().add(attack);
+		buttons.getChildren().add(attackFrom);
 		
 		buttons.getChildren().add(attackerDiceSlider);
 		buttons.getChildren().add(defenderDiceSlider);
@@ -376,20 +385,24 @@ public class GraphicalUserInterface {
 		buttons.getChildren().add(numPlayers);
 
 
+		moveFrom.setTranslateX(120);
 		nextTurn.setTranslateY(30);
 		attack.setTranslateY(60);
+		attackFrom.setTranslateY(60);
+		attackFrom.setTranslateX(120);
 		language.setTranslateY(90);
+		setNumPlayers.setTranslateY(230);
 		
 		attackerDice.setTranslateY(140);
-		defenderDice.setTranslateY(170);
+		defenderDice.setTranslateY(185);
 		numPlayers.setTranslateY(200);
 
 		attackerDiceSlider.setTranslateY(130);
-		defenderDiceSlider.setTranslateY(170);
+		defenderDiceSlider.setTranslateY(175);
 		numPlayersSlider.setTranslateY(200);
 
-		attackerDiceSlider.setTranslateX(125);
-		defenderDiceSlider.setTranslateX(125);
+		attackerDiceSlider.setTranslateX(160);
+		defenderDiceSlider.setTranslateX(160);
 		numPlayersSlider.setTranslateX(125);
 
 
@@ -406,7 +419,7 @@ public class GraphicalUserInterface {
 		
 		card2.setTranslateX(100);
 		card3.setTranslateX(200);
-		spendCards.setTranslateY(150);
+		spendCards.setTranslateY(30);
 		
 		pane.setAlignment(Pos.TOP_LEFT);
 		
@@ -422,6 +435,7 @@ public class GraphicalUserInterface {
 		
 		stage.setScene(scene);
 
+		this.changeMoveFrom(true);
 		setControlsVisibility(false);
 		stage.show();
 	}
@@ -443,6 +457,10 @@ public class GraphicalUserInterface {
 			Color color = Color.BLACK;
 			if (clickedIndex == i) {
 				color = Color.WHITE;
+			} else if (attackingTerritory.equals(territoryNames.get(i))) {
+				color = Color.GREENYELLOW;
+			} else if (transportingTerritory.equals(territoryNames.get(i))) {
+				color = Color.GREENYELLOW;
 			}
 			
 			border.setFill(color);
@@ -473,11 +491,9 @@ public class GraphicalUserInterface {
 			return Color.YELLOW;
 		} else if (player == 4) {
 			return Color.GREEN;
-		}
-		else if (player == 5){
+		} else if (player == 5){
 			return Color.ORANGE;
-		}
-		else if (player == 6){
+		} else if (player == 6){
 			return Color.WHITE;
 		}
 		return Color.BLACK;
@@ -521,6 +537,7 @@ public class GraphicalUserInterface {
 		 territoryPlayer.setVisible(b);
 		 territoryPlayerNumber.setVisible(b);
 		 attack.setVisible(b);
+		 attackFrom.setVisible(b);
 		 language.setVisible(b);
 		 addArmy.setVisible(b);
 		 attackerDice.setVisible(b);
@@ -529,6 +546,11 @@ public class GraphicalUserInterface {
 		 currentTerritoryDesc.setVisible(b);
 		 clickedTerritory.setVisible(b);
 		 defenderDiceSlider.setVisible(b);
+		 spendCards.setVisible(b);
+		 moveFrom.setVisible(b);
+		 card1.setVisible(b);
+		 card2.setVisible(b);
+		 card3.setVisible(b);
 	}
 
 	public void changeNextTurnButton(boolean disabled) {
@@ -542,8 +564,24 @@ public class GraphicalUserInterface {
 	public void changeAddArmyButton(boolean disabled) {
 		addArmy.setDisable(disabled);
 	}
+	
+	public void changeMoveFrom(boolean disabled) {
+		moveFrom.setDisable(disabled);
+	}
 
 	public void changeSpendCardsButton(boolean disabled) {
 		spendCards.setDisable(disabled);
+	}
+	
+	public void changeAttackFromButton(boolean disabled) {
+		attackFrom.setDisable(disabled);
+	}
+
+	public void setAttacking(String text) {
+		this.attackingTerritory = text.replace(' ', '_');
+	}
+	
+	public void setTransporting(String text) {
+		this.transportingTerritory = text.replace(' ', '_');
 	}
 }
