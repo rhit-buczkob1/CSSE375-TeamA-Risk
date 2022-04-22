@@ -1,8 +1,6 @@
 package Risk.controller;
 
-import Risk.model.Card;
 import Risk.model.Continent;
-import Risk.model.Deck;
 import Risk.model.GameBoard;
 import Risk.model.Territory;
 import org.easymock.EasyMock;
@@ -26,18 +24,6 @@ public class 	GameBoardControllerTest {
 		controller.populateGameBoardDeckTroops();
 		assertFalse(controller.gameBoardDeck.drawCard().territory.equals("New Guinea"));
 	}
-
-	@Test
-	public void initGameTest() {
-		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
-
-		controller.initGame();
-		System.out.println(controller.getGameBoard());
-		System.out.println(controller.getGameBoard().continents.size());
-
-		assertTrue(true);
-	}
 	
 	@Test
 	public void initGameTest_allterritories() {
@@ -49,7 +35,7 @@ public class 	GameBoardControllerTest {
 		int territorycount = 0;
 		for (Continent continent : controller.getGameBoard().continents) {
 			for (Territory territories : continent.territories) {
-				assertEquals(true, (territories.getNeighboring().size() > 0));
+				assertTrue((territories.getNeighboring().size() > 0));
 				territorycount++;
 			}
 			
@@ -339,62 +325,16 @@ public class 	GameBoardControllerTest {
 	}
 
 	@Test
-	public void updateGameBoard_min() {
-		GameBoardController controller = EasyMock.partialMockBuilder(GameBoardController.class)
-				.addMockedMethod("updatePlayer").createMock();
-		Set<Continent> continents = new HashSet<Continent>();
-
-		EasyMock.replay(controller);
-		controller.initializeNewBoardForTest();
-		controller.getGameBoard().continents = continents;
-		controller.updateGameBoard();
-		EasyMock.verify(controller);
-	}
-
-	@Test
-	public void updateGameBoard_1() {
-		GameBoardController controller = EasyMock.partialMockBuilder(GameBoardController.class)
-				.addMockedMethod("updatePlayer").createMock();
-		Continent testcontinent = new Continent(new ArrayList<Territory>(), "test");
-		Set<Continent> continents = new HashSet<Continent>();
-		continents.add(testcontinent);
-		controller.updatePlayer(testcontinent);
-		EasyMock.replay(controller);
-		controller.initializeNewBoardForTest();
-		controller.getGameBoard().continents = continents;
-		controller.updateGameBoard();
-		EasyMock.verify(controller);
-	}
-
-	@Test
-	public void updateGameBoard_max() {
+	public void updateGameBoard() {
 		GameBoardController controller = EasyMock.partialMockBuilder(GameBoardController.class)
 				.addMockedMethod("updatePlayer").createMock();
 
-		Continent testcontinent = new Continent(new ArrayList<Territory>(), "test1");
-		Continent testcontinent2 = new Continent(new ArrayList<Territory>(), "test2");
-		Continent testcontinent3 = new Continent(new ArrayList<Territory>(), "test3");
-		Continent testcontinent4 = new Continent(new ArrayList<Territory>(), "test4");
-		Continent testcontinent5 = new Continent(new ArrayList<Territory>(), "test5");
-		Continent testcontinent6 = new Continent(new ArrayList<Territory>(), "test6");
-		Continent testcontinent7 = new Continent(new ArrayList<Territory>(), "test7");
-
 		Set<Continent> continents = new HashSet<Continent>();
-		continents.add(testcontinent);
-		continents.add(testcontinent2);
-		continents.add(testcontinent3);
-		continents.add(testcontinent4);
-		continents.add(testcontinent5);
-		continents.add(testcontinent6);
-		continents.add(testcontinent7);
-
-		controller.updatePlayer(testcontinent);
-		controller.updatePlayer(testcontinent2);
-		controller.updatePlayer(testcontinent3);
-		controller.updatePlayer(testcontinent4);
-		controller.updatePlayer(testcontinent5);
-		controller.updatePlayer(testcontinent6);
-		controller.updatePlayer(testcontinent7);
+		for (int i = 0; i < 7; i++) {
+			Continent continent = new Continent(new ArrayList<Territory>(), "test" + (i+1));
+			continents.add(continent);
+			controller.updatePlayer(continent);
+		}
 
 		EasyMock.replay(controller);
 		controller.initializeNewBoardForTest();
@@ -427,7 +367,7 @@ public class 	GameBoardControllerTest {
 		controller.initializeNewBoardForTest();
 		controller.initGame();
 
-		assertEquals(true, controller.checkOwnedTerritory("Peru", "Argentina", "Russia", 0));
+		assertTrue(controller.checkOwnedTerritory("Peru", "Argentina", "Russia", 0));
 	}
 
 	@Test
@@ -436,7 +376,7 @@ public class 	GameBoardControllerTest {
 		controller.initializeNewBoardForTest();
 		controller.initGame();
 
-		assertEquals(false, controller.checkOwnedTerritory("Peru", "Argentina", "Russia", 1));
+		assertFalse(controller.checkOwnedTerritory("Peru", "Argentina", "Russia", 1));
 	}
 
 	@Test
@@ -445,7 +385,7 @@ public class 	GameBoardControllerTest {
 		controller.initializeNewBoardForTest();
 		controller.initGame();
 
-		assertEquals(false, controller.checkOwnedTerritory("not", "real", "territories", 0));
+		assertFalse(controller.checkOwnedTerritory("not", "real", "territories", 0));
 	}
 
 	@Test
@@ -454,7 +394,7 @@ public class 	GameBoardControllerTest {
 		controller.initializeNewBoardForTest();
 		controller.initGame();
 
-		assertEquals(true, controller.checkOwnedTerritory("not", "real", "Russia", 0));
+		assertTrue(controller.checkOwnedTerritory("not", "real", "Russia", 0));
 	}
 
 	@Test
@@ -463,7 +403,7 @@ public class 	GameBoardControllerTest {
 		controller.initializeNewBoardForTest();
 		controller.initGame();
 
-		assertEquals(true, controller.checkOwnedTerritory("not", "Russia", "territories", 0));
+		assertTrue(controller.checkOwnedTerritory("not", "Russia", "territories", 0));
 	}
 
 	@Test
@@ -472,7 +412,7 @@ public class 	GameBoardControllerTest {
 		controller.initializeNewBoardForTest();
 		controller.initGame();
 
-		assertEquals(false, controller.checkOwnedTerritory("", "", "", 0));
+		assertFalse(controller.checkOwnedTerritory("", "", "", 0));
 	}
 
 	@Test
@@ -481,6 +421,6 @@ public class 	GameBoardControllerTest {
 		controller.initializeNewBoardForTest();
 		controller.initGame();
 
-		assertEquals(false, controller.checkOwnedTerritory("Peru", "Argentina", "Russia", -1));
+		assertFalse(controller.checkOwnedTerritory("Peru", "Argentina", "Russia", -1));
 	}
 }
