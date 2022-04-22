@@ -601,6 +601,7 @@ public class GraphicalUserInterface {
 		this.numPlayers.setVisible(false);
 		this.setNumPlayers.setVisible(false);
 		this.maps.setVisible(false);
+		this.chooseGameMode.setVisible(false);
 		this.playerArmiesNumber.setText(numArmies);
 		setControlsVisibility(true);
 		changeBackground();
