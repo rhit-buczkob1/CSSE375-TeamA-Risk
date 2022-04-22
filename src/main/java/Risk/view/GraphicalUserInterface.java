@@ -441,11 +441,7 @@ public class GraphicalUserInterface {
 			player.setTranslateX(200);
 			root.setTranslateX(80);
 			root.setTranslateY(-20);
-			//setControlsVisibility(true);
-		} else{
-			//setControlsVisibility(true);
 		}
-
 
 		stage.setScene(scene);
 
@@ -589,9 +585,7 @@ public class GraphicalUserInterface {
 
 	}
 
-
 	public void changeBackground(){
-
 		if(this.maps.getValue().equals("Europe")) {
 			this.map = "-europe";
 			this.setUpTerritoryNamesAndLocation("src/main/resources/TerritoryNamesAndLocations-europe");
@@ -603,8 +597,6 @@ public class GraphicalUserInterface {
 		this.initializeFrame();
 
 	}
-
-
 	
 	public void changeAttackFromButton(boolean disabled) {
 		attackFrom.setDisable(disabled);

@@ -127,18 +127,9 @@ public class AttackerDefenderControllerTests {
 		Territory test1 = new Territory("test1");
 		Territory test2 = new Territory("test2");
 
-		test1.setPlayer(1);
-		test2.setPlayer(2);
 
-		test1.addArmies(20);
-		test2.addArmies(20);
+		setupAttackDefense(player1, player2, test1, test2, 20, 20, 15, adc);
 
-		adc.setAttacker(player1);
-		adc.setDefender(player2);
-
-		adc.setAttackingTerritory(test1);
-		adc.setDefendingTerritory(test2);
-		adc.setArmies(15);
 
 		assertEquals(5, test1.getArmyCount());
 		assertEquals(20, test2.getArmyCount());
@@ -153,18 +144,9 @@ public class AttackerDefenderControllerTests {
 		Territory test1 = new Territory("test1");
 		Territory test2 = new Territory("test2");
 
-		test1.setPlayer(1);
-		test2.setPlayer(2);
 
-		test1.addArmies(3);
-		test2.addArmies(20);
+		setupAttackDefense(player1, player2, test1, test2, 3, 20, 1, adc);
 
-		adc.setAttacker(player1);
-		adc.setDefender(player2);
-
-		adc.setAttackingTerritory(test1);
-		adc.setDefendingTerritory(test2);
-		adc.setArmies(1);
 		assertEquals(2, test1.getArmyCount());
 	}
 
@@ -186,17 +168,7 @@ public class AttackerDefenderControllerTests {
 
 		EasyMock.replay(rand);
 
-		test1.setPlayer(1);
-		test2.setPlayer(2);
-
-		test1.addArmies(20);
-		test2.addArmies(20);
-
-		adc.setAttacker(player1);
-		adc.setDefender(player2);
-		adc.setAttackingTerritory(test1);
-		adc.setDefendingTerritory(test2);
-		adc.setArmies(15);
+		setupAttackDefense(player1, player2, test1, test2, 20, 20, 15, adc);
 
 		adc.combat(3, 2, rand);
 
@@ -223,17 +195,7 @@ public class AttackerDefenderControllerTests {
 
 		EasyMock.replay(rand);
 
-		test1.setPlayer(1);
-		test2.setPlayer(2);
-
-		test1.addArmies(20);
-		test2.addArmies(20);
-
-		adc.setAttacker(player1);
-		adc.setDefender(player2);
-		adc.setAttackingTerritory(test1);
-		adc.setDefendingTerritory(test2);
-		adc.setArmies(15);
+		setupAttackDefense(player1, player2, test1, test2, 20, 20, 15, adc);
 
 		adc.combat(1, 2, rand);
 
@@ -268,19 +230,8 @@ public class AttackerDefenderControllerTests {
 		Territory test2 = new Territory("test2");
 
 
-		test1.setPlayer(1);
-		test2.setPlayer(2);
-
-		test1.addArmies(20);
-		test2.addArmies(20);
-
-		adc.setAttacker(player1);
-		adc.setDefender(player2);
-
-		adc.setAttackingTerritory(test1);
-		adc.setDefendingTerritory(test2);
 		try {
-			adc.setArmies(20);
+			setupAttackDefense(player1, player2, test1, test2, 20, 20, 20, adc);
 			fail();
 		} catch (IllegalArgumentException e) {
 			System.err.println(e.getMessage());
@@ -297,19 +248,10 @@ public class AttackerDefenderControllerTests {
 		Territory test1 = new Territory("test1");
 		Territory test2 = new Territory("test2");
 
-		test1.setPlayer(1);
-		test2.setPlayer(2);
 
-		test1.addArmies(20);
-		test2.addArmies(20);
-
-		adc.setAttacker(player1);
-		adc.setDefender(player2);
-
-		adc.setAttackingTerritory(test1);
-		adc.setDefendingTerritory(test2);
 		try {
-			adc.setArmies(21);
+			setupAttackDefense(player1, player2, test1, test2, 20, 20, 21, adc);
+
 			fail();
 		} catch (IllegalArgumentException e) {
 			System.err.println(e.getMessage());
@@ -328,17 +270,8 @@ public class AttackerDefenderControllerTests {
 		Random rand = EasyMock.strictMock(Random.class);
 
 		EasyMock.replay(rand);
-		test1.setPlayer(1);
-		test2.setPlayer(2);
 
-		test1.addArmies(20);
-		test2.addArmies(20);
-
-		adc.setAttacker(player1);
-		adc.setDefender(player2);
-		adc.setAttackingTerritory(test1);
-		adc.setDefendingTerritory(test2);
-		adc.setArmies(2);
+		setupAttackDefense(player1, player2, test1, test2, 20, 20, 2, adc);
 
 		try {
 			adc.combat(3, 2, rand);
@@ -358,17 +291,9 @@ public class AttackerDefenderControllerTests {
 		Random rand = EasyMock.strictMock(Random.class);
 		EasyMock.replay(rand);
 
-		test1.setPlayer(1);
-		test2.setPlayer(2);
 
-		test1.addArmies(20);
-		test2.addArmies(1);
+		setupAttackDefense(player1, player2, test1, test2, 20, 1, 15, adc);
 
-		adc.setAttacker(player1);
-		adc.setDefender(player2);
-		adc.setAttackingTerritory(test1);
-		adc.setDefendingTerritory(test2);
-		adc.setArmies(15);
 
 		try {
 			adc.combat(3, 2, rand);
@@ -398,17 +323,9 @@ public class AttackerDefenderControllerTests {
 		player1.addTerritory();
 		player2.addTerritory();
 
-		test1.setPlayer(1);
-		test2.setPlayer(2);
 
-		test1.addArmies(20);
-		test2.addArmies(2);
+		setupAttackDefense(player1, player2, test1, test2, 20, 2, 15, adc);
 
-		adc.setAttacker(player1);
-		adc.setDefender(player2);
-		adc.setAttackingTerritory(test1);
-		adc.setDefendingTerritory(test2);
-		adc.setArmies(15);
 
 		adc.combat(3, 2, rand);
 
@@ -437,17 +354,8 @@ public class AttackerDefenderControllerTests {
 
 		EasyMock.replay(rand);
 
-		test1.setPlayer(1);
-		test2.setPlayer(2);
+		setupAttackDefense(player1, player2, test1, test2, 20, 20, 15, adc);
 
-		test1.addArmies(20);
-		test2.addArmies(20);
-
-		adc.setAttacker(player1);
-		adc.setDefender(player2);
-		adc.setAttackingTerritory(test1);
-		adc.setDefendingTerritory(test2);
-		adc.setArmies(15);
 
 		adc.combat(1, 2, rand);
 
@@ -474,17 +382,7 @@ public class AttackerDefenderControllerTests {
 
 		EasyMock.replay(rand);
 
-		test1.setPlayer(1);
-		test2.setPlayer(2);
-
-		test1.addArmies(20);
-		test2.addArmies(20);
-
-		adc.setAttacker(player1);
-		adc.setDefender(player2);
-		adc.setAttackingTerritory(test1);
-		adc.setDefendingTerritory(test2);
-		adc.setArmies(15);
+		setupAttackDefense(player1, player2, test1, test2, 20, 20, 15, adc);
 
 		adc.combat(2, 2, rand);
 
@@ -512,17 +410,8 @@ public class AttackerDefenderControllerTests {
 
 		EasyMock.replay(rand);
 
-		test1.setPlayer(1);
-		test2.setPlayer(2);
+		setupAttackDefense(player1, player2, test1, test2, 20, 20, 15, adc);
 
-		test1.addArmies(20);
-		test2.addArmies(20);
-
-		adc.setAttacker(player1);
-		adc.setDefender(player2);
-		adc.setAttackingTerritory(test1);
-		adc.setDefendingTerritory(test2);
-		adc.setArmies(15);
 
 		adc.combat(3, 2, rand);
 
@@ -553,17 +442,9 @@ public class AttackerDefenderControllerTests {
 		player1.addTerritory();
 		player2.addTerritory();
 
-		test1.setPlayer(1);
-		test2.setPlayer(2);
 
-		test1.addArmies(20);
-		test2.addArmies(2);
+		setupAttackDefense(player1, player2, test1, test2, 20, 2, 15, adc);
 
-		adc.setAttacker(player1);
-		adc.setDefender(player2);
-		adc.setAttackingTerritory(test1);
-		adc.setDefendingTerritory(test2);
-		adc.setArmies(15);
 
 		adc.combat(3, 2, rand);
 
@@ -595,18 +476,8 @@ public class AttackerDefenderControllerTests {
 
 		EasyMock.replay(rand);
 
-		test1.setPlayer(1);
-		test2.setPlayer(2);
 
-		test1.addArmies(20);
-		test2.addArmies(20);
-
-		adc.setAttacker(player1);
-		adc.setDefender(player2);
-		adc.setAttackingTerritory(test1);
-		adc.setDefendingTerritory(test2);
-		adc.setArmies(15);
-
+		setupAttackDefense(player1, player2, test1, test2, 20, 20, 15, adc);
 		adc.combat(1, 2, rand);
 
 		assertEquals(20, test1.getArmyCount());
@@ -614,6 +485,21 @@ public class AttackerDefenderControllerTests {
 
 		EasyMock.verify(rand);
 
+	}
+
+
+	private void setupAttackDefense(Player player1, Player player2, Territory test1, Territory test2, int armies1, int armies2, int armies3, AttackerDefenderController adc){
+		test1.setPlayer(1);
+		test2.setPlayer(2);
+
+		test1.addArmies(armies1);
+		test2.addArmies(armies2);
+
+		adc.setAttacker(player1);
+		adc.setDefender(player2);
+		adc.setAttackingTerritory(test1);
+		adc.setDefendingTerritory(test2);
+		adc.setArmies(armies3);
 	}
 	
 

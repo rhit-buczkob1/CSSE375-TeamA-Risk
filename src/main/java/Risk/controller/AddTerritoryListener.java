@@ -27,10 +27,10 @@ public class AddTerritoryListener implements EventHandler<javafx.event.ActionEve
 				}
 				if (toTerritory.equals(gfc.gui.clickedTerritory.getText())) {
 					try {
-						gfc.playercontroller.moveArmy(gfc.gbcontroller.getTerritory(gfc.gui.transportingTerritory),
-								gfc.gbcontroller.getTerritory(toTerritory), 1);
+						gfc.playercontroller.moveArmy(gfc.gbcontroller.territoryController.getTerritory(gfc.gui.transportingTerritory),
+								gfc.gbcontroller.territoryController.getTerritory(toTerritory), 1);
 						gfc.gui.territoryArmiesNumber
-								.setText(String.valueOf(gfc.gbcontroller.getTerritory(gfc.gui.clickedTerritory.getText()).getArmyCount()));
+								.setText(String.valueOf(gfc.gbcontroller.territoryController.getTerritory(gfc.gui.clickedTerritory.getText()).getArmyCount()));
 					} catch (IllegalArgumentException e1) {
 						System.err.println(e1.getMessage());
 					}
@@ -40,12 +40,12 @@ public class AddTerritoryListener implements EventHandler<javafx.event.ActionEve
 			if (!(gfc.gui.clickedTerritory.getText().equals(""))) {
 				int player = gfc.playercontroller.getCurrentPlayer().getId();
 				gfc.addInfantrytoTerritoryfromString(gfc.gui.clickedTerritory.getText());
-				if (player == gfc.gbcontroller.getTerritoryOwner(gfc.gui.clickedTerritory.getText())) {
+				if (player == gfc.gbcontroller.territoryController.getTerritoryOwner(gfc.gui.clickedTerritory.getText())) {
 					System.err.println(gfc.gui.clickedTerritory.getText());
 					System.err.println(player);
 					gfc.gui.setTerritoryColor(gfc.gui.clickedTerritory.getText(), player);
 				}
-				Territory territory = gfc.gbcontroller.getTerritory(gfc.gui.clickedTerritory.getText());
+				Territory territory = gfc.gbcontroller.territoryController.getTerritory(gfc.gui.clickedTerritory.getText());
 
 				int playerArmyCount = gfc.playercontroller.getCurrentPlayer().getPlayerArmies();
 

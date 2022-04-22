@@ -22,7 +22,7 @@ public class AttackFromListener implements EventHandler<MouseEvent> {
 			if (!(gfc.gui.clickedTerritory.getText().equals(""))) {
 				String attack = gfc.gui.attackingTerritory.replace('_', ' ');
 				gfc.gui.attackingTerritory = "";
-				Territory defendingTerritory = gfc.gbcontroller.getTerritory(gfc.gui.clickedTerritory.getText());
+				Territory defendingTerritory = gfc.gbcontroller.territoryController.getTerritory(gfc.gui.clickedTerritory.getText());
 				gfc.initiateCombat(attack, defendingTerritory.getName());
 				
 				gfc.randomizeCombat(gfc.rand, (int)gfc.gui.attackerDiceSlider.getValue(), (int)gfc.gui.defenderDiceSlider.getValue());
