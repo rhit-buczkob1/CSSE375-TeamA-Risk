@@ -130,7 +130,7 @@ public class GraphicalUserInterface {
 		this.attackFrom = new Button(messages.getString("attackFrom"));
 		this.addArmy = new Button(messages.getString("addArmy"));
 		this.moveFrom = new Button(messages.getString("moveFrom"));
-		this.setNumPlayers = new Button("Set # Players");
+		this.setNumPlayers = new Button("Start game");
 		this.attackerDice = new Text(messages.getString("selectAttDice"));
 		this.defenderDice = new Text(messages.getString("selectDefDice"));
 		this.spendCards = new Button(messages.getString("spendCards"));
