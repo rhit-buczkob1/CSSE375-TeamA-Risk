@@ -39,13 +39,17 @@ public class GameFlowController {
 		this.messages = msg;
 		connectToGui();
 
-		changeGuiButtons(false, true, true, true);
+		changeGuiButtons(true, true, true, true, true);
 	}
 
 	public void connectToGui() {
 		this.gui.nextTurn.setOnMouseClicked(new NextButtonListener(this));
-		this.gui.addArmy.setOnAction(new AddTerritoryListener(this));
-		this.gui.attack.setOnMouseClicked(new AttackListener(this));
+		AddTerritoryListener addListener = new AddTerritoryListener(this);
+		this.gui.addArmy.setOnAction(addListener);
+		this.gui.moveFrom.setOnAction(addListener.new MoveListener());
+		AttackFromListener attackListener = new AttackFromListener(this);
+		this.gui.attackFrom.setOnMouseClicked(attackListener);
+		this.gui.attack.setOnMouseClicked(attackListener.new AttackListener());
 		this.gui.language.setOnMouseClicked(new PopUpLauncher(this));
 		this.gui.setNumPlayers.setOnMouseClicked(new PlayerSetListener(this));
 		this.gui.setMouseListener(new EventHandler<MouseEvent>() {
@@ -58,17 +62,35 @@ public class GameFlowController {
 					Territory territory = gbcontroller.getTerritory(clicked.replace('_', ' '));
 					gui.setTerritoryArmyCount(territory.getArmyCount());
 					gui.setCurrentTerritoryOwner(territory.getPlayer());
-					if (phaseController.getPhase().equals("attack")) {
-						gui.changeAttackButton(false);
+					if (phaseController.getPhase().equals("attack") && (territory.getPlayer() == playercontroller.getCurrentPlayer().getId())) {
+						gui.changeAttackFromButton(false);
+					} else if (phaseController.getPhase().equals("attack") && (territory.getPlayer() != playercontroller.getCurrentPlayer().getId())
+							&& (!gui.attackingTerritory.equals(""))) {
+						changeGuiButtons(true, false, false, true, true);
 					} else if ((territory.getPlayer() == playercontroller.getCurrentPlayer().getId() ||
 								territory.getPlayer() == 0) && playercontroller.getCurrentPlayer().getPlayerArmies() != 0) {
 						gui.changeAddArmyButton(false);
 					} else if (!phaseController.getPhase().equals("fortify")){
-						gui.changeAddArmyButton(true);
+						if (!phaseController.getPhase().equals("assignment") || playercontroller.getCurrentPlayer().getPlayerArmies() != 0)
+							gui.changeAddArmyButton(true);
+					} else if (phaseController.getPhase().equals("fortify")) {
+						if (gui.clickedTerritory.getText().equals("") || !verifyOwnership(gui.clickedTerritory.getText())) {
+							changeGuiButtons(true, false, true, true, true);
+							gui.changeMoveFrom(true);
+						} else {
+							if (!gui.transportingTerritory.equals("")) {
+								changeGuiButtons(false, false, true, true, true);
+								gui.changeMoveFrom(false);
+							} else {
+								changeGuiButtons(true, false, true, true, true);
+								gui.changeMoveFrom(false);
+							}
+						}
 					}
 				} else {
 					gui.changeAttackButton(true);
 					gui.changeAddArmyButton(true);
+					gui.changeAttackFromButton(true);
 				}
 			}
 			
@@ -142,23 +164,44 @@ public class GameFlowController {
 		}
 		switch (phaseController.getPhase()) {
 			case "assignment":
-				changeGuiButtons(false, true, true, false);
+				if (gui.clickedTerritory.getText().equals("") || !verifyOwnership(gui.clickedTerritory.getText())) 
+					changeGuiButtons(true, true, true, false, true);
+				else changeGuiButtons(false, true, true, false, true);
+				gui.changeMoveFrom(true);
+				gui.transportingTerritory = "";
+				gui.paintTerritoryBounds();
 				break;
 			case "attack":
-				changeGuiButtons(true, false, false, true);
+				if (gui.clickedTerritory.getText().equals("") || !verifyOwnership(gui.clickedTerritory.getText())) 
+					changeGuiButtons(true, false, true, true, true);
+				else changeGuiButtons(true, false, true, true, false);
 				break;
 			case "fortify":
-				changeGuiButtons(false, false, true, false);
+				if (gui.clickedTerritory.getText().equals("") || !verifyOwnership(gui.clickedTerritory.getText())) {
+					changeGuiButtons(true, false, true, true, true);
+					gui.changeMoveFrom(true);
+				} else {
+					if (!gui.transportingTerritory.equals("")) {
+						changeGuiButtons(false, false, true, true, true);
+						gui.changeMoveFrom(false);
+					} else {
+						changeGuiButtons(true, false, true, true, true);
+						gui.changeMoveFrom(false);
+					}
+				}
+				gui.attackingTerritory = "";
+				gui.paintTerritoryBounds();
 				break;
 		}
 	}
 
 	public void changeGuiButtons(boolean addArmy, boolean nextTurn,
-								 boolean attack, boolean spendCards) {
+								 boolean attack, boolean spendCards, boolean attackFrom) {
 		this.gui.changeAddArmyButton(addArmy);
 		this.gui.changeNextTurnButton(nextTurn);
 		this.gui.changeAttackButton(attack);
 		this.gui.changeSpendCardsButton(spendCards);
+		this.gui.changeAttackFromButton(attackFrom);
 	}
 
 	public String getPhase() {
