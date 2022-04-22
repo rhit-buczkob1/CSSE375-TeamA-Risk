@@ -4,8 +4,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class ContinentTests {
 
@@ -18,19 +17,7 @@ public class ContinentTests {
 	 * same player. a territory with the same player appears immediately after
 	 * another territory with the same player. There's at least one other territory
 	 * between territories with duplicates.
-	 *
-	 * 
-	 * 
-	 *
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
 	 */
-
-	// TODO: update bva
 
 	@Test
 	public void continentGetNameTest() {
@@ -55,15 +42,7 @@ public class ContinentTests {
 		ArrayList<Territory> territories = new ArrayList<>();
 		Continent continentToTest = new Continent(territories, "Eurasia");
 		Territory territoryTest = new Territory("testTerritory");
-		assertEquals(false, continentToTest.isTerritoryExist(territoryTest));
-	}
-
-	@Test
-	public void isTerritoryExistTest() {
-		// Not sure how to bva this, ask Yiji, Note because this is refactoring this
-		// doesn't need to be TDD'd yet.
-		// Not sure how to test this as I'm really only calling prebuilt functions.
-
+		assertFalse(continentToTest.isTerritoryExist(territoryTest));
 	}
 
 	@Test
