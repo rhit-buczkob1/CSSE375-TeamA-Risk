@@ -10,17 +10,6 @@ import java.util.ResourceBundle;
 
 public class Main extends Application {
 
-	public static void runMain(PlayerController pc, GameBoardController gameBoard) throws Exception {
-
-//		for (int i = 0; i < 4; i++) {
-//			Player p = new Player(i + 1);
-//			pc.addPlayer(p);
-//		}
-		//gameBoard.initGame();
-		//pc.initializePlayer();
-
-	}
-
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		PlayerController pc = new PlayerController();
@@ -32,8 +21,6 @@ public class Main extends Application {
 		AttackerDefenderController adc = new AttackerDefenderController();
 
 		GameFlowController gameflowcontroller = new GameFlowController(phc, pc, gameBoard, adc, gui, msg);
-
-		runMain(pc, gameBoard);
 
 		gui.initializeFrame();
 	}
