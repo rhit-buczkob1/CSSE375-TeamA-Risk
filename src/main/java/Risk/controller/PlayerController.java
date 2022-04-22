@@ -25,7 +25,7 @@ public class PlayerController {
 		return this.currentIndex;
 	}
 
-	public void initializePlayer() throws Exception {
+	public int initializePlayer() throws Exception {
 		if(players.size() < 3){
 			throw new Exception("Cannot initialize with fewer than three players");
 		}
@@ -33,11 +33,12 @@ public class PlayerController {
 			throw new Exception("Cannot initialize with more than six players");
 
 		}
-		int numArmiesPerPlayer = 30;//35 - (3 - players.size())*5;
+		int numArmiesPerPlayer = 35 - (players.size() - 3)*5;
 
 			for (Player player : players) {
 				player.addPlayerArmies(numArmiesPerPlayer);
 			}
+		return  numArmiesPerPlayer;
 	}
 
 	public void addInfantryToTerritory(Territory territory, int armies) {
@@ -224,4 +225,19 @@ public class PlayerController {
 	public void setGameMode(String gameMode) {
 		this.gameMode = gameMode;
 	}
+
+	public int setNumberOfPlayers(int numPlayers) {
+		if(numPlayers < 3 || numPlayers > 6) return -1;
+		players.clear();
+		for(int i = 0; i<numPlayers; i++){
+			players.add(new Player(i+1));
+		}
+		try {
+			return initializePlayer();
+		}
+		catch (Exception e){
+			return -1;
+		}
+	}
+
 }

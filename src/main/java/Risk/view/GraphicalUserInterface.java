@@ -47,16 +47,19 @@ public class GraphicalUserInterface {
 	
 	public Button nextTurn;
 	public Text currentPlayer;
-	public Text currentPlayerId = new Text("1");
+	public Text currentPlayerId = new Text("");
 	public Text playerArmies;
-	public Text playerArmiesNumber = new Text("30");
+	public Text playerArmiesNumber = new Text("");
 	public Text territoryArmies;
 	public Text territoryArmiesNumber = new Text("0");
 	public Text territoryPlayer;
 	public Text territoryPlayerNumber = new Text("0");
 	public Button attack;
+	public Button attackFrom;
 	public Button language;
 	public Button addArmy;
+	public Button moveFrom;
+	public Button setNumPlayers;
 	public Text attackerDice;
 	public Text defenderDice;
 	public Slider attackerDiceSlider;
@@ -64,6 +67,9 @@ public class GraphicalUserInterface {
 	public ComboBox<String> card1;
 	public ComboBox<String> card2;
 	public ComboBox<String> card3;
+	public Text numPlayers;
+	public Slider numPlayersSlider = new Slider(3, 6, 1);
+	public ComboBox<String> maps = new ComboBox<>();
 	public Button spendCards;
 	public Text currentPhase = new Text("Setup");
 	public Button chooseGameMode;
@@ -74,29 +80,30 @@ public class GraphicalUserInterface {
 	public boolean testMode = false;
 	public int clickedIndex = -1;
 	private ArrayList<Rectangle> territoryInsides = new ArrayList<Rectangle>();
-	
-	
+	public String attackingTerritory = "";
+	public String transportingTerritory = "";
+
+	public String map = "";
 
 	public GraphicalUserInterface(ResourceBundle msg) {
-		this.setUpTerritoryNamesAndLocation("src/main/resources/TerritoryNamesAndLocations.txt");
-		
+
 		this.messages = msg;
 		clickedTerritory = new Text("");
-		for (int i = 0; i < 42; i++) {
-			territoryColors.add(Color.DARKGRAY);
-		}
+
 		
 		this.language = new Button(messages.getString("lang"));
 		this.nextTurn = new Button(messages.getString("nextPhase"));
-		this.currentPlayer = new Text(messages.getString("player"));
+		this.currentPlayer = new Text("Set # of players and select map");
 		this.playerArmies = new Text(messages.getString("armiesInPlayersHands"));
 		this.territoryArmies = new Text(messages.getString("armiesTerr"));
 		this.territoryPlayer = new Text(messages.getString("terrPlayer"));
 		this.attack = new Button(messages.getString("attack"));
 		this.addArmy = new Button(messages.getString("addArmy"));
+		this.setNumPlayers = new Button("Start game");
 		this.attackerDice = new Text(messages.getString("selectAttDice"));
 		this.defenderDice = new Text(messages.getString("selectDefDice"));
 		this.spendCards = new Button(messages.getString("spendCards"));
+		this.numPlayers = new Text("Number of Players");
 	}
 	
 	public GraphicalUserInterface(ResourceBundle msg, Stage stage) {
@@ -110,7 +117,7 @@ public class GraphicalUserInterface {
 		
 		this.stage = stage;
 		
-		this.setUpTerritoryNamesAndLocation("src/main/resources/TerritoryNamesAndLocations.txt");
+		//this.setUpTerritoryNamesAndLocation("src/main/resources/TerritoryNamesAndLocations.txt");
 		
 		currentTerritoryDesc = new Text(messages.getString("select"));
 		currentTerritoryDesc.setId("currentTerritoryDesc");
@@ -121,9 +128,9 @@ public class GraphicalUserInterface {
 		this.nextTurn = new Button(messages.getString("nextPhase"));
 		nextTurn.setId("nextTurn");
 
-		this.currentPlayer = new Text(messages.getString("player"));
+		this.currentPlayer = new Text("Set # of players and select map");
 		currentPlayer.setId("currentPlayer");
-
+		
 		this.playerArmies = new Text(messages.getString("armiesInPlayersHands"));
 		playerArmies.setId("playerArmies");
 
@@ -139,6 +146,15 @@ public class GraphicalUserInterface {
 		this.addArmy = new Button(messages.getString("addArmy"));
 		addArmy.setId("addArmy");
 
+		this.attackFrom = new Button(messages.getString("attackFrom"));
+		attackFrom.setId("attackFrom");
+
+		this.moveFrom = new Button(messages.getString("moveFrom"));
+		moveFrom.setId("moveFrom");
+
+		this.setNumPlayers = new Button("Start game");
+		setNumPlayers.setId("setNumPlayers");
+		
 		this.attackerDice = new Text(messages.getString("selectAttDice"));
 		attackerDice.setId("attackerDice");
 
@@ -165,6 +181,9 @@ public class GraphicalUserInterface {
 
 		this.card3 = new ComboBox<String>();
 		card3.setId("card3");
+
+		this.numPlayers = new Text("Number of Players");
+		numPlayers.setId("numPlayers");
 	}
 	
 	public void setLanguage(ResourceBundle msg, String phase) {
@@ -176,7 +195,9 @@ public class GraphicalUserInterface {
 		this.territoryArmies.setText(messages.getString("armiesTerr"));
 		this.territoryPlayer.setText(messages.getString("terrPlayer"));
 		this.attack.setText(messages.getString("attack"));
+		this.attackFrom.setText(messages.getString("attackFrom"));
 		this.addArmy.setText(messages.getString("addArmy"));
+		this.moveFrom.setText(messages.getString("moveFrom"));
 		this.attackerDice.setText(messages.getString("selectAttDice"));
 		this.defenderDice.setText(messages.getString("selectDefDice"));
 		this.spendCards.setText(messages.getString("spendCards"));
@@ -253,7 +274,15 @@ public class GraphicalUserInterface {
 	}
 
 	public void setUpTerritoryNamesAndLocation(String filename) {
+		this.territoryInsides.clear();
+		this.territoryColors.clear();
+		this.territoriesBounds.clear();
+		for (int i = 0; i <= 42; i++) {
+			territoryColors.add(Color.DARKGRAY);
+		}
 		try {
+			System.err.println("hello");
+
 			Scanner scanner = new Scanner(new FileReader(filename));
 			int i = 0; // File is set up so that i=0 should happen every 3 runs of the while loop
 			int x = 0;
@@ -293,11 +322,11 @@ public class GraphicalUserInterface {
 		stage.setMinWidth(screenWidth);
 		stage.setMaxHeight(screenHeight);
 		stage.setMinHeight(screenHeight);
-		
+
 		GridPane pane = new GridPane();
 		
 		try {
-			BackgroundImage bImg = new BackgroundImage(new Image(new FileInputStream("src/main/resources/background.png")),
+			BackgroundImage bImg = new BackgroundImage(new Image(new FileInputStream("src/main/resources/background"+map+".png")),
                     BackgroundRepeat.NO_REPEAT,
                     BackgroundRepeat.NO_REPEAT,
                     BackgroundPosition.DEFAULT,
@@ -385,32 +414,59 @@ public class GraphicalUserInterface {
 		defenderDiceSlider.setMajorTickUnit(1);
 		defenderDiceSlider.setShowTickMarks(true);
 		defenderDiceSlider.setShowTickLabels(true);
+
+
+		numPlayersSlider.setSnapToTicks(true);
+		numPlayersSlider.setMinorTickCount(0);
+		numPlayersSlider.setMajorTickUnit(1);
+		numPlayersSlider.setShowTickMarks(true);
+		numPlayersSlider.setShowTickLabels(true);
 		
 		Group buttons = new Group();
 		
 		buttons.getChildren().add(addArmy);
+		buttons.getChildren().add(moveFrom);
+		buttons.getChildren().add(setNumPlayers);
+		buttons.getChildren().add(maps);
+		maps.setPrefWidth(100);
+		maps.getItems().add("Globe");
+		maps.getItems().add("Europe");
+		setNumPlayers.setTranslateY(50);
 		buttons.getChildren().add(nextTurn);
 		buttons.getChildren().add(language);
 		buttons.getChildren().add(attack);
 		buttons.getChildren().add(chooseGameMode);
+		buttons.getChildren().add(attackFrom);
 		
 		buttons.getChildren().add(attackerDiceSlider);
 		buttons.getChildren().add(defenderDiceSlider);
+		buttons.getChildren().add(numPlayersSlider);
 		buttons.getChildren().add(attackerDice);
 		buttons.getChildren().add(defenderDice);
-		
+		buttons.getChildren().add(numPlayers);
+
+
+		moveFrom.setTranslateX(120);
 		nextTurn.setTranslateY(30);
 		attack.setTranslateY(60);
+		attackFrom.setTranslateY(60);
+		attackFrom.setTranslateX(120);
 		language.setTranslateY(90);
 		chooseGameMode.setTranslateY(120);
 		
-		attackerDice.setTranslateY(170);
-		defenderDice.setTranslateY(200);
-		attackerDiceSlider.setTranslateY(160);
-		defenderDiceSlider.setTranslateY(200);
-		attackerDiceSlider.setTranslateX(125);
-		defenderDiceSlider.setTranslateX(125);
+		attackerDice.setTranslateY(140);
+		defenderDice.setTranslateY(185);
+		attackerDiceSlider.setTranslateY(130);
+		defenderDiceSlider.setTranslateY(175);
+		attackerDiceSlider.setTranslateX(160);
+		defenderDiceSlider.setTranslateX(160);
 		
+		setNumPlayers.setTranslateY(230);
+		numPlayers.setTranslateY(200);
+		numPlayersSlider.setTranslateY(200);
+		numPlayersSlider.setTranslateX(125);
+
+
 		Group cards = new Group();
 		
 		cards.getChildren().add(card1);
@@ -424,7 +480,7 @@ public class GraphicalUserInterface {
 		
 		card2.setTranslateX(100);
 		card3.setTranslateX(200);
-		spendCards.setTranslateY(120);
+		spendCards.setTranslateY(30);
 		
 		pane.setAlignment(Pos.TOP_LEFT);
 		
@@ -434,11 +490,29 @@ public class GraphicalUserInterface {
 		
 		pane.add(root, 1, 1);
 		pane.add(options, 2, 1);
-		
+
+
 		Scene scene = new Scene(pane);
-		
+		if(map.equals("")){
+			cards.setTranslateX(1060);
+			buttons.setTranslateX(1060);
+			player.setTranslateX(1060);
+			setControlsVisibility(false);
+		} else if(map.equals("-europe")){
+			cards.setTranslateX(200);
+			buttons.setTranslateX(200);
+			player.setTranslateX(200);
+			root.setTranslateX(80);
+			root.setTranslateY(-20);
+			//setControlsVisibility(true);
+		} else{
+			//setControlsVisibility(true);
+		}
+
+
 		stage.setScene(scene);
-		
+
+		this.changeMoveFrom(true);
 		stage.show();
 	}
 	
@@ -449,7 +523,7 @@ public class GraphicalUserInterface {
 		}
 	}
 	
-	public void paintTerritoryBounds() {
+	public void paintTerritoryBounds() { //TODO: fix index out of bounds
 		for (int i = 0; i < this.territoriesBounds.size(); i++) {
 			
 			Rectangle border = this.territoriesBounds.get(i);
@@ -459,6 +533,10 @@ public class GraphicalUserInterface {
 			Color color = Color.BLACK;
 			if (clickedIndex == i) {
 				color = Color.WHITE;
+			} else if (attackingTerritory.equals(territoryNames.get(i))) {
+				color = Color.GREENYELLOW;
+			} else if (transportingTerritory.equals(territoryNames.get(i))) {
+				color = Color.GREENYELLOW;
 			}
 			
 			border.setFill(color);
@@ -489,6 +567,10 @@ public class GraphicalUserInterface {
 			return Color.YELLOW;
 		} else if (player == 4) {
 			return Color.GREEN;
+		} else if (player == 5){
+			return Color.ORANGE;
+		} else if (player == 6){
+			return Color.WHITE;
 		}
 		return Color.BLACK;
 	}
@@ -512,4 +594,90 @@ public class GraphicalUserInterface {
 		this.setTerritoryPlayer("" + player);
 	}
 
+	public void setNumPlayers(String numArmies){
+		this.currentPlayerId.setText("1");
+		this.currentPlayer.setText("Current Player:");
+		this.numPlayersSlider.setVisible(false);
+		this.numPlayers.setVisible(false);
+		this.setNumPlayers.setVisible(false);
+		this.maps.setVisible(false);
+		this.playerArmiesNumber.setText(numArmies);
+		setControlsVisibility(true);
+		changeBackground();
+	}
+
+	private void setControlsVisibility(boolean b){
+		 nextTurn.setVisible(b);
+		 playerArmies.setVisible(b);
+		 playerArmiesNumber.setVisible(b);
+		 territoryArmies.setVisible(b);
+		 territoryArmiesNumber.setVisible(b);
+		 territoryPlayer.setVisible(b);
+		 territoryPlayerNumber.setVisible(b);
+		 attack.setVisible(b);
+		 attackFrom.setVisible(b);
+		 language.setVisible(b);
+		 addArmy.setVisible(b);
+		 attackerDice.setVisible(b);
+		 defenderDice.setVisible(b);
+		 attackerDiceSlider.setVisible(b);
+		 currentTerritoryDesc.setVisible(b);
+		 clickedTerritory.setVisible(b);
+		 defenderDiceSlider.setVisible(b);
+		 spendCards.setVisible(b);
+		 moveFrom.setVisible(b);
+		 card1.setVisible(b);
+		 card2.setVisible(b);
+		 card3.setVisible(b);
+	}
+
+	public void changeNextTurnButton(boolean disabled) {
+		nextTurn.setDisable(disabled);
+	}
+
+	public void changeAttackButton(boolean disabled) {
+		attack.setDisable(disabled);
+	}
+
+	public void changeAddArmyButton(boolean disabled) {
+		addArmy.setDisable(disabled);
+	}
+	
+	public void changeMoveFrom(boolean disabled) {
+		moveFrom.setDisable(disabled);
+	}
+
+	public void changeSpendCardsButton(boolean disabled) {
+		spendCards.setDisable(disabled);
+
+	}
+
+
+	public void changeBackground(){
+
+		if(this.maps.getValue().equals("Europe")) {
+			this.map = "-europe";
+			this.setUpTerritoryNamesAndLocation("src/main/resources/TerritoryNamesAndLocations-europe");
+		}
+		else {
+			this.map = "-globe";
+			this.setUpTerritoryNamesAndLocation("src/main/resources/TerritoryNamesAndLocations-globe");
+		}
+		this.initializeFrame();
+
+	}
+
+
+	
+	public void changeAttackFromButton(boolean disabled) {
+		attackFrom.setDisable(disabled);
+	}
+
+	public void setAttacking(String text) {
+		this.attackingTerritory = text.replace(' ', '_');
+	}
+	
+	public void setTransporting(String text) {
+		this.transportingTerritory = text.replace(' ', '_');
+	}
 }

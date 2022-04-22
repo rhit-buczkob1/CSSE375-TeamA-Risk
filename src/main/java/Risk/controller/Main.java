@@ -12,12 +12,12 @@ public class Main extends Application {
 
 	public static void runMain(PlayerController pc, GameBoardController gameBoard) throws Exception {
 
-		for (int i = 0; i < 4; i++) {
-			Player p = new Player(i + 1);
-			pc.addPlayer(p);
-		}
-		gameBoard.initGame();
-		pc.initializePlayer();
+//		for (int i = 0; i < 4; i++) {
+//			Player p = new Player(i + 1);
+//			pc.addPlayer(p);
+//		}
+		//gameBoard.initGame();
+		//pc.initializePlayer();
 
 	}
 

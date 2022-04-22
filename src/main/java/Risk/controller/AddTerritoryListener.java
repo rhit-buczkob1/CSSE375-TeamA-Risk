@@ -4,7 +4,6 @@ import Risk.model.Territory;
 import javafx.event.EventHandler;
 
 public class AddTerritoryListener implements EventHandler<javafx.event.ActionEvent> {
-	String fromTerritory = "";
 	String toTerritory = "";
 	GameFlowController gfc;
 	
@@ -14,50 +13,68 @@ public class AddTerritoryListener implements EventHandler<javafx.event.ActionEve
 	
 	@Override
 	public void handle(javafx.event.ActionEvent event) {
-		if (gfc.phase.equals("fortify") && fromTerritory.equals("")) {
+		if (gfc.getPhase().equals("fortify")) {
 			if (!(gfc.gui.clickedTerritory.getText().equals(""))) {
-				fromTerritory = gfc.gui.clickedTerritory.getText();
-			}
-		} else if (gfc.phase.equals("fortify") && toTerritory.equals("")) {
-			if (!(gfc.gui.clickedTerritory.equals(""))) {
-				toTerritory = gfc.gui.clickedTerritory.getText();
+				if (toTerritory.equals("")) {
+					toTerritory = gfc.gui.clickedTerritory.getText();
 
-				if (!gfc.verifyOwnership(fromTerritory) || !gfc.verifyOwnership(toTerritory)
-						|| !gfc.verifyAdjacent(fromTerritory, toTerritory)) {
-					fromTerritory = "";
-					toTerritory = "";
-					return;
+					if (!gfc.verifyOwnership(gfc.gui.transportingTerritory) || !gfc.verifyOwnership(toTerritory)
+							|| !gfc.verifyAdjacent(gfc.gui.transportingTerritory, toTerritory)) {
+						gfc.gui.transportingTerritory = "";
+						toTerritory = "";
+						return;
+					}
 				}
-
-			}
-		} else if (gfc.phase.equals("fortify")) {
-			try {
-				gfc.playercontroller.moveArmy(gfc.gbcontroller.getTerritory(fromTerritory),
-						gfc.gbcontroller.getTerritory(toTerritory), 1);
-				gfc.gui.territoryArmiesNumber
-						.setText(String.valueOf(gfc.gbcontroller.getTerritory(gfc.gui.clickedTerritory.getText()).getArmyCount()));
-			} catch (IllegalArgumentException e1) {
-				System.err.println(e1.getMessage());
-			}
-
+				if (toTerritory.equals(gfc.gui.clickedTerritory.getText())) {
+					try {
+						gfc.playercontroller.moveArmy(gfc.gbcontroller.getTerritory(gfc.gui.transportingTerritory),
+								gfc.gbcontroller.getTerritory(toTerritory), 1);
+						gfc.gui.territoryArmiesNumber
+								.setText(String.valueOf(gfc.gbcontroller.getTerritory(gfc.gui.clickedTerritory.getText()).getArmyCount()));
+					} catch (IllegalArgumentException e1) {
+						System.err.println(e1.getMessage());
+					}
+				}
+			} 
 		} else {
-			if (!(gfc.gui.clickedTerritory.equals(""))) {
+			if (!(gfc.gui.clickedTerritory.getText().equals(""))) {
 				int player = gfc.playercontroller.getCurrentPlayer().getId();
 				gfc.addInfantrytoTerritoryfromString(gfc.gui.clickedTerritory.getText());
 				if (player == gfc.gbcontroller.getTerritoryOwner(gfc.gui.clickedTerritory.getText())) {
+					System.err.println(gfc.gui.clickedTerritory.getText());
+					System.err.println(player);
 					gfc.gui.setTerritoryColor(gfc.gui.clickedTerritory.getText(), player);
 				}
 				Territory territory = gfc.gbcontroller.getTerritory(gfc.gui.clickedTerritory.getText());
 
-				gfc.gui.setCurrentPlayerArmies(Integer.toString(gfc.playercontroller.getCurrentPlayer().getPlayerArmies()));
+				int playerArmyCount = gfc.playercontroller.getCurrentPlayer().getPlayerArmies();
+
+				gfc.gui.setCurrentPlayerArmies(Integer.toString(playerArmyCount));
 				gfc.gui.setCurrentPlayer(String.valueOf(gfc.playercontroller.getCurrentPlayer().getId()));
 				gfc.gui.setTerritoryArmyCount(territory.getArmyCount());
 				gfc.gui.setCurrentTerritoryOwner(territory.getPlayer());
 				gfc.gui.paintTerritoryBounds();
+
+				if (playerArmyCount == 0) {
+					gfc.gui.changeNextTurnButton(false);
+					gfc.gui.changeAddArmyButton(true);
+				}
 			} else {
 				throw new IllegalArgumentException("Mouse not clicked");
 			}
 
 		}
+	}
+	
+	public class MoveListener implements EventHandler<javafx.event.ActionEvent> {
+
+		@Override
+		public void handle(javafx.event.ActionEvent event) {
+			if (!(gfc.gui.clickedTerritory.getText().equals("")) && toTerritory.equals("")) {
+				gfc.gui.transportingTerritory = gfc.gui.clickedTerritory.getText();
+				gfc.gui.paintTerritoryBounds();
+			}
+		}
+		
 	}
 }
