@@ -1,0 +1,93 @@
+[Territory]Norway
+    Sweden
+    Finland
+
+[Territory]Sweden
+    Finland
+    Norway
+
+[Territory]Finland
+    Sweden
+    Norway
+    Russia
+
+[Territory]Russia
+    Latvia
+    Finland
+    Belarus
+    Ukraine
+
+[Territory]Latvia
+    Russia
+    Belarus
+    Poland
+
+[Territory]Belarus
+    Latvia
+    Russia
+    Poland
+    Ukraine
+
+[Territory]Ukraine
+    Romania
+    Belarus
+    Poland
+    Russia
+
+[Territory]Romania
+    Ukraine
+    Hungary
+    Bulgaria
+
+[Territory]Bulgaria
+    Romania
+    Turkey
+    Greece
+    Hungary
+
+[Territory]Turkey
+    Bulgaria
+    Greece
+
+[Territory]Greece
+    Bulgaria
+    Turkey
+    Hungary
+
+[Territory]Hungary
+    Romania
+    Bulgaria
+    Greece
+    Italy
+    Poland
+    Germany
+
+[Territory]Poland
+    Belarus
+    Latvia
+    Ukraine
+    Hungary
+    Germany
+
+[Territory]Germany
+    Poland
+    Hungary
+    France
+    Italy
+
+[Territory]Italy
+    Germany
+    France
+    Hungary
+
+[Territory]France
+    Italy
+    Germany
+    Spain
+
+[Territory]Spain
+    France
+    Portugal
+
+[Territory]Portugal
+    Spain
