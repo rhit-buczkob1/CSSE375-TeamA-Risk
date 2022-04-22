@@ -85,6 +85,7 @@ public class GameBoard {
 	}
 
 	public Territory getTerritoryFromString(String name) {
+
 		for (Continent continent : this.continents) {
 			for (Territory territory : continent.territories) {
 				if (territory.getName().equals(name)) {

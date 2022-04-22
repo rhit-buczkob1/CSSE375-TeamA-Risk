@@ -233,7 +233,6 @@ public class GraphicalUserInterface {
 			territoryColors.add(Color.DARKGRAY);
 		}
 		try {
-			System.err.println("hello");
 
 			Scanner scanner = new Scanner(new FileReader(filename));
 			int i = 0; // File is set up so that i=0 should happen every 3 runs of the while loop
