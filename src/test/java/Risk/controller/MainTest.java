@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import Risk.model.GameBoard;
 import org.junit.Test;
 
 import Risk.model.Player;
@@ -21,7 +22,7 @@ public class MainTest {
 		ResourceBundle msg = ResourceBundle.getBundle("MessagesBundle", l);
 		GraphicalUserInterface gui = new GraphicalUserInterface(msg);
 		AttackerDefenderController adc = new AttackerDefenderController();
-		gameBoard.initializeNewBoardForTest();
+		gameBoard.gameBoard = new GameBoard();
 
 		GameFlowController gameflowcontroller = new GameFlowController(phc, pc, gameBoard, adc, gui, msg);
 		Main main = new Main();
@@ -40,7 +41,7 @@ public class MainTest {
 		}
 
 		assertEquals(playercount, 4);
-		assertEquals(6, gameBoard.getGameBoard().continents.size());
+		assertEquals(6, gameBoard.gameBoard.continents.size());
 
 	}
 
