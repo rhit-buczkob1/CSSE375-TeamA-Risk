@@ -219,13 +219,18 @@ public class PlayerController {
 	}
 
 
-	public int setNumberOfPlayers(int numPlayers) throws Exception {
+	public int setNumberOfPlayers(int numPlayers) {
+		if(numPlayers < 3 || numPlayers > 6) return -1;
 		players.clear();
 		for(int i = 0; i<numPlayers; i++){
 			players.add(new Player(i+1));
 		}
-
-		return initializePlayer();
+		try {
+			return initializePlayer();
+		}
+		catch (Exception e){
+			return -1;
+		}
 	}
 
 }

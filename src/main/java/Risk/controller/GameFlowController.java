@@ -56,6 +56,7 @@ public class GameFlowController {
 				gui.paintTerritoryBounds();
 				if (!clicked.equals("")) {
 					Territory territory = gbcontroller.getTerritory(clicked.replace('_', ' '));
+
 					gui.setTerritoryArmyCount(territory.getArmyCount());
 					gui.setCurrentTerritoryOwner(territory.getPlayer());
 					if (phaseController.getPhase().equals("attack")) {

@@ -220,6 +220,9 @@ public class GraphicalUserInterface {
 	}
 
 	public void setUpTerritoryNamesAndLocation(String filename) {
+		this.territoryInsides.clear();
+		this.territoryColors.clear();
+		this.territoriesBounds.clear();
 		for (int i = 0; i <= 42; i++) {
 			territoryColors.add(Color.DARKGRAY);
 		}
@@ -265,7 +268,7 @@ public class GraphicalUserInterface {
 		stage.setMinWidth(screenWidth);
 		stage.setMaxHeight(screenHeight);
 		stage.setMinHeight(screenHeight);
-		
+
 		GridPane pane = new GridPane();
 		
 		try {
@@ -510,7 +513,6 @@ public class GraphicalUserInterface {
 		Color playerColor = this.getColorForPlayer(player);
 		for (int i = 0; i < this.territoryNames.size(); i++) {
 			if (this.territoryNames.get(i).equals(territory)) {
-				System.out.println("terriroty");
 				this.territoryColors.set(i, playerColor);
 				return;
 			}
