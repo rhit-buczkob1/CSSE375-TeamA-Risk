@@ -28,9 +28,12 @@ public class GameModePopUpLauncher implements EventHandler<MouseEvent> {
         ComboBox<String> box = new ComboBox<String>();
         box.getItems().add("Normal");
         box.getItems().add("Headquarters");
+        box.setId("gameModeSelectionBox");
 
         Button confirm = new Button(gfc.messages.getString("confirm"));
+        confirm.setId("confirmModeChange");
         Button cancel = new Button(gfc.messages.getString("cancel"));
+        cancel.setId("cancelModeChange");
 
         confirm.setOnMouseClicked(new EventHandler<MouseEvent>() {
 

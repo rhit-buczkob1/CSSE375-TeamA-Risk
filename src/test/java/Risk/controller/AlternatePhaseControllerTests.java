@@ -2,6 +2,7 @@ package Risk.controller;
 
 import Risk.view.GraphicalUserInterface;
 import com.sun.javafx.application.PlatformImpl;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.Parent;
@@ -26,18 +27,35 @@ public class AlternatePhaseControllerTests extends ApplicationTest{
 
     Locale locale = new Locale("en", "US");
     ResourceBundle msg = ResourceBundle.getBundle("MessagesBundle", locale);
+    GameFlowController gfc;
 
     @Override
     public void start(Stage stage) throws Exception {
+        PlayerController pc = new PlayerController();
+        GameBoardController gbController = new GameBoardController();
+        PhaseController phaseController = new PhaseController(pc, gbController);
+        AttackerDefenderController adController = new AttackerDefenderController();
         GraphicalUserInterface gui = new GraphicalUserInterface(msg, stage);
-        Parent parent = gui.chooseGameMode;
-        Scene scene = new Scene(parent, 100, 100);
-        stage.setScene(scene);
-        stage.show();
+
+        gfc = new GameFlowController(phaseController, pc, gbController, adController, gui, msg);
+
+        gui.initializeFrame();
     }
 
     @Test
     public void test_button_existance() {
-        verifyThat(".button", hasText("Choose Game Mode"));
+        verifyThat("#chooseGameMode", hasText("Choose Game Mode"));
+    }
+
+    @Test
+    public void test_swap_phase_controller() {
+        verifyThat("#chooseGameMode", hasText("Choose Game Mode"));
+
+        clickOn("#chooseGameMode");
+        clickOn("#gameModeSelectionBox");
+
+        clickOn("#confirmModeChange");
+
+        assertEquals("class Risk.controller.AlternatePhaseController", gfc.phaseController.getClass().toString());
     }
 }
