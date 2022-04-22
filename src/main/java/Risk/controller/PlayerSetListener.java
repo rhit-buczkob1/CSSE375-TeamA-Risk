@@ -19,11 +19,18 @@ public class PlayerSetListener implements EventHandler<MouseEvent> {
     @Override
     public void handle(MouseEvent event) {
         int numPlayers = (int)gfc.gui.numPlayersSlider.getValue();
+        String map = "";
+        if(gfc.gui.maps.getValue().equals("Europe")) {
+            map = "-europe";
+        } else map = "-globe";
 
-        try{
+            try{
+            gfc.gbcontroller.map = map;
+            gfc.gbcontroller.initGame();
             int armiesPerPlayer = gfc.playercontroller.setNumberOfPlayers(numPlayers);
             gfc.gui.setNumPlayers(gfc.playercontroller.getNumberOfPlayers() + "");
             gfc.gui.setCurrentPlayerArmies(armiesPerPlayer + "");
+            gfc.gui.changeBackground();
 
         } catch (Exception e){
             System.out.println(e);

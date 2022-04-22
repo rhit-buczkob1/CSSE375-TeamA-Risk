@@ -70,6 +70,7 @@ public class GraphicalUserInterface {
 	public ComboBox<String> card1 = new ComboBox<String>();
 	public ComboBox<String> card2 = new ComboBox<String>();
 	public ComboBox<String> card3 = new ComboBox<String>();
+	public ComboBox<String> maps = new ComboBox<>();
 	public Button spendCards;
 	public Text currentPhase = new Text("Setup");
 
@@ -82,24 +83,23 @@ public class GraphicalUserInterface {
 	public String attackingTerritory = "";
 	public String transportingTerritory = "";
 
+	public String map = "";
+
 	public GraphicalUserInterface(ResourceBundle msg) {
-		this.setUpTerritoryNamesAndLocation("src/main/resources/TerritoryNamesAndLocations.txt");
-		
+
 		this.messages = msg;
 		clickedTerritory = new Text("");
-		for (int i = 0; i < 42; i++) {
-			territoryColors.add(Color.DARKGRAY);
-		}
+
 		
 		this.language = new Button(messages.getString("lang"));
 		this.nextTurn = new Button(messages.getString("nextPhase"));
-		this.currentPlayer = new Text("Set # of players");
+		this.currentPlayer = new Text("Set # of players and select map");
 		this.playerArmies = new Text(messages.getString("armiesInPlayersHands"));
 		this.territoryArmies = new Text(messages.getString("armiesTerr"));
 		this.territoryPlayer = new Text(messages.getString("terrPlayer"));
 		this.attack = new Button(messages.getString("attack"));
 		this.addArmy = new Button(messages.getString("addArmy"));
-		this.setNumPlayers = new Button("Set # Players");
+		this.setNumPlayers = new Button("Start game");
 		this.attackerDice = new Text(messages.getString("selectAttDice"));
 		this.defenderDice = new Text(messages.getString("selectDefDice"));
 		this.spendCards = new Button(messages.getString("spendCards"));
@@ -117,12 +117,12 @@ public class GraphicalUserInterface {
 		
 		this.stage = stage;
 		
-		this.setUpTerritoryNamesAndLocation("src/main/resources/TerritoryNamesAndLocations.txt");
+		//this.setUpTerritoryNamesAndLocation("src/main/resources/TerritoryNamesAndLocations.txt");
 		
 		currentTerritoryDesc = new Text(messages.getString("select"));
 		this.language = new Button(messages.getString("lang"));
 		this.nextTurn = new Button(messages.getString("nextPhase"));
-		this.currentPlayer = new Text("Set # of players");
+		this.currentPlayer = new Text("Set # of players and select map");
 		this.playerArmies = new Text(messages.getString("armiesInPlayersHands"));
 		this.territoryArmies = new Text(messages.getString("armiesTerr"));
 		this.territoryPlayer = new Text(messages.getString("terrPlayer"));
@@ -130,8 +130,7 @@ public class GraphicalUserInterface {
 		this.attackFrom = new Button(messages.getString("attackFrom"));
 		this.addArmy = new Button(messages.getString("addArmy"));
 		this.moveFrom = new Button(messages.getString("moveFrom"));
-		this.setNumPlayers = new Button("Set # Players");
-
+		this.setNumPlayers = new Button("Start game");
 		this.attackerDice = new Text(messages.getString("selectAttDice"));
 		this.defenderDice = new Text(messages.getString("selectDefDice"));
 		this.spendCards = new Button(messages.getString("spendCards"));
@@ -227,7 +226,15 @@ public class GraphicalUserInterface {
 	}
 
 	public void setUpTerritoryNamesAndLocation(String filename) {
+		this.territoryInsides.clear();
+		this.territoryColors.clear();
+		this.territoriesBounds.clear();
+		for (int i = 0; i <= 42; i++) {
+			territoryColors.add(Color.DARKGRAY);
+		}
 		try {
+			System.err.println("hello");
+
 			Scanner scanner = new Scanner(new FileReader(filename));
 			int i = 0; // File is set up so that i=0 should happen every 3 runs of the while loop
 			int x = 0;
@@ -267,11 +274,11 @@ public class GraphicalUserInterface {
 		stage.setMinWidth(screenWidth);
 		stage.setMaxHeight(screenHeight);
 		stage.setMinHeight(screenHeight);
-		
+
 		GridPane pane = new GridPane();
 		
 		try {
-			BackgroundImage bImg = new BackgroundImage(new Image(new FileInputStream("src/main/resources/background.png")),
+			BackgroundImage bImg = new BackgroundImage(new Image(new FileInputStream("src/main/resources/background"+map+".png")),
                     BackgroundRepeat.NO_REPEAT,
                     BackgroundRepeat.NO_REPEAT,
                     BackgroundPosition.DEFAULT,
@@ -372,6 +379,11 @@ public class GraphicalUserInterface {
 		buttons.getChildren().add(addArmy);
 		buttons.getChildren().add(moveFrom);
 		buttons.getChildren().add(setNumPlayers);
+		buttons.getChildren().add(maps);
+		maps.setPrefWidth(100);
+		maps.getItems().add("Globe");
+		maps.getItems().add("Europe");
+		setNumPlayers.setTranslateY(50);
 		buttons.getChildren().add(nextTurn);
 		buttons.getChildren().add(language);
 		buttons.getChildren().add(attack);
@@ -432,11 +444,26 @@ public class GraphicalUserInterface {
 
 
 		Scene scene = new Scene(pane);
-		
+		if(map.equals("")){
+			cards.setTranslateX(1060);
+			buttons.setTranslateX(1060);
+			player.setTranslateX(1060);
+			setControlsVisibility(false);
+		} else if(map.equals("-europe")){
+			cards.setTranslateX(200);
+			buttons.setTranslateX(200);
+			player.setTranslateX(200);
+			root.setTranslateX(80);
+			root.setTranslateY(-20);
+			//setControlsVisibility(true);
+		} else{
+			//setControlsVisibility(true);
+		}
+
+
 		stage.setScene(scene);
 
 		this.changeMoveFrom(true);
-		setControlsVisibility(false);
 		stage.show();
 	}
 	
@@ -447,7 +474,7 @@ public class GraphicalUserInterface {
 		}
 	}
 	
-	public void paintTerritoryBounds() {
+	public void paintTerritoryBounds() { //TODO: fix index out of bounds
 		for (int i = 0; i < this.territoriesBounds.size(); i++) {
 			
 			Rectangle border = this.territoriesBounds.get(i);
@@ -524,8 +551,10 @@ public class GraphicalUserInterface {
 		this.numPlayersSlider.setVisible(false);
 		this.numPlayers.setVisible(false);
 		this.setNumPlayers.setVisible(false);
+		this.maps.setVisible(false);
 		this.playerArmiesNumber.setText(numArmies);
 		setControlsVisibility(true);
+		changeBackground();
 	}
 
 	private void setControlsVisibility(boolean b){
@@ -571,7 +600,25 @@ public class GraphicalUserInterface {
 
 	public void changeSpendCardsButton(boolean disabled) {
 		spendCards.setDisable(disabled);
+
 	}
+
+
+	public void changeBackground(){
+
+		if(this.maps.getValue().equals("Europe")) {
+			this.map = "-europe";
+			this.setUpTerritoryNamesAndLocation("src/main/resources/TerritoryNamesAndLocations-europe");
+		}
+		else {
+			this.map = "-globe";
+			this.setUpTerritoryNamesAndLocation("src/main/resources/TerritoryNamesAndLocations-globe");
+		}
+		this.initializeFrame();
+
+	}
+
+
 	
 	public void changeAttackFromButton(boolean disabled) {
 		attackFrom.setDisable(disabled);

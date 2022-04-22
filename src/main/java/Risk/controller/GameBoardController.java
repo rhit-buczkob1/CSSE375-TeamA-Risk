@@ -12,6 +12,7 @@ public class GameBoardController {
 	GameBoard gameBoard = GameBoard.getGameBoard();
 	Deck gameBoardDeck = new Deck();
 	int tradeCounter = 4;
+	public String map = "";
 
 	public void initGame() {
 
@@ -35,7 +36,7 @@ public class GameBoardController {
 		BufferedReader reader;
 
 		try {
-			reader = new BufferedReader(new FileReader("src/main/resources/mapdata"));
+			reader = new BufferedReader(new FileReader("src/main/resources/mapdata"+map));
 			String line = reader.readLine();
 			int continentvalue = 0;
 			String currentContinent = "";
@@ -85,7 +86,7 @@ public class GameBoardController {
 
 		BufferedReader reader;
 		try {
-			reader = new BufferedReader(new FileReader("src/main/resources/TerritoryData"));
+			reader = new BufferedReader(new FileReader("src/main/resources/TerritoryData"+map));
 			String line = reader.readLine();
 
 			String currentTerritory = "";
@@ -155,7 +156,7 @@ public class GameBoardController {
 	public void populateGameBoardDeckTroops() {
 		BufferedReader reader;
 		try {
-			reader = new BufferedReader(new FileReader("src/main/resources/CardTroopData"));
+			reader = new BufferedReader(new FileReader("src/main/resources/CardTroopData"+map));
 			String line = reader.readLine();
 			int index = 0;
 			while (line != null) {

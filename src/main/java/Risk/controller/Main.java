@@ -16,7 +16,7 @@ public class Main extends Application {
 //			Player p = new Player(i + 1);
 //			pc.addPlayer(p);
 //		}
-		gameBoard.initGame();
+		//gameBoard.initGame();
 		//pc.initializePlayer();
 
 	}
