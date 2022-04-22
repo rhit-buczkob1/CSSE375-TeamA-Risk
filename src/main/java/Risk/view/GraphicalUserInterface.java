@@ -86,28 +86,12 @@ public class GraphicalUserInterface {
 	public String map = "";
 
 	public GraphicalUserInterface(ResourceBundle msg) {
-
 		this.messages = msg;
 		clickedTerritory = new Text("");
-
-		
-		this.language = new Button(messages.getString("lang"));
-		this.nextTurn = new Button(messages.getString("nextPhase"));
-		this.currentPlayer = new Text("Set # of players and select map");
-		this.playerArmies = new Text(messages.getString("armiesInPlayersHands"));
-		this.territoryArmies = new Text(messages.getString("armiesTerr"));
-		this.territoryPlayer = new Text(messages.getString("terrPlayer"));
-		this.attack = new Button(messages.getString("attack"));
-		this.addArmy = new Button(messages.getString("addArmy"));
-		this.setNumPlayers = new Button("Start game");
-		this.attackerDice = new Text(messages.getString("selectAttDice"));
-		this.defenderDice = new Text(messages.getString("selectDefDice"));
-		this.spendCards = new Button(messages.getString("spendCards"));
-		this.numPlayers = new Text("Number of Players");
+		setupUI(false);
 	}
 	
 	public GraphicalUserInterface(ResourceBundle msg, Stage stage) {
-		
 		this.messages = msg;
 		clickedTerritory = new Text("");
 		
@@ -116,10 +100,12 @@ public class GraphicalUserInterface {
 		}
 		
 		this.stage = stage;
-		
-		//this.setUpTerritoryNamesAndLocation("src/main/resources/TerritoryNamesAndLocations.txt");
-		
 		currentTerritoryDesc = new Text(messages.getString("select"));
+
+		setupUI(true);
+	}
+
+	public void setupUI(boolean extraButtons) {
 		this.language = new Button(messages.getString("lang"));
 		this.nextTurn = new Button(messages.getString("nextPhase"));
 		this.currentPlayer = new Text("Set # of players and select map");
@@ -127,15 +113,17 @@ public class GraphicalUserInterface {
 		this.territoryArmies = new Text(messages.getString("armiesTerr"));
 		this.territoryPlayer = new Text(messages.getString("terrPlayer"));
 		this.attack = new Button(messages.getString("attack"));
-		this.attackFrom = new Button(messages.getString("attackFrom"));
 		this.addArmy = new Button(messages.getString("addArmy"));
-		this.moveFrom = new Button(messages.getString("moveFrom"));
 		this.setNumPlayers = new Button("Start game");
 		this.attackerDice = new Text(messages.getString("selectAttDice"));
 		this.defenderDice = new Text(messages.getString("selectDefDice"));
 		this.spendCards = new Button(messages.getString("spendCards"));
 		this.numPlayers = new Text("Number of Players");
 
+		if (extraButtons) {
+			this.attackFrom = new Button(messages.getString("attackFrom"));
+			this.moveFrom = new Button(messages.getString("moveFrom"));
+		}
 	}
 	
 	public void setLanguage(ResourceBundle msg, String phase) {
@@ -233,8 +221,6 @@ public class GraphicalUserInterface {
 			territoryColors.add(Color.DARKGRAY);
 		}
 		try {
-			System.err.println("hello");
-
 			Scanner scanner = new Scanner(new FileReader(filename));
 			int i = 0; // File is set up so that i=0 should happen every 3 runs of the while loop
 			int x = 0;
