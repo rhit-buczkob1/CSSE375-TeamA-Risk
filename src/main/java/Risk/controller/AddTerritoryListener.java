@@ -4,7 +4,6 @@ import Risk.model.Territory;
 import javafx.event.EventHandler;
 
 public class AddTerritoryListener implements EventHandler<javafx.event.ActionEvent> {
-	String fromTerritory = "";
 	String toTerritory = "";
 	GameFlowController gfc;
 	
@@ -14,35 +13,31 @@ public class AddTerritoryListener implements EventHandler<javafx.event.ActionEve
 	
 	@Override
 	public void handle(javafx.event.ActionEvent event) {
-
-		if (gfc.getPhase().equals("fortify") && fromTerritory.equals("")) {
+		if (gfc.getPhase().equals("fortify")) {
 			if (!(gfc.gui.clickedTerritory.getText().equals(""))) {
-				fromTerritory = gfc.gui.clickedTerritory.getText();
-			}
-		} else if (gfc.getPhase().equals("fortify") && toTerritory.equals("")) {
-			if (!(gfc.gui.clickedTerritory.equals(""))) {
-				toTerritory = gfc.gui.clickedTerritory.getText();
+				if (toTerritory.equals("")) {
+					toTerritory = gfc.gui.clickedTerritory.getText();
 
-				if (!gfc.verifyOwnership(fromTerritory) || !gfc.verifyOwnership(toTerritory)
-						|| !gfc.verifyAdjacent(fromTerritory, toTerritory)) {
-					fromTerritory = "";
-					toTerritory = "";
-					return;
+					if (!gfc.verifyOwnership(gfc.gui.transportingTerritory) || !gfc.verifyOwnership(toTerritory)
+							|| !gfc.verifyAdjacent(gfc.gui.transportingTerritory, toTerritory)) {
+						gfc.gui.transportingTerritory = "";
+						toTerritory = "";
+						return;
+					}
 				}
-
-			}
-		} else if (gfc.getPhase().equals("fortify")) {
-			try {
-				gfc.playercontroller.moveArmy(gfc.gbcontroller.getTerritory(fromTerritory),
-						gfc.gbcontroller.getTerritory(toTerritory), 1);
-				gfc.gui.territoryArmiesNumber
-						.setText(String.valueOf(gfc.gbcontroller.getTerritory(gfc.gui.clickedTerritory.getText()).getArmyCount()));
-			} catch (IllegalArgumentException e1) {
-				System.err.println(e1.getMessage());
-			}
-
+				if (toTerritory.equals(gfc.gui.clickedTerritory.getText())) {
+					try {
+						gfc.playercontroller.moveArmy(gfc.gbcontroller.getTerritory(gfc.gui.transportingTerritory),
+								gfc.gbcontroller.getTerritory(toTerritory), 1);
+						gfc.gui.territoryArmiesNumber
+								.setText(String.valueOf(gfc.gbcontroller.getTerritory(gfc.gui.clickedTerritory.getText()).getArmyCount()));
+					} catch (IllegalArgumentException e1) {
+						System.err.println(e1.getMessage());
+					}
+				}
+			} 
 		} else {
-			if (!(gfc.gui.clickedTerritory.equals(""))) {
+			if (!(gfc.gui.clickedTerritory.getText().equals(""))) {
 				int player = gfc.playercontroller.getCurrentPlayer().getId();
 				gfc.addInfantrytoTerritoryfromString(gfc.gui.clickedTerritory.getText());
 				if (player == gfc.gbcontroller.getTerritoryOwner(gfc.gui.clickedTerritory.getText())) {
@@ -69,5 +64,17 @@ public class AddTerritoryListener implements EventHandler<javafx.event.ActionEve
 			}
 
 		}
+	}
+	
+	public class MoveListener implements EventHandler<javafx.event.ActionEvent> {
+
+		@Override
+		public void handle(javafx.event.ActionEvent event) {
+			if (!(gfc.gui.clickedTerritory.getText().equals("")) && toTerritory.equals("")) {
+				gfc.gui.transportingTerritory = gfc.gui.clickedTerritory.getText();
+				gfc.gui.paintTerritoryBounds();
+			}
+		}
+		
 	}
 }
