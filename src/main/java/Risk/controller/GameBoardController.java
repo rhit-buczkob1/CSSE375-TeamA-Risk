@@ -23,12 +23,6 @@ public class GameBoardController {
 		populateGameBoardDeckTroops();
 		// other setup if needed...
 	}
-	
-	
-	
-	
-
-	
 
 	public void loadGameBoard() {
 
