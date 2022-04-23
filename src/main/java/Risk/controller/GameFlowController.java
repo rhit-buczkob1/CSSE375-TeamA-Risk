@@ -37,6 +37,7 @@ public class GameFlowController {
 		this.phase = "setup";
 		this.gbcontroller = gbcontroller;
 		this.territoryController = gbcontroller.territoryController;
+
 		this.adcontroller = adc;
 		this.gui = gui;
 		this.messages = msg;
@@ -271,7 +272,7 @@ public class GameFlowController {
 	}
 
 	public Territory getTerritory(String lastclickedstring) {
-		return gbcontroller.getTerritory(lastclickedstring);
+		return territoryController.getTerritory(lastclickedstring);
 	}
 
 	public void setCurrentTerritoryArmyCount(int armyCount) {
@@ -288,9 +289,9 @@ public class GameFlowController {
 
 	public void fortifyTerritory(String fromTerritory, String toTerritory) {
 		try {
-			playercontroller.moveArmy(gbcontroller.getTerritory(fromTerritory), gbcontroller.getTerritory(toTerritory), 1);
+			playercontroller.moveArmy(territoryController.getTerritory(fromTerritory), territoryController.getTerritory(toTerritory), 1);
 			gui.territoryArmiesNumber
-					.setText(String.valueOf(gbcontroller.getTerritory(gui.clickedTerritory.getText()).getArmyCount()));
+					.setText(String.valueOf(territoryController.getTerritory(gui.clickedTerritory.getText()).getArmyCount()));
 		} catch (IllegalArgumentException e1) {
 			System.err.println(e1.getMessage());
 		}
@@ -299,10 +300,10 @@ public class GameFlowController {
 	public void addArmy() {
 		int player = playercontroller.getCurrentPlayer().getId();
 		addInfantrytoTerritoryfromString(gui.clickedTerritory.getText());
-		if (player == gbcontroller.getTerritoryOwner(gui.clickedTerritory.getText())) {
+		if (player == territoryController.getTerritoryOwner(gui.clickedTerritory.getText())) {
 			gui.setTerritoryColor(gui.clickedTerritory.getText(), player);
 		}
-		Territory territory = gbcontroller.getTerritory(gui.clickedTerritory.getText());
+		Territory territory = territoryController.getTerritory(gui.clickedTerritory.getText());
 
 		gui.setCurrentPlayerArmies(Integer.toString(playercontroller.getCurrentPlayer().getPlayerArmies()));
 		gui.setCurrentPlayer(String.valueOf(playercontroller.getCurrentPlayer().getId()));
