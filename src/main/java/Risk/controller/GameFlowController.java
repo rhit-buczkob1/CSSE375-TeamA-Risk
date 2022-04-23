@@ -25,6 +25,7 @@ public class GameFlowController {
 	public static Random rand = new Random();
 
 	ResourceBundle messages;
+	String gameMode = "NORMAL";
 
 	public GameFlowController(PhaseController phaseController, PlayerController playercontroller,
 							  GameBoardController gbcontroller,
@@ -36,6 +37,7 @@ public class GameFlowController {
 		this.phase = "setup";
 		this.gbcontroller = gbcontroller;
 		this.territoryController = gbcontroller.territoryController;
+
 		this.adcontroller = adc;
 		this.gui = gui;
 		this.messages = msg;
@@ -53,6 +55,7 @@ public class GameFlowController {
 		this.gui.attackFrom.setOnMouseClicked(attackListener);
 		this.gui.attack.setOnMouseClicked(attackListener.new AttackListener());
 		this.gui.language.setOnMouseClicked(new PopUpLauncher(this));
+		this.gui.chooseGameMode.setOnMouseClicked(new GameModePopUpLauncher(this));
 		this.gui.setNumPlayers.setOnMouseClicked(new PlayerSetListener(this));
 		this.gui.setMouseListener(new EventHandler<MouseEvent>() {
 
@@ -136,6 +139,10 @@ public class GameFlowController {
 			this.gui.setTerritoryColor(defendingTerritory.getName(), this.playercontroller.getCurrentPlayer().getId());
 			gui.currentTerritoryArmyCount = defendingTerritory.getArmyCount();
 			gui.currentTerritoryPlayer = defendingTerritory.getPlayer();
+			if(defendingTerritory.isHQ) {
+				gbcontroller.transferAllTerritories(this.adcontroller.defender.getId(), this.playercontroller.getCurrentPlayer().getId(), gui);
+				playercontroller.players.remove(this.adcontroller.defender);
+			}
 			this.gui.paintTerritoryBounds();
 		}
 
@@ -250,5 +257,71 @@ public class GameFlowController {
 			this.gui.card3.getItems().add(convertCardForGui(card));
 
 		}
+	}
+
+	public String getMessage(String key) {
+		return messages.getString(key);
+	}
+
+	public void setMessages(ResourceBundle messagesBundle) {
+		messages = messagesBundle;
+	}
+
+	public void setLanguage() {
+		gui.setLanguage(messages, getPhase());
+	}
+
+	public Territory getTerritory(String lastclickedstring) {
+		return territoryController.getTerritory(lastclickedstring);
+	}
+
+	public void setCurrentTerritoryArmyCount(int armyCount) {
+		gui.currentTerritoryArmyCount = armyCount;
+	}
+
+	public void setCurrentTerritoryPlayer(int player) {
+		gui.currentTerritoryPlayer = player;
+	}
+
+	public boolean clickedOnValidLocation() {
+		return !(gui.clickedTerritory.equals(""));
+	}
+
+	public void fortifyTerritory(String fromTerritory, String toTerritory) {
+		try {
+			playercontroller.moveArmy(territoryController.getTerritory(fromTerritory), territoryController.getTerritory(toTerritory), 1);
+			gui.territoryArmiesNumber
+					.setText(String.valueOf(territoryController.getTerritory(gui.clickedTerritory.getText()).getArmyCount()));
+		} catch (IllegalArgumentException e1) {
+			System.err.println(e1.getMessage());
+		}
+	}
+
+	public void addArmy() {
+		int player = playercontroller.getCurrentPlayer().getId();
+		addInfantrytoTerritoryfromString(gui.clickedTerritory.getText());
+		if (player == territoryController.getTerritoryOwner(gui.clickedTerritory.getText())) {
+			gui.setTerritoryColor(gui.clickedTerritory.getText(), player);
+		}
+		Territory territory = territoryController.getTerritory(gui.clickedTerritory.getText());
+
+		gui.setCurrentPlayerArmies(Integer.toString(playercontroller.getCurrentPlayer().getPlayerArmies()));
+		gui.setCurrentPlayer(String.valueOf(playercontroller.getCurrentPlayer().getId()));
+		gui.currentTerritoryArmyCount = territory.getArmyCount();
+		gui.currentTerritoryPlayer = territory.getPlayer();
+		gui.paintTerritoryBounds();
+	}
+
+	public void next() {
+		next_phase();
+		gui.setCurrentPlayerArmies(Integer.toString(playercontroller.getCurrentPlayer().getPlayerArmies()));
+		gui.setCurrentPlayer(String.valueOf(playercontroller.getCurrentPlayer().getId()));
+	}
+
+	public void swapToAlternatePhaseController() {
+		String phase = this.phaseController.getPhase();
+		this.playercontroller.setGameMode(this.gameMode);
+		this.phaseController = new AlternatePhaseController(this.playercontroller, this.gbcontroller);
+		this.phaseController.setPhase(phase);
 	}
 }

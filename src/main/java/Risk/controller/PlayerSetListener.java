@@ -26,8 +26,8 @@ public class PlayerSetListener implements EventHandler<MouseEvent> {
 
             try{
             gfc.gbcontroller.map = map;
-            gfc.gbcontroller.territoryController.map = map;
             gfc.gbcontroller.initGame();
+            gfc.territoryController = gfc.gbcontroller.territoryController;
             int armiesPerPlayer = gfc.playercontroller.setNumberOfPlayers(numPlayers);
             gfc.gui.setNumPlayers(gfc.playercontroller.getNumberOfPlayers() + "");
             gfc.gui.setCurrentPlayerArmies(armiesPerPlayer + "");

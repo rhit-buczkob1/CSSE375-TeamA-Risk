@@ -7,6 +7,7 @@ public class Territory {
 	int player;
 	int armies;
 	ArrayList<Territory> neighboringterritories;
+	public boolean isHQ = false;
 
 	public Territory(String territoryName) {
 		this.name = new TerritoryName(territoryName);
@@ -83,4 +84,8 @@ public class Territory {
 				+ ", armies=" + armies
 				+ ", neighboringterritories=" + getNeighboring() + '}';
 	}
+
+    public void setHQ(boolean isHQ) {
+		this.isHQ = true;
+    }
 }

@@ -62,17 +62,17 @@ public class GraphicalUserInterface {
 	public Button setNumPlayers;
 	public Text attackerDice;
 	public Text defenderDice;
+	public Slider attackerDiceSlider;
+	public Slider defenderDiceSlider;
+	public ComboBox<String> card1;
+	public ComboBox<String> card2;
+	public ComboBox<String> card3;
 	public Text numPlayers;
-	public Slider attackerDiceSlider = new Slider(1, 3, 1);
-	public Slider defenderDiceSlider = new Slider(1, 2, 1);
 	public Slider numPlayersSlider = new Slider(3, 6, 1);
-
-	public ComboBox<String> card1 = new ComboBox<String>();
-	public ComboBox<String> card2 = new ComboBox<String>();
-	public ComboBox<String> card3 = new ComboBox<String>();
 	public ComboBox<String> maps = new ComboBox<>();
 	public Button spendCards;
 	public Text currentPhase = new Text("Setup");
+	public Button chooseGameMode;
 
 
 	public Text currentTerritoryDesc;
@@ -106,24 +106,81 @@ public class GraphicalUserInterface {
 	}
 
 	public void setupUI(boolean extraButtons) {
+
+		this.chooseGameMode = new Button("Choose Game Mode");//add to language resource file
+		chooseGameMode.setId("chooseGameMode");
+		currentTerritoryDesc = new Text(messages.getString("select"));
+		currentTerritoryDesc.setId("currentTerritoryDesc");
+
 		this.language = new Button(messages.getString("lang"));
+		language.setId("language");
+
 		this.nextTurn = new Button(messages.getString("nextPhase"));
+		nextTurn.setId("nextTurn");
+
 		this.currentPlayer = new Text("Set # of players and select map");
+		currentPlayer.setId("currentPlayer");
+
 		this.playerArmies = new Text(messages.getString("armiesInPlayersHands"));
+		playerArmies.setId("playerArmies");
+
 		this.territoryArmies = new Text(messages.getString("armiesTerr"));
+		territoryArmies.setId("territoryArmies");
+
 		this.territoryPlayer = new Text(messages.getString("terrPlayer"));
+		territoryPlayer.setId("territoryPlayer");
+
 		this.attack = new Button(messages.getString("attack"));
+		attack.setId("attack");
+
 		this.addArmy = new Button(messages.getString("addArmy"));
+		addArmy.setId("addArmy");
+
+
+
 		this.setNumPlayers = new Button("Start game");
+		setNumPlayers.setId("setNumPlayers");
+
 		this.attackerDice = new Text(messages.getString("selectAttDice"));
+		attackerDice.setId("attackerDice");
+
 		this.defenderDice = new Text(messages.getString("selectDefDice"));
+		defenderDice.setId("defenderDice");
+
 		this.spendCards = new Button(messages.getString("spendCards"));
+		spendCards.setId("spendCards");
+
+		this.chooseGameMode = new Button("Choose Game Mode"); //add to language resource file
+		chooseGameMode.setId("chooseGameMode");
+
+		this.attackerDiceSlider = new Slider(1, 3, 1);
+		attackerDiceSlider.setId("attackerDiceSlider");
+
+		this.defenderDiceSlider = new Slider(1, 2, 1);
+		defenderDiceSlider.setId("defenderDiceSlider");
+
+		this.card1 = new ComboBox<String>();
+		card1.setId("card1");
+
+		this.card2 = new ComboBox<String>();
+		card2.setId("card2");
+
+		this.card3 = new ComboBox<String>();
+		card3.setId("card3");
+
 		this.numPlayers = new Text("Number of Players");
+		numPlayers.setId("numPlayers");
 
 		if (extraButtons) {
+
 			this.attackFrom = new Button(messages.getString("attackFrom"));
+			attackFrom.setId("attackFrom");
+
 			this.moveFrom = new Button(messages.getString("moveFrom"));
+			moveFrom.setId("moveFrom");
+
 		}
+
 	}
 	
 	public void setLanguage(ResourceBundle msg, String phase) {
@@ -373,6 +430,7 @@ public class GraphicalUserInterface {
 		buttons.getChildren().add(nextTurn);
 		buttons.getChildren().add(language);
 		buttons.getChildren().add(attack);
+		buttons.getChildren().add(chooseGameMode);
 		buttons.getChildren().add(attackFrom);
 		
 		buttons.getChildren().add(attackerDiceSlider);
@@ -389,18 +447,18 @@ public class GraphicalUserInterface {
 		attackFrom.setTranslateY(60);
 		attackFrom.setTranslateX(120);
 		language.setTranslateY(90);
-		setNumPlayers.setTranslateY(230);
+		chooseGameMode.setTranslateY(120);
 		
 		attackerDice.setTranslateY(140);
 		defenderDice.setTranslateY(185);
-		numPlayers.setTranslateY(200);
-
 		attackerDiceSlider.setTranslateY(130);
 		defenderDiceSlider.setTranslateY(175);
-		numPlayersSlider.setTranslateY(200);
-
 		attackerDiceSlider.setTranslateX(160);
 		defenderDiceSlider.setTranslateX(160);
+		
+		setNumPlayers.setTranslateY(230);
+		numPlayers.setTranslateY(200);
+		numPlayersSlider.setTranslateY(200);
 		numPlayersSlider.setTranslateX(125);
 
 
@@ -534,6 +592,7 @@ public class GraphicalUserInterface {
 		this.numPlayers.setVisible(false);
 		this.setNumPlayers.setVisible(false);
 		this.maps.setVisible(false);
+		this.chooseGameMode.setVisible(false);
 		this.playerArmiesNumber.setText(numArmies);
 		setControlsVisibility(true);
 		changeBackground();
