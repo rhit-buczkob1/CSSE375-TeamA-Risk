@@ -46,9 +46,9 @@ public class GameFlowControllerTest {
 		test1.setArmyCount(30);
 		test2.setArmyCount(30);
 
-		EasyMock.expect(gbc.getTerritoryOwner("test2")).andReturn(2);
-		EasyMock.expect(gbc.getTerritory("test1")).andReturn(test1);
-		EasyMock.expect(gbc.getTerritory("test2")).andReturn(test2);
+		EasyMock.expect(gbc.territoryController.getTerritoryOwner("test2")).andReturn(2);
+		EasyMock.expect(gbc.territoryController.getTerritory("test1")).andReturn(test1);
+		EasyMock.expect(gbc.territoryController.getTerritory("test2")).andReturn(test2);
 		EasyMock.expect(pc.getCurrentPlayer()).andReturn(player);
 		EasyMock.expect(pc.getPlayer(2)).andReturn(player2);
 		EasyMock.expect(rand.nextInt(6)).andReturn(5);
@@ -95,9 +95,9 @@ public class GameFlowControllerTest {
 		player.addTerritory();
 		player2.addTerritory();
 
-		EasyMock.expect(gbc.getTerritoryOwner("test2")).andReturn(2);
-		EasyMock.expect(gbc.getTerritory("test1")).andReturn(test1);
-		EasyMock.expect(gbc.getTerritory("test2")).andReturn(test2);
+		EasyMock.expect(gbc.territoryController.getTerritoryOwner("test2")).andReturn(2);
+		EasyMock.expect(gbc.territoryController.getTerritory("test1")).andReturn(test1);
+		EasyMock.expect(gbc.territoryController.getTerritory("test2")).andReturn(test2);
 		EasyMock.expect(rand.nextInt(6)).andReturn(5);
 		EasyMock.expect(rand.nextInt(6)).andReturn(4);
 		EasyMock.replay(gbc, rand);
@@ -141,7 +141,7 @@ public class GameFlowControllerTest {
 		PhaseController phc = new PhaseController(pc, gbc);
 		GameFlowController gfc = new GameFlowController(phc, pc, gbc, adc, new GraphicalUserInterface(msg), msg);
 		Territory test = new Territory("test");
-		EasyMock.expect(gbc.getTerritory("test")).andReturn(test);
+		EasyMock.expect(gbc.territoryController.getTerritory("test")).andReturn(test);
 		pc.addInfantryToTerritory(test, 1);
 
 		EasyMock.replay(pc);
@@ -161,7 +161,7 @@ public class GameFlowControllerTest {
 		Player player = EasyMock.strictMock(Player.class);
 		EasyMock.expect(playercontroller.getCurrentPlayer()).andReturn(player);
 		EasyMock.expect(player.getId()).andReturn(1);
-		EasyMock.expect(gameBoard.getTerritoryOwner("Indiana")).andReturn(1);
+		EasyMock.expect(gameBoard.territoryController.getTerritoryOwner("Indiana")).andReturn(1);
 
 		EasyMock.replay(playercontroller, gameBoard, player);
 
@@ -183,7 +183,7 @@ public class GameFlowControllerTest {
 		Player player = EasyMock.strictMock(Player.class);
 		EasyMock.expect(playercontroller.getCurrentPlayer()).andReturn(player);
 		EasyMock.expect(player.getId()).andReturn(0);
-		EasyMock.expect(gameBoard.getTerritoryOwner("Indiana")).andReturn(2);
+		EasyMock.expect(gameBoard.territoryController.getTerritoryOwner("Indiana")).andReturn(2);
 
 		EasyMock.replay(playercontroller, gameBoard, player);
 		GameFlowController gfc = new GameFlowController(phc, playercontroller, gameBoard, new AttackerDefenderController(),
@@ -202,7 +202,7 @@ public class GameFlowControllerTest {
 		PlayerController pc = new PlayerController();
 		PhaseController phc = new PhaseController(pc, gameBoard);
 
-		EasyMock.expect(gameBoard.isAdjacent("Indiana", "Ohio")).andReturn(true);
+		EasyMock.expect(gameBoard.territoryController.isAdjacent("Indiana", "Ohio")).andReturn(true);
 
 		EasyMock.replay(gameBoard);
 
@@ -256,7 +256,7 @@ public class GameFlowControllerTest {
 		playercontroller.addArmiesToCurrentPlayer(4);
 		EasyMock.expect(playercontroller.getCurrentPlayer()).andReturn(player);
 		EasyMock.expect(player.getId()).andReturn(1);
-		EasyMock.expect(gameBoard.checkOwnedTerritory("", "", "", 1)).andReturn(false);
+		EasyMock.expect(gameBoard.territoryController.checkOwnedTerritory("", "", "", 1)).andReturn(false);
 		EasyMock.expect(playercontroller.getCurrentPlayer()).andReturn(player);
 
 		gameBoard.incrementTradeCounter();
@@ -289,7 +289,7 @@ public class GameFlowControllerTest {
 		EasyMock.expect(playercontroller.getCurrentPlayer()).andReturn(player);
 		EasyMock.expect(player.getId()).andReturn(1);
 		EasyMock.expect(player.getDeck()).andReturn(deck);
-		EasyMock.expect(gameBoard.checkOwnedTerritory(card1.getTerritory(), card2.getTerritory(), card3.getTerritory(), 1))
+		EasyMock.expect(gameBoard.territoryController.checkOwnedTerritory(card1.getTerritory(), card2.getTerritory(), card3.getTerritory(), 1))
 				.andReturn(true);
 		playercontroller.addArmiesToCurrentPlayer(2);
 		EasyMock.expect(playercontroller.getCurrentPlayer()).andReturn(player);
@@ -529,7 +529,7 @@ public class GameFlowControllerTest {
 
 		GameFlowController gfc = new GameFlowController(phc, pc, gb,
 				new AttackerDefenderController(), new GraphicalUserInterface(msg), msg);
-		EasyMock.expect(gb.isAdjacent("", "")).andReturn(false);
+		EasyMock.expect(gb.territoryController.isAdjacent("", "")).andReturn(false);
 		EasyMock.replay(gb);
 
 		assertEquals(false, gfc.verifyAdjacent("", ""));
@@ -546,7 +546,7 @@ public class GameFlowControllerTest {
 
 		GameFlowController gfc = new GameFlowController(phc, pc, gb,
 				new AttackerDefenderController(), new GraphicalUserInterface(msg), msg);
-		EasyMock.expect(gb.isAdjacent("North_America", "South_America")).andReturn(true);
+		EasyMock.expect(gb.territoryController.isAdjacent("North_America", "South_America")).andReturn(true);
 		EasyMock.replay(gb);
 
 		assertEquals(true, gfc.verifyAdjacent("North_America", "South_America"));

@@ -1,8 +1,6 @@
 package Risk.controller;
 
-import Risk.model.Card;
 import Risk.model.Continent;
-import Risk.model.Deck;
 import Risk.model.GameBoard;
 import Risk.model.Territory;
 import org.easymock.EasyMock;
@@ -15,70 +13,51 @@ import java.util.Set;
 import static org.junit.Assert.*;
 
 public class 	GameBoardControllerTest {
-	
-	
+
+
 	@Test
 	public void loadshuffletest() {
-		
 		GameBoardController controller = new GameBoardController();
-		
-		
-		
+		controller.map = "-globe";
 		controller.loadGameBoard();
-		controller.loadTerritoryNeighboring();
+		controller.territoryController = new GameBoardTerritoryController(controller.gameBoard);
+		controller.territoryController.map = "-globe";
+		controller.territoryController.loadTerritoryNeighboring();
 		controller.populateGameBoardDeckTroops();
 		assertFalse(controller.gameBoardDeck.drawCard().territory.equals("New Guinea"));
-		
-
-		
 	}
 
-	@Test
-	public void initGameTest() {
-		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
-
-		controller.initGame();
-		System.out.println(controller.getGameBoard());
-		System.out.println(controller.getGameBoard().continents.size());
-
-		assertTrue(true);
-
-	}
-	
 	@Test
 	public void initGameTest_allterritories() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+
+		controller.map = "-globe";
 
 		controller.initGame();
-		assertEquals(controller.getGameBoard().continents.size(), 6);
+		assertEquals(controller.gameBoard .continents.size(), 6);
 		int territorycount = 0;
-		for (Continent continent : controller.getGameBoard().continents) {
+		for (Continent continent : controller.gameBoard .continents) {
 			for (Territory territories : continent.territories) {
-				assertEquals(true, (territories.getNeighboring().size() > 0));
+				assertTrue((territories.getNeighboring().size() > 0));
 				territorycount++;
 			}
-			
-			
+
+
 		}
+		assertEquals(42, controller.gameBoard.getDeck().cards.size());
 		
-		assertEquals(42, controller.getGameBoard().getDeck().cards.size());
-		
-		assertEquals(territorycount, 42);
-
-
-		
-				
+		assertEquals(42, territorycount);
 	}
 
 	@Test
 	public void initGameTest_mocked() {
 		GameBoardController controller = EasyMock.partialMockBuilder(GameBoardController.class)
-				.addMockedMethod("loadGameBoard").addMockedMethod("loadTerritoryNeighboring")
+				.addMockedMethod("loadGameBoard")
 				.addMockedMethod("populateGameBoardDeckTroops").createMock();
 		controller.loadGameBoard();
-		controller.loadTerritoryNeighboring();
+		controller.territoryController = new GameBoardTerritoryController(new GameBoard());
+		controller.territoryController.loadTerritoryNeighboring();
 		controller.populateGameBoardDeckTroops();
 		EasyMock.replay(controller);
 		controller.initGame();
@@ -89,10 +68,10 @@ public class 	GameBoardControllerTest {
 	@Test
 	public void getTerritoryOwner_input1() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
-
+		controller.gameBoard = new GameBoard();
+		controller.territoryController = new GameBoardTerritoryController(controller.gameBoard);
 		try {
-			controller.getTerritoryOwner("");
+			controller.territoryController.getTerritoryOwner("");
 			fail("Should throw an IllegalArgumentException.");
 
 		} catch (IllegalArgumentException e) {
@@ -104,61 +83,62 @@ public class 	GameBoardControllerTest {
 	@Test
 	public void getTerritoryOwner_input2() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
+
 		controller.initGame();
 
 		try {
-			int player = controller.getTerritoryOwner("Alberta");
+			int player = controller.territoryController.getTerritoryOwner("Alberta");
 			assertEquals(0, player); // not owned so 0
-
 		} catch (IllegalArgumentException e) {
 			fail("Shouldn't cause an exception.");
 		}
-
 	}
-	
-	
+
+
 	@Test
 	public void getTerritoryOwner_inputvalid() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
 		controller.initGame();
-		
-		
-		controller.getTerritory("Alberta").setPlayer(2);
+
+		controller.territoryController.map = "-globe";
+		controller.territoryController.getTerritory("Alberta").setPlayer(2);
 
 		try {
-			int player = controller.getTerritoryOwner("Alberta");
+			int player = controller.territoryController.getTerritoryOwner("Alberta");
 			assertEquals(2, player); // not owned so 0
 
 		} catch (IllegalArgumentException e) {
 			fail("Shouldn't cause an exception.");
 		}
-
 	}
 
 	@Test
 	public void testIsAdjacent_input1() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
 
 		controller.initGame();
 		try {
-			assertTrue(controller.isAdjacent("Alberta", "Alaska"));
+			assertTrue(controller.territoryController.isAdjacent("Alberta", "Alaska"));
 		} catch (IllegalArgumentException e) {
 			fail("Shouldn't cause an exception.");
 		}
-
 	}
 
 	@Test
 	public void testIsAdjacent_input2() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
 
 		controller.initGame();
 		try {
-			assertFalse(controller.isAdjacent("Alberta", "Brazil"));
+			assertFalse(controller.territoryController.isAdjacent("Alberta", "Brazil"));
 		} catch (IllegalArgumentException e) {
 			fail("Shouldn't cause an exception.");
 		}
@@ -167,11 +147,12 @@ public class 	GameBoardControllerTest {
 	@Test
 	public void testIsAdjacent_input3() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
 
 		controller.initGame();
 		try {
-			controller.isAdjacent("Alberta", "Indiana");
+			controller.territoryController.isAdjacent("Alberta", "Indiana");
 			fail("Should cause an exception.");
 		} catch (IllegalArgumentException e) {
 			assertEquals(e.getMessage(), "No Territory Found");
@@ -181,13 +162,14 @@ public class 	GameBoardControllerTest {
 	@Test
 	public void testGetTerritory_input1() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
 
 		controller.initGame();
 		try {
-			Territory territory = controller.getTerritory("Alberta");
+			Territory territory = controller.territoryController.getTerritory("Alberta");
 			assertEquals("Alberta", territory.getName());
-			territory = controller.getTerritory("Egypt");
+			territory = controller.territoryController.getTerritory("Egypt");
 			assertEquals("Egypt", territory.getName());
 		} catch (IllegalArgumentException e) {
 			fail("Shouldn't cause an exception.");
@@ -197,11 +179,12 @@ public class 	GameBoardControllerTest {
 	@Test
 	public void testGetTerritory_input2() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
 
 		controller.initGame();
 		try {
-			controller.getTerritory("Indiana");
+			controller.territoryController.getTerritory("Indiana");
 			fail("Should cause an exception.");
 		} catch (IllegalArgumentException e) {
 			assertEquals(e.getMessage(), "No Territory Found");
@@ -211,7 +194,8 @@ public class 	GameBoardControllerTest {
 	@Test
 	public void testPopulateGameBoardDeckTerritory() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
 
 		controller.initGame();
 		controller.populateGameBoardDeckTroops();
@@ -222,7 +206,8 @@ public class 	GameBoardControllerTest {
 	@Test
 	public void testPopulateGameBoardDeckTroops() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
 
 		controller.initGame();
 		controller.populateGameBoardDeckTroops();
@@ -236,7 +221,8 @@ public class 	GameBoardControllerTest {
 	@Test
 	public void testgetNewContinentPlayerArmies_toolow() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
 
 		controller.initGame();
 		controller.populateGameBoardDeckTroops();
@@ -252,7 +238,8 @@ public class 	GameBoardControllerTest {
 	@Test
 	public void testgetNewContinentPlayerArmies_toohigh() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
 
 		controller.initGame();
 		controller.populateGameBoardDeckTroops();
@@ -268,29 +255,30 @@ public class 	GameBoardControllerTest {
 	@Test
 	public void testgetNewContinentPlayerArmies_max() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
 
 		controller.initGame();
 		controller.populateGameBoardDeckTroops();
 
-		GameBoard gameboard = controller.getGameBoard();
+		GameBoard gameboard = controller.gameBoard ;
 
 		for (Continent continent : gameboard.continents) {
 			continent.setPlayer(1);
 		}
 
 		assertEquals(controller.getNewContinentPlayerArmies(1), 24);
-
 	}
 
 	@Test
 	public void testgetNewContinentPlayerArmies_min() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
 
 		controller.initGame();
 
-		GameBoard gameboard = controller.getGameBoard();
+		GameBoard gameboard = controller.gameBoard ;
 		System.out.println(gameboard.continents.size());
 
 		for (Continent continent : gameboard.continents) {
@@ -298,14 +286,13 @@ public class 	GameBoardControllerTest {
 		}
 
 		assertEquals(controller.getNewContinentPlayerArmies(4), 0);
-
 	}
 
 	@Test
 	public void updatePlayer_owned() {
 
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
 
 		Territory test1 = new Territory("test1");
 		Territory test2 = new Territory("test2");
@@ -326,14 +313,13 @@ public class 	GameBoardControllerTest {
 		controller.updatePlayer(continent);
 
 		assertEquals(continent.getPlayer(), 1);
-
 	}
 
 	@Test
 	public void updatePlayer_unowned() {
 
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
 
 		Territory test1 = new Territory("test1");
 		Territory test2 = new Territory("test2");
@@ -355,132 +341,35 @@ public class 	GameBoardControllerTest {
 		controller.updatePlayer(continent);
 
 		assertEquals(continent.getPlayer(), 0);
-
 	}
 
 	@Test
-	public void updateGameBoard_min() {
-		GameBoardController controller = EasyMock.partialMockBuilder(GameBoardController.class)
-				.addMockedMethod("updatePlayer").createMock();
-		Set<Continent> continents = new HashSet<Continent>();
-
-		EasyMock.replay(controller);
-		controller.initializeNewBoardForTest();
-		controller.getGameBoard().continents = continents;
-		controller.updateGameBoard();
-		EasyMock.verify(controller);
-
-	}
-
-	@Test
-	public void updateGameBoard_1() {
-		GameBoardController controller = EasyMock.partialMockBuilder(GameBoardController.class)
-				.addMockedMethod("updatePlayer").createMock();
-		Continent testcontinent = new Continent(new ArrayList<Territory>(), "test");
-		Set<Continent> continents = new HashSet<Continent>();
-		continents.add(testcontinent);
-		controller.updatePlayer(testcontinent);
-		EasyMock.replay(controller);
-		controller.initializeNewBoardForTest();
-		controller.getGameBoard().continents = continents;
-		controller.updateGameBoard();
-		EasyMock.verify(controller);
-
-	}
-
-	@Test
-	public void updateGameBoard_max() {
+	public void updateGameBoard() {
 		GameBoardController controller = EasyMock.partialMockBuilder(GameBoardController.class)
 				.addMockedMethod("updatePlayer").createMock();
 
-		Continent testcontinent = new Continent(new ArrayList<Territory>(), "test1");
-		Continent testcontinent2 = new Continent(new ArrayList<Territory>(), "test2");
-		Continent testcontinent3 = new Continent(new ArrayList<Territory>(), "test3");
-		Continent testcontinent4 = new Continent(new ArrayList<Territory>(), "test4");
-		Continent testcontinent5 = new Continent(new ArrayList<Territory>(), "test5");
-		Continent testcontinent6 = new Continent(new ArrayList<Territory>(), "test6");
-		Continent testcontinent7 = new Continent(new ArrayList<Territory>(), "test7");
-
 		Set<Continent> continents = new HashSet<Continent>();
-		continents.add(testcontinent);
-		continents.add(testcontinent2);
-		continents.add(testcontinent3);
-		continents.add(testcontinent4);
-		continents.add(testcontinent5);
-		continents.add(testcontinent6);
-		continents.add(testcontinent7);
-
-		controller.updatePlayer(testcontinent);
-		controller.updatePlayer(testcontinent2);
-		controller.updatePlayer(testcontinent3);
-		controller.updatePlayer(testcontinent4);
-		controller.updatePlayer(testcontinent5);
-		controller.updatePlayer(testcontinent6);
-		controller.updatePlayer(testcontinent7);
+		for (int i = 0; i < 7; i++) {
+			Continent continent = new Continent(new ArrayList<Territory>(), "test" + (i+1));
+			continents.add(continent);
+			controller.updatePlayer(continent);
+		}
 
 		EasyMock.replay(controller);
-		controller.initializeNewBoardForTest();
-		controller.getGameBoard().continents = continents;
+		controller.gameBoard = new GameBoard();
+		controller.gameBoard .continents = continents;
 		controller.updateGameBoard();
 		EasyMock.verify(controller);
-
 	}
 
 	@Test
-	public void testgetincrementTradeCounter_0and1() {
+	public void testIncrementTradeCounter() {
+		int[] expected = {4, 6, 8, 10, 12, 15, 20, 25, 30, 35, 40, 45, 50};
 		GameBoardController controller = new GameBoardController();
-		assertEquals(4, controller.getTradeCounter());
-		controller.incrementTradeCounter();
-		assertEquals(6, controller.getTradeCounter());
-	}
-
-	@Test
-	public void testgetincrementTradeCounter_5and6() {
-		GameBoardController controller = new GameBoardController();
-		assertEquals(4, controller.getTradeCounter());
-		controller.incrementTradeCounter();
-		assertEquals(6, controller.getTradeCounter());
-		controller.incrementTradeCounter();
-		assertEquals(8, controller.getTradeCounter());
-		controller.incrementTradeCounter();
-		assertEquals(10, controller.getTradeCounter());
-		controller.incrementTradeCounter();
-		assertEquals(12, controller.getTradeCounter());
-		controller.incrementTradeCounter();
-		assertEquals(15, controller.getTradeCounter());
-		controller.incrementTradeCounter();
-		assertEquals(20, controller.getTradeCounter());
-	}
-
-	@Test
-	public void testgetincrementTradeCounter_maximums() {
-		GameBoardController controller = new GameBoardController();
-		assertEquals(4, controller.getTradeCounter());
-		controller.incrementTradeCounter();
-		assertEquals(6, controller.getTradeCounter());
-		controller.incrementTradeCounter();
-		assertEquals(8, controller.getTradeCounter());
-		controller.incrementTradeCounter();
-		assertEquals(10, controller.getTradeCounter());
-		controller.incrementTradeCounter();
-		assertEquals(12, controller.getTradeCounter());
-		controller.incrementTradeCounter();
-		assertEquals(15, controller.getTradeCounter());
-		controller.incrementTradeCounter();
-		assertEquals(20, controller.getTradeCounter());
-		controller.incrementTradeCounter();
-		assertEquals(25, controller.getTradeCounter());
-		controller.incrementTradeCounter();
-		assertEquals(30, controller.getTradeCounter());
-		controller.incrementTradeCounter();
-		assertEquals(35, controller.getTradeCounter());
-		controller.incrementTradeCounter();
-		assertEquals(40, controller.getTradeCounter());
-		controller.incrementTradeCounter();
-		assertEquals(45, controller.getTradeCounter());
-		controller.incrementTradeCounter();
-		assertEquals(50, controller.getTradeCounter());
-		controller.incrementTradeCounter();
+		for (int i = 0; i < expected.length; i++) {
+			assertEquals(expected[i], controller.getTradeCounter());
+			controller.incrementTradeCounter();
+		}
 		assertEquals(55, controller.getTradeCounter());
 		try {
 			controller.incrementTradeCounter();
@@ -494,71 +383,76 @@ public class 	GameBoardControllerTest {
 	@Test
 	public void checkOwnedTerritorytest_valid() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
+
 		controller.initGame();
 
-		assertEquals(true, controller.checkOwnedTerritory("Peru", "Argentina", "Russia", 0));
-
+		assertTrue(controller.territoryController.checkOwnedTerritory("Peru", "Argentina", "Russia", 0));
 	}
 
 	@Test
 	public void checkOwnedTerritorytest_invalidplayer() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
 		controller.initGame();
 
-		assertEquals(false, controller.checkOwnedTerritory("Peru", "Argentina", "Russia", 1));
-
+		assertFalse(controller.territoryController.checkOwnedTerritory("Peru", "Argentina", "Russia", 1));
 	}
 
 	@Test
 	public void checkOwnedTerritorytest_invalidterritories() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
+
 		controller.initGame();
 
-		assertEquals(false, controller.checkOwnedTerritory("not", "real", "territories", 0));
-
+		assertFalse(controller.territoryController.checkOwnedTerritory("not", "real", "territories", 0));
 	}
 
 	@Test
 	public void checkOwnedTerritorytest_invalidterritories_1and2() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
+
 		controller.initGame();
 
-		assertEquals(true, controller.checkOwnedTerritory("not", "real", "Russia", 0));
-
+		assertTrue(controller.territoryController.checkOwnedTerritory("not", "real", "Russia", 0));
 	}
 
 	@Test
 	public void checkOwnedTerritorytest_invalidterritories_1and3() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
+
 		controller.initGame();
 
-		assertEquals(true, controller.checkOwnedTerritory("not", "Russia", "territories", 0));
-
+		assertTrue(controller.territoryController.checkOwnedTerritory("not", "Russia", "territories", 0));
 	}
 
 	@Test
 	public void checkOwnedTerritorytest_invalidterritories_allnullstring() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
+
 		controller.initGame();
 
-		assertEquals(false, controller.checkOwnedTerritory("", "", "", 0));
-
+		assertFalse(controller.territoryController.checkOwnedTerritory("", "", "", 0));
 	}
 
 	@Test
 	public void checkOwnedTerritorytest_invalidterritories_invalid_player() {
 		GameBoardController controller = new GameBoardController();
-		controller.initializeNewBoardForTest();
+		controller.gameBoard = new GameBoard();
+		controller.map = "-globe";
+
 		controller.initGame();
 
-		assertEquals(false, controller.checkOwnedTerritory("Peru", "Argentina", "Russia", -1));
-
+		assertFalse(controller.territoryController.checkOwnedTerritory("Peru", "Argentina", "Russia", -1));
 	}
-
 }
