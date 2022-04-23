@@ -5,23 +5,19 @@ import java.util.Set;
 
 public class Card {
 
-	public TerritoryName territory;
+	public String territory;
 	public String troopType;
 	public Card(String territory) {
-		this.territory = new TerritoryName(territory);
+		this.territory = territory;
 	}
 
 	public Card(String territory, String troopType) {
-//		if(!isValidTroopType(troopType)) throw new IllegalArgumentException(troopType + " is not a valid troop type.");
-
-//		else {
-			this.territory = new TerritoryName(territory);
-			this.troopType = troopType;
-//		}
+		this.territory = territory;
+		this.troopType = troopType;
 	}
 
 	public String getTerritory() {
-		return this.territory.getName();
+		return this.territory;
 	}
 
 	public String getTroopType() {
