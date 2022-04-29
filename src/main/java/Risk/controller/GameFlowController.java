@@ -318,10 +318,7 @@ public class GameFlowController {
 		gui.setCurrentPlayer(String.valueOf(playercontroller.getCurrentPlayer().getId()));
 	}
 
-	public void swapToAlternatePhaseController() {
-		String phase = this.phaseController.getPhase();
-		this.playercontroller.setGameMode(this.gameMode);
-		this.phaseController = new AlternatePhaseController(this.playercontroller, this.gbcontroller);
-		this.phaseController.setPhase(phase);
+	public void swapToAlternatePhaseController(String gameMode) {
+		this.playercontroller.setGameMode(gameMode);
 	}
 }

@@ -41,12 +41,10 @@ public class GameModePopUpLauncher implements EventHandler<MouseEvent> {
             public void handle(MouseEvent event) {
                 String mode = box.getValue();
                 if (mode == "Normal") {
-                    gfc.gameMode = "NORMAL";
+                    gfc.swapToAlternatePhaseController("NORMAL");
                 } else {
-                    gfc.gameMode = "HEADQUARTERS";
+                    gfc.swapToAlternatePhaseController("HEADQUARTERS");
                 }
-                // might have to do some game reset stuff
-                gfc.swapToAlternatePhaseController();
                 panel.close();
             }
 
