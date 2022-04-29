@@ -11,7 +11,7 @@ public class PlayerController {
 	ArrayList<Player> players = new ArrayList<>();
 	int currentIndex = 0;
 	boolean initSetup = true;
-	private String gameMode;
+	private String gameMode = "NORMAL";
 
 	public void addPlayer(Player player) {
 		this.players.add(player);
