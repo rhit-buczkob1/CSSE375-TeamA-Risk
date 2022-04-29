@@ -5,6 +5,8 @@ import Risk.model.Deck;
 import Risk.model.Player;
 import Risk.model.Territory;
 import Risk.view.GraphicalUserInterface;
+import javafx.stage.Stage;
+
 import org.easymock.EasyMock;
 import org.junit.Test;
 
@@ -13,26 +15,38 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Random;
 import java.util.ResourceBundle;
+import org.testfx.framework.junit.ApplicationTest;
 
 import static org.junit.Assert.*;
 
-public class GameFlowControllerTest {
+public class GameFlowControllerTest extends ApplicationTest {
 
 	Locale locale = new Locale("en", "US");
 	ResourceBundle msg = ResourceBundle.getBundle("MessagesBundle", locale);
 
+//	PlayerController pc = EasyMock.strictMock(PlayerController.class);
+//	AttackerDefenderController adc = new AttackerDefenderController();
+//	GameBoardController gbc = EasyMock.mock(GameBoardController.class);
+//	PhaseController phc = new PhaseController(pc, gbc);
 
-	PlayerController pc = EasyMock.strictMock(PlayerController.class);
-	AttackerDefenderController adc = new AttackerDefenderController();
-	GameBoardController gbc = EasyMock.mock(GameBoardController.class);
+
 	Random rand = EasyMock.strictMock(Random.class);
-	PhaseController phc = new PhaseController(pc, gbc);
-
+	GraphicalUserInterface gui;
+	
+	@Override
+	public void start(Stage stage) throws Exception {
+        gui = new GraphicalUserInterface(msg, stage);
+	}
 
 	@Test
 	public void testInitiateCombat() {
-		GameFlowController gfc = new GameFlowController(phc, pc, gbc, adc, new GraphicalUserInterface(msg), msg);
-
+		PlayerController pc = EasyMock.mock(PlayerController.class);
+		AttackerDefenderController adc = new AttackerDefenderController();
+		GameBoardController gbc = EasyMock.mock(GameBoardController.class);
+		Random rand = EasyMock.strictMock(Random.class);
+		PhaseController phc = new PhaseController(pc, gbc);
+		GameFlowController gfc = new GameFlowController(phc, pc, gbc, adc, gui, msg);
+		
 		Territory test1 = new Territory("test1");
 		Territory test2 = new Territory("test2");
 		test2.setPlayer(2);
@@ -45,10 +59,10 @@ public class GameFlowControllerTest {
 		test1.setPlayer(1);
 		test1.setArmyCount(30);
 		test2.setArmyCount(30);
-
-		EasyMock.expect(gbc.territoryController.getTerritoryOwner("test2")).andReturn(2);
-		EasyMock.expect(gbc.territoryController.getTerritory("test1")).andReturn(test1);
-		EasyMock.expect(gbc.territoryController.getTerritory("test2")).andReturn(test2);
+		
+		EasyMock.expect(gbc.getTerritoryOwner("test2")).andReturn(2);
+		EasyMock.expect(gbc.getTerritory("test1")).andReturn(test1);
+		EasyMock.expect(gbc.getTerritory("test2")).andReturn(test2);
 		EasyMock.expect(pc.getCurrentPlayer()).andReturn(player);
 		EasyMock.expect(pc.getPlayer(2)).andReturn(player2);
 		EasyMock.expect(rand.nextInt(6)).andReturn(5);
@@ -77,7 +91,7 @@ public class GameFlowControllerTest {
 		GameBoardController gbc = EasyMock.mock(GameBoardController.class);
 		Random rand = EasyMock.strictMock(Random.class);
 		PhaseController phc = new PhaseController(pc, gbc);
-		GameFlowController gfc = new GameFlowController(phc, pc, gbc, adc, new GraphicalUserInterface(msg), msg);
+		GameFlowController gfc = new GameFlowController(phc, pc, gbc, adc, gui, msg);
 
 		Territory test1 = new Territory("test1");
 		Territory test2 = new Territory("test2");
@@ -95,9 +109,9 @@ public class GameFlowControllerTest {
 		player.addTerritory();
 		player2.addTerritory();
 
-		EasyMock.expect(gbc.territoryController.getTerritoryOwner("test2")).andReturn(2);
-		EasyMock.expect(gbc.territoryController.getTerritory("test1")).andReturn(test1);
-		EasyMock.expect(gbc.territoryController.getTerritory("test2")).andReturn(test2);
+		EasyMock.expect(gbc.getTerritoryOwner("test2")).andReturn(2);
+		EasyMock.expect(gbc.getTerritory("test1")).andReturn(test1);
+		EasyMock.expect(gbc.getTerritory("test2")).andReturn(test2);
 		EasyMock.expect(rand.nextInt(6)).andReturn(5);
 		EasyMock.expect(rand.nextInt(6)).andReturn(4);
 		EasyMock.replay(gbc, rand);
@@ -120,7 +134,7 @@ public class GameFlowControllerTest {
 		GameBoardController gb = new GameBoardController();
 		PhaseController phc = new PhaseController(pc, gb);
 		GameFlowController gfc = new GameFlowController(phc, pc, gb,
-				new AttackerDefenderController(), new GraphicalUserInterface(msg), msg);
+				new AttackerDefenderController(), gui, msg);
 
 		try {
 			gfc.initiateCombat("test", "test2");
@@ -139,9 +153,9 @@ public class GameFlowControllerTest {
 		AttackerDefenderController adc = EasyMock.mock(AttackerDefenderController.class);
 		GameBoardController gbc = EasyMock.mock(GameBoardController.class);
 		PhaseController phc = new PhaseController(pc, gbc);
-		GameFlowController gfc = new GameFlowController(phc, pc, gbc, adc, new GraphicalUserInterface(msg), msg);
+		GameFlowController gfc = new GameFlowController(phc, pc, gbc, adc, gui, msg);
 		Territory test = new Territory("test");
-		EasyMock.expect(gbc.territoryController.getTerritory("test")).andReturn(test);
+		EasyMock.expect(gbc.getTerritory("test")).andReturn(test);
 		pc.addInfantryToTerritory(test, 1);
 
 		EasyMock.replay(pc);
@@ -161,12 +175,12 @@ public class GameFlowControllerTest {
 		Player player = EasyMock.strictMock(Player.class);
 		EasyMock.expect(playercontroller.getCurrentPlayer()).andReturn(player);
 		EasyMock.expect(player.getId()).andReturn(1);
-		EasyMock.expect(gameBoard.territoryController.getTerritoryOwner("Indiana")).andReturn(1);
+		EasyMock.expect(gameBoard.getTerritoryOwner("Indiana")).andReturn(1);
 
 		EasyMock.replay(playercontroller, gameBoard, player);
 
 		GameFlowController gfc = new GameFlowController(phc, playercontroller, gameBoard, new AttackerDefenderController(),
-				new GraphicalUserInterface(msg), msg);
+				gui, msg);
 
 		if (!gfc.verifyOwnership("Indiana")) {
 			fail();
@@ -183,11 +197,11 @@ public class GameFlowControllerTest {
 		Player player = EasyMock.strictMock(Player.class);
 		EasyMock.expect(playercontroller.getCurrentPlayer()).andReturn(player);
 		EasyMock.expect(player.getId()).andReturn(0);
-		EasyMock.expect(gameBoard.territoryController.getTerritoryOwner("Indiana")).andReturn(2);
+		EasyMock.expect(gameBoard.getTerritoryOwner("Indiana")).andReturn(2);
 
 		EasyMock.replay(playercontroller, gameBoard, player);
 		GameFlowController gfc = new GameFlowController(phc, playercontroller, gameBoard, new AttackerDefenderController(),
-				new GraphicalUserInterface(msg), msg);
+				gui, msg);
 
 		if (gfc.verifyOwnership("Indiana")) {
 			fail();
@@ -202,12 +216,12 @@ public class GameFlowControllerTest {
 		PlayerController pc = new PlayerController();
 		PhaseController phc = new PhaseController(pc, gameBoard);
 
-		EasyMock.expect(gameBoard.territoryController.isAdjacent("Indiana", "Ohio")).andReturn(true);
+		EasyMock.expect(gameBoard.isAdjacent("Indiana", "Ohio")).andReturn(true);
 
 		EasyMock.replay(gameBoard);
 
 		GameFlowController gfc = new GameFlowController(phc, pc, gameBoard,
-				new AttackerDefenderController(), new GraphicalUserInterface(msg), msg);
+				new AttackerDefenderController(), gui, msg);
 
 		gfc.verifyAdjacent("Indiana", "Ohio");
 
@@ -256,7 +270,7 @@ public class GameFlowControllerTest {
 		playercontroller.addArmiesToCurrentPlayer(4);
 		EasyMock.expect(playercontroller.getCurrentPlayer()).andReturn(player);
 		EasyMock.expect(player.getId()).andReturn(1);
-		EasyMock.expect(gameBoard.territoryController.checkOwnedTerritory("", "", "", 1)).andReturn(false);
+		EasyMock.expect(gameBoard.checkOwnedTerritory("", "", "", 1)).andReturn(false);
 		EasyMock.expect(playercontroller.getCurrentPlayer()).andReturn(player);
 
 		gameBoard.incrementTradeCounter();
@@ -264,7 +278,7 @@ public class GameFlowControllerTest {
 		EasyMock.replay(gameBoard, playercontroller, player);
 
 		GameFlowController gfc = new GameFlowController(phc, playercontroller, gameBoard, new AttackerDefenderController(),
-				new GraphicalUserInterface(msg), msg);
+				gui, msg);
 		gfc.turnInCards(card1, card2, card3);
 		EasyMock.verify(playercontroller, gameBoard);
 	}
@@ -289,7 +303,7 @@ public class GameFlowControllerTest {
 		EasyMock.expect(playercontroller.getCurrentPlayer()).andReturn(player);
 		EasyMock.expect(player.getId()).andReturn(1);
 		EasyMock.expect(player.getDeck()).andReturn(deck);
-		EasyMock.expect(gameBoard.territoryController.checkOwnedTerritory(card1.getTerritory(), card2.getTerritory(), card3.getTerritory(), 1))
+		EasyMock.expect(gameBoard.checkOwnedTerritory(card1.getTerritory(), card2.getTerritory(), card3.getTerritory(), 1))
 				.andReturn(true);
 		playercontroller.addArmiesToCurrentPlayer(2);
 		EasyMock.expect(playercontroller.getCurrentPlayer()).andReturn(player);
@@ -297,7 +311,7 @@ public class GameFlowControllerTest {
 		EasyMock.replay(gameBoard, playercontroller, player);
 
 		GameFlowController gfc = new GameFlowController(phc, playercontroller, gameBoard, new AttackerDefenderController(),
-				new GraphicalUserInterface(msg), msg);
+				gui, msg);
 		gfc.turnInCards(card1, card2, card3);
 		EasyMock.verify(playercontroller, gameBoard, player);
 	}
@@ -317,7 +331,7 @@ public class GameFlowControllerTest {
 		EasyMock.replay(gameBoard, playercontroller);
 
 		GameFlowController gfc = new GameFlowController(phc, playercontroller, gameBoard, new AttackerDefenderController(),
-				new GraphicalUserInterface(msg), msg);
+				gui, msg);
 		try {
 			gfc.turnInCards(card1, card2, card3);
 			fail("shouldn't reach this point");
@@ -336,7 +350,7 @@ public class GameFlowControllerTest {
 		PhaseController phc = new PhaseController(pc, gb);
 
 		GameFlowController gfc = new GameFlowController(phc, pc, gb,
-				new AttackerDefenderController(), new GraphicalUserInterface(msg), msg);
+				new AttackerDefenderController(), gui, msg);
 		try {
 			gfc.turnInCards(card1, card1, card1);
 			fail("shouldn't reach this point");
@@ -355,7 +369,7 @@ public class GameFlowControllerTest {
 		PhaseController phc = new PhaseController(pc, gb);
 
 		GameFlowController gfc = new GameFlowController(phc, pc, gb,
-				new AttackerDefenderController(), new GraphicalUserInterface(msg), msg);
+				new AttackerDefenderController(), gui, msg);
 
 		try {
 			gfc.turnInCards(card2, card1, card1);
@@ -375,7 +389,7 @@ public class GameFlowControllerTest {
 		PhaseController phc = new PhaseController(pc, gb);
 
 		GameFlowController gfc = new GameFlowController(phc, pc, gb,
-				new AttackerDefenderController(), new GraphicalUserInterface(msg), msg);
+				new AttackerDefenderController(), gui, msg);
 		try {
 			gfc.turnInCards(card1, card1, card2);
 			fail("shouldn't reach this point");
@@ -394,7 +408,7 @@ public class GameFlowControllerTest {
 		PhaseController phc = new PhaseController(pc, gb);
 
 		GameFlowController gfc = new GameFlowController(phc, pc, gb,
-				new AttackerDefenderController(), new GraphicalUserInterface(msg), msg);
+				new AttackerDefenderController(), gui, msg);
 		try {
 			gfc.turnInCards(card1, card2, card1);
 			fail("shouldn't reach this point");
@@ -410,7 +424,7 @@ public class GameFlowControllerTest {
 		PhaseController phc = new PhaseController(pc, gb);
 
 		GameFlowController gfc = new GameFlowController(phc, pc, gb,
-				new AttackerDefenderController(), new GraphicalUserInterface(msg), msg);
+				new AttackerDefenderController(), gui, msg);
 
 		try {
 			Card card = new Card("", "");
@@ -428,7 +442,7 @@ public class GameFlowControllerTest {
 		PhaseController phc = new PhaseController(pc, gb);
 
 		GameFlowController gfc = new GameFlowController(phc, pc, gb,
-				new AttackerDefenderController(), new GraphicalUserInterface(msg), msg);
+				new AttackerDefenderController(), gui, msg);
 
 		Card card = new Card("Russia", "Infantry");
 
@@ -528,8 +542,8 @@ public class GameFlowControllerTest {
 		PhaseController phc = new PhaseController(pc, gb);
 
 		GameFlowController gfc = new GameFlowController(phc, pc, gb,
-				new AttackerDefenderController(), new GraphicalUserInterface(msg), msg);
-		EasyMock.expect(gb.territoryController.isAdjacent("", "")).andReturn(false);
+				new AttackerDefenderController(), gui, msg);
+		EasyMock.expect(gb.isAdjacent("", "")).andReturn(false);
 		EasyMock.replay(gb);
 
 		assertEquals(false, gfc.verifyAdjacent("", ""));
@@ -545,8 +559,8 @@ public class GameFlowControllerTest {
 		PhaseController phc = new PhaseController(pc, gb);
 
 		GameFlowController gfc = new GameFlowController(phc, pc, gb,
-				new AttackerDefenderController(), new GraphicalUserInterface(msg), msg);
-		EasyMock.expect(gb.territoryController.isAdjacent("North_America", "South_America")).andReturn(true);
+				new AttackerDefenderController(), gui, msg);
+		EasyMock.expect(gb.isAdjacent("North_America", "South_America")).andReturn(true);
 		EasyMock.replay(gb);
 
 		assertEquals(true, gfc.verifyAdjacent("North_America", "South_America"));

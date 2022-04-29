@@ -77,6 +77,7 @@ public class PlayerControllerTest {
 	@Test
 	public void addOwnershipTerritoryTest() {
 		PlayerController pc = new PlayerController();
+		pc.setGameMode("NORMAL");
 		Player player = new Player(1);
 		Territory territory = new Territory("Test");
 		pc.addPlayer(player);
@@ -109,6 +110,7 @@ public class PlayerControllerTest {
 	@Test
 	public void addArmyTerritoryTest() {
 		PlayerController pc = new PlayerController();
+		pc.setGameMode("NORMAL");
 		Player player = new Player(1);
 		Territory territory = new Territory("Test");
 		pc.addPlayer(player);
@@ -127,6 +129,7 @@ public class PlayerControllerTest {
 	@Test
 	public void addArmyTerritoryTest_not_already_owned_by_player_not_init_phase() {
 		PlayerController pc = new PlayerController();
+		pc.setGameMode("NORMAL");
 		Player player = new Player(1);
 		Player player2 = new Player(2);
 
@@ -153,6 +156,7 @@ public class PlayerControllerTest {
 	@Test
 	public void addArmyTerritoryTest_init_phase() {
 		PlayerController pc = new PlayerController();
+		pc.setGameMode("NORMAL");
 		Player player = new Player(1);
 		Player player2 = new Player(2);
 		Territory territory = new Territory("Test");
@@ -177,6 +181,7 @@ public class PlayerControllerTest {
 	@Test
 	public void initSetupTest() {
 		PlayerController pc = new PlayerController();
+		pc.setGameMode("NORMAL");
 		Player player = new Player(1);
 		Territory territory = new Territory("Test");
 		pc.addPlayer(player);
@@ -196,6 +201,7 @@ public class PlayerControllerTest {
 	@Test
 	public void addArmyToUnownedTerritoryTest() {
 		PlayerController pc = new PlayerController();
+		pc.setGameMode("NORMAL");
 		Player player = new Player(1);
 		Territory territory = new Territory("Test");
 		pc.addPlayer(player);
@@ -232,6 +238,7 @@ public class PlayerControllerTest {
 	public void addArmyToEnemyTerritoryFlagTest() {
 		Player player = new Player(1);
 		PlayerController pc = new PlayerController();
+		pc.setGameMode("NORMAL");
 		pc.addPlayer(player);
 		player.addPlayerArmies(1);
 		Territory territory = new Territory("Test");

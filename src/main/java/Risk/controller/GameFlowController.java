@@ -21,7 +21,7 @@ public class GameFlowController {
 	AttackerDefenderController adcontroller;
 	Territory attackingTerritory;
 	Territory defendingTerritory;
-	GameBoardTerritoryController territoryController;
+//	GameBoardTerritoryController territoryController;
 	public static Random rand = new Random();
 
 	ResourceBundle messages;
@@ -36,7 +36,7 @@ public class GameFlowController {
 		this.playercontroller = playercontroller;
 		this.phase = "setup";
 		this.gbcontroller = gbcontroller;
-		this.territoryController = gbcontroller.territoryController;
+//		this.territoryController = gbcontroller.territoryController;
 
 		this.adcontroller = adc;
 		this.gui = gui;
@@ -64,7 +64,7 @@ public class GameFlowController {
 				String clicked = gui.checkForPointOnTerritory(new Point2D(event.getX(), event.getY()));
 				gui.paintTerritoryBounds();
 				if (!clicked.equals("")) {
-					Territory territory = territoryController.getTerritory(clicked.replace('_', ' '));
+					Territory territory = gbcontroller.getTerritory(clicked.replace('_', ' '));
 
 					gui.setTerritoryArmyCount(territory.getArmyCount());
 					gui.setCurrentTerritoryOwner(territory.getPlayer());
@@ -105,7 +105,7 @@ public class GameFlowController {
 	}
 
 	public void addInfantrytoTerritoryfromString(String string) {
-		Territory territory = territoryController.getTerritory(string);
+		Territory territory = gbcontroller.getTerritory(string);
 
 		playercontroller.addInfantryToTerritory(territory, 1);
 	}
@@ -120,8 +120,8 @@ public class GameFlowController {
 			throw new IllegalArgumentException("It's not Attack Phase");
 		}
 
-		this.attackingTerritory = territoryController.getTerritory(string);
-		this.defendingTerritory = territoryController.getTerritory(string2);
+		this.attackingTerritory = gbcontroller.getTerritory(string);
+		this.defendingTerritory = gbcontroller.getTerritory(string2);
 		adcontroller.setAttacker(playercontroller.getCurrentPlayer());
 		adcontroller.setDefender(playercontroller.getPlayer(defendingTerritory.getPlayer()));
 		adcontroller.setAttackingTerritory(attackingTerritory);
@@ -135,7 +135,7 @@ public class GameFlowController {
 	}
 
 	public void finishCombat(){
-		if (this.territoryController.getTerritoryOwner(defendingTerritory.getName()) == this.playercontroller.getCurrentPlayer().getId()) {
+		if (this.gbcontroller.getTerritoryOwner(defendingTerritory.getName()) == this.playercontroller.getCurrentPlayer().getId()) {
 			this.gui.setTerritoryColor(defendingTerritory.getName(), this.playercontroller.getCurrentPlayer().getId());
 			gui.currentTerritoryArmyCount = defendingTerritory.getArmyCount();
 			gui.currentTerritoryPlayer = defendingTerritory.getPlayer();
@@ -153,11 +153,11 @@ public class GameFlowController {
 
 	public boolean verifyOwnership(String territoryName) {
 		int player = this.playercontroller.getCurrentPlayer().getId();
-		return player == this.territoryController.getTerritoryOwner(territoryName);
+		return player == this.gbcontroller.getTerritoryOwner(territoryName);
 	}
 
 	public boolean verifyAdjacent(String firstName, String secondName) {
-		return this.territoryController.isAdjacent(firstName, secondName);
+		return this.gbcontroller.isAdjacent(firstName, secondName);
 	}
 
 	public void next_phase() {
@@ -230,7 +230,7 @@ public class GameFlowController {
 			throw new IllegalArgumentException("Invalid cards played");
 		}
 		this.playercontroller.addArmiesToCurrentPlayer(this.gbcontroller.getTradeCounter());
-		if (this.territoryController.checkOwnedTerritory(card1.getTerritory(), card2.getTerritory(), card3.getTerritory(),
+		if (this.gbcontroller.checkOwnedTerritory(card1.getTerritory(), card2.getTerritory(), card3.getTerritory(),
 				this.playercontroller.getCurrentPlayer().getId())) {
 			this.playercontroller.addArmiesToCurrentPlayer(2);
 		}
@@ -272,7 +272,7 @@ public class GameFlowController {
 	}
 
 	public Territory getTerritory(String lastclickedstring) {
-		return territoryController.getTerritory(lastclickedstring);
+		return gbcontroller.getTerritory(lastclickedstring);
 	}
 
 	public void setCurrentTerritoryArmyCount(int armyCount) {
@@ -289,9 +289,9 @@ public class GameFlowController {
 
 	public void fortifyTerritory(String fromTerritory, String toTerritory) {
 		try {
-			playercontroller.moveArmy(territoryController.getTerritory(fromTerritory), territoryController.getTerritory(toTerritory), 1);
+			playercontroller.moveArmy(gbcontroller.getTerritory(fromTerritory), gbcontroller.getTerritory(toTerritory), 1);
 			gui.territoryArmiesNumber
-					.setText(String.valueOf(territoryController.getTerritory(gui.clickedTerritory.getText()).getArmyCount()));
+					.setText(String.valueOf(gbcontroller.getTerritory(gui.clickedTerritory.getText()).getArmyCount()));
 		} catch (IllegalArgumentException e1) {
 			System.err.println(e1.getMessage());
 		}
@@ -300,10 +300,10 @@ public class GameFlowController {
 	public void addArmy() {
 		int player = playercontroller.getCurrentPlayer().getId();
 		addInfantrytoTerritoryfromString(gui.clickedTerritory.getText());
-		if (player == territoryController.getTerritoryOwner(gui.clickedTerritory.getText())) {
+		if (player == gbcontroller.getTerritoryOwner(gui.clickedTerritory.getText())) {
 			gui.setTerritoryColor(gui.clickedTerritory.getText(), player);
 		}
-		Territory territory = territoryController.getTerritory(gui.clickedTerritory.getText());
+		Territory territory = gbcontroller.getTerritory(gui.clickedTerritory.getText());
 
 		gui.setCurrentPlayerArmies(Integer.toString(playercontroller.getCurrentPlayer().getPlayerArmies()));
 		gui.setCurrentPlayer(String.valueOf(playercontroller.getCurrentPlayer().getId()));

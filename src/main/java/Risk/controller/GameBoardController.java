@@ -27,7 +27,23 @@ public class GameBoardController {
 		populateGameBoardDeckTroops();
 		// other setup if needed...
 	}
+	
+	public int getTerritoryOwner(String territoryName) {
+		return territoryController.getTerritoryOwner(territoryName);
+	}
+	
+	public Territory getTerritory(String territoryName) {
+		return territoryController.getTerritory(territoryName);
+	}
 
+	public boolean isAdjacent(String firstName, String secondName) {
+		return territoryController.isAdjacent(firstName, secondName);
+	}
+	
+	public boolean checkOwnedTerritory(String territory, String territory2, String territory3, int id) {
+		return territoryController.checkOwnedTerritory(territory, territory2, territory3, id);
+	}
+	
 	public void loadGameBoard() {
 
 		String continentLineHeader = "[continent]";
@@ -168,4 +184,5 @@ public class GameBoardController {
 			}
 		}
     }
+
 }

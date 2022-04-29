@@ -275,7 +275,7 @@ public class GraphicalUserInterface {
 		this.territoryColors.clear();
 		this.territoriesBounds.clear();
 		for (int i = 0; i <= 42; i++) {
-			territoryColors.add(Color.DARKGRAY);
+			territoryColors.add(Color.BLACK);
 		}
 		try {
 			Scanner scanner = new Scanner(new FileReader(filename));

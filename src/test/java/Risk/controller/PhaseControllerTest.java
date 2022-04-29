@@ -4,8 +4,11 @@ import Risk.model.Deck;
 import Risk.model.Player;
 import Risk.model.Territory;
 import Risk.view.GraphicalUserInterface;
+import javafx.stage.Stage;
+
 import org.easymock.EasyMock;
 import org.junit.Test;
+import org.testfx.framework.junit.ApplicationTest;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -13,18 +16,25 @@ import java.util.ResourceBundle;
 
 import static org.junit.Assert.*;
 
-public class PhaseControllerTest {
+public class PhaseControllerTest extends ApplicationTest {
 
     Locale locale = new Locale("en", "US");
     ResourceBundle msg = ResourceBundle.getBundle("MessagesBundle", locale);
+    
+    GraphicalUserInterface gui;
+    
+    @Override
+	public void start(Stage stage) throws Exception {
+		gui = new GraphicalUserInterface(msg, stage);
+	}
 
-    @Test
+	@Test
     public void initTurnGetPhaseTest() {
         PlayerController pc = new PlayerController();
         GameBoardController gb = new GameBoardController();
         PhaseController phc = new PhaseController(pc, gb);
         GameFlowController gfc = new GameFlowController(phc, pc, gb,
-                new AttackerDefenderController(), new GraphicalUserInterface(msg), msg);
+                new AttackerDefenderController(), gui, msg);
 
         assertEquals(gfc.getPhase(), "setup");
     }
@@ -35,7 +45,6 @@ public class PhaseControllerTest {
         GameBoardController gb = new GameBoardController();
         PhaseController phc = new PhaseController(pc, gb);
         Player player = EasyMock.mock(Player.class);
-        GraphicalUserInterface gui = new GraphicalUserInterface(msg);
 		gui.testMode = true;
         GameFlowController gfc = new GameFlowController(phc, pc, gb,
                 new AttackerDefenderController(), gui, msg);
@@ -68,7 +77,7 @@ public class PhaseControllerTest {
         GameBoardController gb = new GameBoardController();
         PhaseController phc = new PhaseController(pc, gb);
         GameFlowController gfc = new GameFlowController(phc, pc, gb,
-                new AttackerDefenderController(), new GraphicalUserInterface(msg), msg);
+                new AttackerDefenderController(), gui, msg);
 
         assertEquals(gfc.getPhase(), "setup");
 
@@ -89,7 +98,6 @@ public class PhaseControllerTest {
         GameBoardController gb = new GameBoardController();
         PhaseController phc = new PhaseController(pc, gb);
         Player player = EasyMock.mock(Player.class);
-        GraphicalUserInterface gui = new GraphicalUserInterface(msg);
         gui.testMode = true;
         GameFlowController gfc = new GameFlowController(phc, pc, gb,
                 new AttackerDefenderController(), gui, msg);
@@ -134,7 +142,6 @@ public class PhaseControllerTest {
         GameBoardController gb = new GameBoardController();
         PhaseController phc = new PhaseController(pc, gb);
         Player player = EasyMock.mock(Player.class);
-        GraphicalUserInterface gui = new GraphicalUserInterface(msg);
         gui.testMode = true;
         GameFlowController gfc = new GameFlowController(phc, pc, gb,
                 new AttackerDefenderController(), gui, msg);
@@ -179,7 +186,6 @@ public class PhaseControllerTest {
         GameBoardController gb = new GameBoardController();
         PhaseController phc = new PhaseController(pc, gb);
         Player player = EasyMock.mock(Player.class);
-        GraphicalUserInterface gui = new GraphicalUserInterface(msg);
         gui.testMode = true;
         GameFlowController gfc = new GameFlowController(phc, pc, gb,
                 new AttackerDefenderController(), gui, msg);
@@ -220,7 +226,6 @@ public class PhaseControllerTest {
         GameBoardController gb = new GameBoardController();
         PhaseController phc = new PhaseController(pc, gb);
         Player player = EasyMock.mock(Player.class);
-        GraphicalUserInterface gui = new GraphicalUserInterface(msg);
         gui.testMode = true;
         GameFlowController gfc = new GameFlowController(phc, pc, gb,
                 new AttackerDefenderController(), gui, msg);
