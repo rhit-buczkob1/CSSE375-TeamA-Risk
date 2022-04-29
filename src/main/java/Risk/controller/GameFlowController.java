@@ -25,7 +25,6 @@ public class GameFlowController {
 	public static Random rand = new Random();
 
 	ResourceBundle messages;
-	String gameMode = "NORMAL";
 
 	public GameFlowController(PhaseController phaseController, PlayerController playercontroller,
 							  GameBoardController gbcontroller,
