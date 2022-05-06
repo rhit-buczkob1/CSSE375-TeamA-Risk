@@ -3,6 +3,8 @@ package Risk.controller;
 import Risk.model.Card;
 import Risk.model.Territory;
 import Risk.view.GraphicalUserInterface;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.control.ComboBox;
@@ -22,6 +24,7 @@ public class GameFlowController {
 	Territory attackingTerritory;
 	Territory defendingTerritory;
 //	GameBoardTerritoryController territoryController;
+	ObservableList<String> converted;
 	public static Random rand = new Random();
 
 	ResourceBundle messages;
@@ -165,6 +168,7 @@ public class GameFlowController {
 		}
 		phaseController.next_phase();
 		if (phaseController.getUpdateCards()) {
+			System.err.println("updating");
 			updateCardsOnGui();
 		}
 		this.gui.currentPhase.setText(this.messages.getString(phaseController.getPhase()));
@@ -241,21 +245,20 @@ public class GameFlowController {
 	public String convertCardForGui(Card toconvert) {
 		String territoryToDisplay = messages.getString(toconvert.getTerritory().replace(" ", "_"));
 		String troopToDisplay = messages.getString(toconvert.getTroopType().toLowerCase());
-		String toreturn = "<html>" + territoryToDisplay + "<br>" + troopToDisplay + "<html/>";
+		String toreturn = territoryToDisplay + "\t" + troopToDisplay;
 		return toreturn;
 	}
 
 	public void updateCardsOnGui() {
-		this.gui.card1 = new ComboBox<String>();
-		this.gui.card2 = new ComboBox<String>();
-		this.gui.card3 = new ComboBox<String>();
 		ArrayList<Card> deckToUpdate = this.playercontroller.getCurrentPlayer().getDeck();
-		for (Card card : deckToUpdate) {
-			this.gui.card1.getItems().add(convertCardForGui(card));
-			this.gui.card2.getItems().add(convertCardForGui(card));
-			this.gui.card3.getItems().add(convertCardForGui(card));
+		converted = FXCollections.observableArrayList();
 
+		for (Card card : deckToUpdate) {
+			converted.add(convertCardForGui(card));
 		}
+		this.gui.card1.itemsProperty().set(converted);
+		this.gui.card2.itemsProperty().set(converted);
+		this.gui.card3.itemsProperty().set(converted);
 	}
 
 	public String getMessage(String key) {
