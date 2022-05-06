@@ -20,7 +20,6 @@ public class GuiTest extends ApplicationTest {
 	
     @BeforeClass
     public static void headless() {
-//        System.setProperty("prism.verbose", "true"); // optional
         System.setProperty("java.awt.headless", "true");
         System.setProperty("testfx.robot", "glass");
         System.setProperty("testfx.headless", "true");
