@@ -24,10 +24,9 @@ public class PlayerSetListener implements EventHandler<MouseEvent> {
             map = "-europe";
         } else map = "-globe";
 
-            try{
+        try {
             gfc.gbcontroller.map = map;
             gfc.gbcontroller.initGame();
-//            gfc.territoryController = gfc.gbcontroller.territoryController;
             int armiesPerPlayer = gfc.playercontroller.setNumberOfPlayers(numPlayers);
             gfc.gui.setNumPlayers(gfc.playercontroller.getNumberOfPlayers() + "");
             gfc.gui.setCurrentPlayerArmies(armiesPerPlayer + "");
