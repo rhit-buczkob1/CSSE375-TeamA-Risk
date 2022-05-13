@@ -110,10 +110,10 @@ public class GuiTest extends ApplicationTest {
 	
 	@Test
 	public void testGetColorForPlayerInvalid() {
-		assertEquals(Color.BLACK, gui.getColorForPlayer(Integer.MIN_VALUE));
-		assertEquals(Color.BLACK, gui.getColorForPlayer(0));
-		assertEquals(Color.BLACK, gui.getColorForPlayer(7));
-		assertEquals(Color.BLACK, gui.getColorForPlayer(Integer.MAX_VALUE));
+		assertEquals(Color.DARKGRAY, gui.getColorForPlayer(Integer.MIN_VALUE));
+		assertEquals(Color.DARKGRAY, gui.getColorForPlayer(0));
+		assertEquals(Color.DARKGRAY, gui.getColorForPlayer(7));
+		assertEquals(Color.DARKGRAY, gui.getColorForPlayer(Integer.MAX_VALUE));
 	}
 	
 	@Test
@@ -128,7 +128,7 @@ public class GuiTest extends ApplicationTest {
 		assertEquals(Color.YELLOW, gui.territoryColors.get(2));
 		assertEquals(Color.GREEN, gui.territoryColors.get(3));
 		for (int i = 4; i < gui.territoryColors.size(); i++) {
-			assertEquals(Color.BLACK, gui.territoryColors.get(i));
+			assertEquals(Color.DARKGRAY, gui.territoryColors.get(i));
 		}
 	}
 	
@@ -142,7 +142,7 @@ public class GuiTest extends ApplicationTest {
 		gui.setTerritoryColor("Not a real territory", 2);
 		gui.setTerritoryColor("", 3);
 		for (int i = 0; i < gui.territoryColors.size(); i++) {
-			assertEquals(Color.BLACK, gui.territoryColors.get(i));
+			assertEquals(Color.DARKGRAY, gui.territoryColors.get(i));
 		}
 	}
 
