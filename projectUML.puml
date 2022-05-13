@@ -1,11 +1,12 @@
 @startuml
 package controller {
     class AddTerritoryListener {
-        -fromTerritory: String
         -toTerritory: String
         +AddTerritoryListener(GameFlowController gfController)
-        +actionPerformed(ActionEvent e)
-        +setTerritoryToFortify()
+        +handle(javafx.event.ActionEvent event)
+    }
+    class MoveListener {
+        +handle(javafx.event.ActionEvent event)
     }
     class AttackerDefenderController {
         attackerArmies: int
@@ -26,46 +27,57 @@ package controller {
         +attack(Integer[] attackerDice, Integer[] defenderDice)
         +sortDice(Integer[] dice)
     }
+    class AttackFromListener {
+        +handle(MouseEvent event)
+    }
     class AttackListener {
-        -attackingTerritory: String
-        +AttackListener(GameFlowController gfController)
-        +actionPerformed(ActionEvent e)
-        +selectingAttackingTerritory()
+        +handle(MouseEvent event)
     }
     class CardListener {
         +CardListener(GameFlowController gfController)
-        +actionPerformed(ActionEvent e)
+        +handle(MouseEvent event)
     }
-    class ClickListener {}
     class GameBoardController {
         tradeCounter: int
+        map: String
         +initGame()
         +loadGameBoard()
-        +loadTerritoryNeighboring()
         +updatePlayer(Continent continent)
         +getTerritoryOwner(String territoryName): int
         +isAdjacent(String firstTerritory, String secondTerritory): boolean
         +getTerritory(String territoryName): Territory
         +populateGameBoardDeckTroops()
         +getNewContinentPlayerArmies(int i): int
-        +getGameBoard(): GameBoard
-        +initializeNewBoardForTest()
         +updateGameBoard()
         +getTradeCounter(): int
         +incrementTradeCounter()
         +checkOwnedTerritory(String territory1, String territory2, String territory3, int player): Boolean
     }
+    class GameBoardTerritoryController {
+        map: String
+        +GameBoardTerritoryController(GameBoard gameBoard)
+        +loadTerritoryNeighboring()
+        +getTerritoryOwner(String territoryName): int
+        +isAdjacent(String firstTerritory, String secondTerritory): boolean
+        +getTerritory(String territoryName): Territory
+        +checkOwnedTerritory(String territory1, String territory2, String territory3, int player);
+    }
     class GameFlowController {
         -{static}rand: Random
         phase: String
+        converted: ObservableList<String>
+        messages: ResourceBundle
         +GameFlowController(PhaseController phaseController, PlayerController playerController, GameBoardController gbcontroller, AttackerDefenderController adc, GraphicUserInterface gui, ResourceBundle msg)
         +connectToGui()
         +addInfantrytoTerritoryfromString(String string)
         +updatePhase()
         +initiateCombat(String string, String string2, Random rand2, int attackerdice, int defenderdice)
+        +randomizeCombat(Random rand2, int attackerdice, int defenderdice)
+        +finishCombat()
         +verifyOwnership(String territoryName): boolean
         +verifyAdjacent(String firstName, String secondName): boolean
         +next_phase()
+        +changeGuiButtons(boolean addArmy, boolean nextTurn, boolean attack, boolean spendCards, boolean attackFrom)
         +getPhase(): String
         +turnInCards(Card card1, Card card2, Card card3)
         +convertCardForGui(Card toconvert): String
@@ -82,14 +94,18 @@ package controller {
         +fortifyTerritory(String fromTerritory, String toTerritory)
         +addArmy()
         +next()
+        +swapToAlternatePhaseController(String gameMode)
+    }
+    class GameModePopUpLauncher {
+        +GameModePopUpLauncher(GameFlowController gfController)
+        +handle(MouseEvent event)
     }
     class Main {
-        +{static}main(String[] args)
-        +{static}runMain(PlayerController pc, GameBoardController gameBoard) throws Exception
+        +start(Stage primaryStage) throws Exception
     }
     class NextButtonListener {
         +NextButtonListener(GameFlowController gfController)
-        +actionPerformed(ActionEvent e)
+        +handle(MouseEvent event)
     }
     abstract class Phase {
         #phaseName: String
@@ -130,6 +146,7 @@ package controller {
     class PlayerController {
         currentIndex: int
         initSetup: boolean
+        +gameMode: String
         +addPlayer(Player player)
         +getCurrentPlayer(): Player
         +getcurrentIndex(): int
@@ -157,37 +174,50 @@ package controller {
         +playerLoss()
         +getPlayer(int player): Player
         +getNumberOfPlayers(): int
+        +setGameMode(String gameMode)
+        +setNumberOfPlayers(int numPlayers): int
+    }
+    class PlayerSetListener {
+        +PlayerSetListener(GameFlowController gfc)
+        +handle(MouseEvent event)
     }
     class PopUpLauncher {
         +PopUpLauncher(GameFlowController gfController)
-        +actionPerformed(ActionEvent arg0)
-        +selectedEnglish(String languageSelected): boolean
+        +handle(MouseEvent event)
     }
 
     AddTerritoryListener->GameFlowController
     AttackerDefenderController-UP->"*"model.Player
     AttackerDefenderController-UP->"*"model.Territory
-    AttackListener-->GameFlowController
+    AttackFromListener-->GameFlowController
+    AttackFromListener +-- AttackListener
     CardListener-->GameFlowController
     GameBoardController-UP->model.GameBoard
     GameBoardController-UP->model.Deck
+    GameBoardController-->GameBoardTerritoryController
+    GameBoardTerritoryController-UP->model.GameBoard
     GameFlowController-DOWN->PhaseController
     GameFlowController-RIGHT->PlayerController
     GameFlowController-RIGHT->GameBoardController
     GameFlowController-->view.GraphicUserInterface
     GameFlowController-UP->AttackerDefenderController
+    GameFlowController-UP->"2"model.Territory
+    GameModePopUpLauncher-UP->GameFlowController
     NextButtonListener-->GameFlowController
     Phase->GameFlowController
     PhaseController-UP->"*"Phase
     PhaseController-UP->PlayerController
     PhaseController-UP->GameBoardController
     PlayerController-UP->"*"model.Player
+    PlayerSetListener-UP->GameFlowController
     PopUpLauncher-UP->GameFlowController
+    AddTerritoryListener +-- MoveListener
 }
 
 package model {
     class Card {
         +troopType: String
+        +territory: String
         +Card(String territory)
         +Card(String territory, String troopType)
         +getTerritory(): String
@@ -195,6 +225,9 @@ package model {
         +isValidTroopType(String inputString): boolean
     }
     class Continent {
+        -player: int
+        -name: String
+        -value: int
         +Continent(ArrayList<Territory> territories, String name)
         +getPlayer(): int
         +getName(): String
@@ -255,40 +288,113 @@ package model {
     class Territory {
         player: int
         armies: int
+        name: String
         +Territory(String territoryName)
         +getName(): String
         +getPlayer(): int
         +setPlayer(int newplayer)
         +addArmies(int i)
         +getArmyCount()
+        +getNeighboring(): ArrayList<String>
         +addNeighboring(Territory territory)
         +removeArmies(int i)
         +setArmyCount(int armies)
         +toString(): String
-    }
-    class TerritoryName {
-        -name: String
-        -validTerritoryNames: Set<String>
-        +TerritoryName(String newName)
-        +getName(): String
-        +isValidTerritoryName(String terriory): boolean
-        +populateValidTerritoryNames()
+        +setHQ(boolean isHQ)
     }
 
     Continent-->"*"Territory
-    Card->TerritoryName
     Deck-->"*"Card
     GameBoard->GameBoard
     GameBoard-->"*"Continent
     GameBoard->Deck
     Player->"*"Card
-    Territory->TerritoryName
     Territory-->"*"Territory
 }
 
 package view {
     class GraphicUserInterface {
-
+        private EventHandler<MouseEvent> mouseListener;
+        	territoriesBounds: ArrayList<Rectangle>
+        	currentBounds: ArrayList<Rectangle>
+        	territoryNames: ArrayList<String>
+        	territoryColors: ArrayList<Color>
+        	-stage: Stage
+        	screenWidth: int
+        	screenHeight: int
+        	startingWidthAndHeight: int
+        	boxWidthAndHeight: int
+        	currentTerritoryArmyCount: int
+        	currentTerritoryPlayer: int
+        	-messages: ResourceBundle
+        	nextTurn: Button
+        	currentPlayer: Text
+        	currentPlayerId: Text
+        	playerArmies: Text
+        	playerArmiesNumber: Text
+        	territoryArmies: Text
+        	territoryArmiesNumber: Text
+        	territoryPlayer: Text
+        	territoryPlayerNumber: Text
+        	attack: Button
+        	attackFrom: Button
+        	language: Button
+        	addArmy: Button
+        	moveFrom: Button
+        	setNumPlayers: Button
+        	attackerDice: Text
+        	defenderDice: Text
+        	attackerDiceSlider: Slider
+        	defenderDiceSlider: Slider
+        	card1: ComboBox<String>
+        	card2: ComboBox<String>
+        	card3: ComboBox<String>
+        	numPlayers: Text
+        	numPlayersSlider: Slider;
+        	maps: ComboBox<String>
+        	spendCards: Button
+        	currentPhase: Text
+        	chooseGameMode: Button
+            currentTerritoryDesc: Text
+        	clickedTerritory: Text
+        	testMode: boolean
+        	clickedIndex: int
+        	-territoryInsides: ArrayList<Rectangle>
+        	attackingTerritory: String
+        	transportingTerritory: String
+        	map: String
+        	+GraphicalUserInterface(ResourceBundle msg)
+        	+GraphicalUserInterface(ResourceBundle msg, Stage stage)
+        	+setupUI(boolean extraButtons)
+        	+setLanguage(ResourceBundle msg, String phase)
+        	+setMouseListener(EventHandler<MouseEvent> listener)
+        	+setCurrentPlayer(String player)
+        	+setCurrentPlayerArmies(String player)
+        	+setTerritoryArmies(String armies)
+        	+setTerritoryPlayer(String armies)
+        	+victoryScreen()
+        	+checkForPointOnTerritory(Point2D click): String
+        	+setUpTerritoryNamesAndLocation(String filename)
+        	+initializeFrame()
+        	+addTerritoryBoundsToPane(Group root)
+        	+paintTerritoryBounds()
+        	+getTerritoryBox(int x, int y): Rectangle
+        	+getColorForPlayer(int player): Color
+        	+setTerritoryColor(String territory, int player)
+        	+setTerritoryArmyCount(int armyCount)
+        	+setCurrentTerritoryOwner(int player)
+        	+setNumPlayers(String numArmies)
+        	+setControlsVisibility(boolean b)
+        	+changeNextTurnButton(boolean disabled)
+        	+changeAttackButton(boolean disabled)
+        	+changeAddArmyButton(boolean disabled)
+        	+changeMoveFrom(boolean disabled)
+        	+changeSpendCardsButton(boolean disabled)
+        	+changeBackground()
+        	+changeAttackFromButton(boolean disabled)
+        	+setAttacking(String text)
+        	+setTransporting(String text)
+        	+gameFrame()
     }
 }
 @enduml
