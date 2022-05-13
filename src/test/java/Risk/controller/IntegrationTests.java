@@ -34,6 +34,11 @@ public class IntegrationTests extends ApplicationTest {
 
     @Test
     public void testButtonResponsiveness() {
-        assert(true);
+        PlayerController pc = new PlayerController();
+        GameBoardController gameBoard = new GameBoardController();
+        PhaseController phc = new PhaseController(pc, gameBoard);
+        AttackerDefenderController adc = new AttackerDefenderController();
+
+        GameFlowController gameflowcontroller = new GameFlowController(phc, pc, gameBoard, adc, gui, msg);
     }
 }
