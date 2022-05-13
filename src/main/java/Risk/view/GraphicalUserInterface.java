@@ -107,9 +107,6 @@ public class GraphicalUserInterface {
 	}
 
 	public void setupUI(boolean extraButtons) {
-
-		this.chooseGameMode = new Button("Choose Game Mode");//add to language resource file
-		chooseGameMode.setId("chooseGameMode");
 		currentTerritoryDesc = new Text(messages.getString("select"));
 		currentTerritoryDesc.setId("currentTerritoryDesc");
 
@@ -125,19 +122,21 @@ public class GraphicalUserInterface {
 		this.playerArmies = new Text(messages.getString("armiesInPlayersHands"));
 		playerArmies.setId("playerArmies");
 
+		playerArmiesNumber.setId("playerArmiesNumber");
+
 		this.territoryArmies = new Text(messages.getString("armiesTerr"));
 		territoryArmies.setId("territoryArmies");
 
 		this.territoryPlayer = new Text(messages.getString("terrPlayer"));
 		territoryPlayer.setId("territoryPlayer");
 
+		clickedTerritory.setId("clickedTerritory");
+
 		this.attack = new Button(messages.getString("attack"));
 		attack.setId("attack");
 
 		this.addArmy = new Button(messages.getString("addArmy"));
 		addArmy.setId("addArmy");
-
-
 
 		this.setNumPlayers = new Button("Start game");
 		setNumPlayers.setId("setNumPlayers");
@@ -295,10 +294,9 @@ public class GraphicalUserInterface {
 					Rectangle rect = this.getTerritoryBox(x, y);
 					rect.widthProperty().bind(stage.widthProperty().divide(37.5).subtract(5));
 					rect.heightProperty().bind(stage.heightProperty().divide(18.75).subtract(5));
-					
+
 					rect.xProperty().bind(stage.widthProperty().divide(2000.0).multiply(x).add(2.5));
 					rect.yProperty().bind(stage.heightProperty().divide(1000.0).multiply(y).add(2.5));
-					
 					this.territoryInsides.add(rect);
 				}
 				i++;
@@ -314,7 +312,8 @@ public class GraphicalUserInterface {
 
 	public void initializeFrame() {
 		stage.setTitle(this.messages.getString("risk"));
-		
+		stage.setX(10);
+		stage.setY(10);
 		stage.setMaxHeight(startingWidthAndHeight);
 		stage.setMaxWidth(startingWidthAndHeight);
 		stage.setMinHeight(startingWidthAndHeight);
@@ -339,6 +338,7 @@ public class GraphicalUserInterface {
 		buttons.getChildren().add(currentPlayer);
 		buttons.getChildren().add(setNumPlayers);
 		buttons.getChildren().add(maps);
+		maps.setId("maps");
 		maps.setPrefWidth(100);
 		maps.setTranslateY(30);;
 		maps.getItems().add("Globe");
