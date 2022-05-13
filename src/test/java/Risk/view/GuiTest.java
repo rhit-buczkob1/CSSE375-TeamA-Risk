@@ -1,5 +1,6 @@
 package Risk.view;
 
+import org.easymock.EasyMock;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -7,6 +8,8 @@ import org.testfx.framework.junit.ApplicationTest;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import javafx.scene.shape.Rectangle;
+import java.awt.event.MouseEvent;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -35,59 +38,6 @@ public class GuiTest extends ApplicationTest {
 	public void start(Stage stage) throws Exception {
 		gui = new GraphicalUserInterface(msg, stage);
 	}
-	
-	/* can't test gui yet
-	@Test
-	public void testCheckForPointOnTerritory() {
-		
-		ClickListener mouseListener = new ClickListener();
-		MouseEvent eventMock = EasyMock.strictMock(MouseEvent.class);
-		EasyMock.expect(eventMock.getX()).andReturn(25);
-		EasyMock.expect(eventMock.getY()).andReturn(25);
-		EasyMock.replay(eventMock);
-		GraphicalUserInterface gui = new GraphicalUserInterface(mouseListener);
-		gui.initializeFrame();
-		gui.territoryNames.add(0, "Alaska");
-		gui.territoriesBounds.add(0, new Rectangle(0, 0, 50, 50));
-		mouseListener.mousePressed(eventMock);
-		String territoryName = gui.checkForPointOnTerritory();
-		EasyMock.verify(eventMock);
-		assertEquals("Alaska", territoryName);
-
-		eventMock = EasyMock.strictMock(MouseEvent.class);
-		EasyMock.expect(eventMock.getX()).andReturn(30000);
-		EasyMock.expect(eventMock.getY()).andReturn(30000);
-		EasyMock.replay(eventMock);
-		gui = new GraphicalUserInterface(mouseListener);
-		gui.initializeFrame();
-		gui.territoryNames.add(0, "Alaska");
-		gui.territoriesBounds.add(0, new Rectangle(0, 0, 50, 50));
-		mouseListener.mousePressed(eventMock);
-		territoryName = gui.checkForPointOnTerritory();
-		EasyMock.verify(eventMock);
-		assertEquals("", territoryName); 
-
-	}
-	*/
-
-	/* can't test gui yet
-	@Test
-	public void testCheckForPointOnTerritoryEdge() {
-		ClickListener mouseListener = new ClickListener();
-		MouseEvent eventMock = EasyMock.strictMock(MouseEvent.class);
-		EasyMock.expect(eventMock.getX()).andReturn(25);
-		EasyMock.expect(eventMock.getY()).andReturn(0);
-		EasyMock.replay(eventMock);
-		GraphicalUserInterface gui = new GraphicalUserInterface(mouseListener);
-		gui.initializeFrame();
-		gui.territoryNames.add(0, "Alaska");
-		gui.territoriesBounds.add(0, new Rectangle(0, 0, 50, 50));
-		mouseListener.mousePressed(eventMock);
-		String territoryName = gui.checkForPointOnTerritory();
-		EasyMock.verify(eventMock);
-		assertEquals("Alaska", territoryName);
-	}
-	*/
 
 	@Test
 	public void testSetUpTerritoryNamesAndLocation() {

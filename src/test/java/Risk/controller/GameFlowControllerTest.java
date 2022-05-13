@@ -235,33 +235,6 @@ public class GameFlowControllerTest extends ApplicationTest {
 		EasyMock.verify(gameBoard);
 	}
 
-//	@Test
-//	public void testAddCardFromTerritoryCapture() {
-//		PlayerController pc = new PlayerController();
-//		AttackerDefenderController adc = EasyMock.mock(AttackerDefenderController.class);
-//		GameBoardController gbc = new GameBoardController();
-//		GraphicalUserInterface gui = new GraphicalUserInterface(msg);
-//		PhaseController phc = new PhaseController(pc, gbc);
-//		gui.testMode = true;
-//		GameFlowController gfc = new GameFlowController(phc, pc, gbc, adc, gui, msg);
-//		gbc.initGame();
-//		Territory test = new Territory("test");
-//
-//		Player p1 = new Player(1);
-//		pc.addPlayer(p1);
-//		p1.caughtTerritory(true);
-//		EasyMock.replay(adc);
-//
-//
-//		pc.addPlayer(p1);
-//		gfc.fortify_phase();
-//
-//		assertEquals(1, p1.getDeck().size());
-//		assertFalse(p1.hasCaughtTerritory());
-//
-//		EasyMock.verify(adc);
-//	}
-
 	@Test
 	public void turnInCardsTest_valid() {
 		Card card1 = new Card("", "Infantry");
@@ -455,92 +428,7 @@ public class GameFlowControllerTest extends ApplicationTest {
 
 		assertTrue(gfc.convertCardForGui(card).equals("<html>Russia<br>Infantry<html/>"));
 	}
-	//
-//	@Test
-//	public void initiateCombatPaintTest_shouldwin() {
-//		PlayerController pc = EasyMock.strictMock(PlayerController.class);
-//		AttackerDefenderController adc = new AttackerDefenderController();
-//		GameBoardController gbc = EasyMock.mock(GameBoardController.class);
-//		Random rand = EasyMock.strictMock(Random.class);
-//		GraphicalUserInterface gui = new GraphicalUserInterface(msg);
-//		gui.testMode = true;
-//		GameFlowController gfc = new GameFlowController(pc, gbc, adc, gui, msg);
-//
-//		Territory test1 = new Territory("test1");
-//		Territory test2 = new Territory("test2");
-//		test2.setPlayer(2);
-//		Player player = new Player(1);
-//		Player player2 = new Player(2);
-//
-//		pc.addPlayer(player);
-//		pc.addPlayer(player2);
-//
-//		test1.setPlayer(1);
-//		test1.setArmyCount(30);
-//		test2.setArmyCount(30);
-//
-//		EasyMock.expect(gbc.getTerritoryOwner("test2")).andReturn(2);
-//		EasyMock.expect(gbc.getTerritory("test1")).andReturn(test1);
-//		EasyMock.expect(gbc.getTerritory("test2")).andReturn(test2);
-//		EasyMock.expect(pc.getCurrentPlayer()).andReturn(player);
-//		EasyMock.expect(pc.getPlayer(2)).andReturn(player2);
-//		EasyMock.expect(rand.nextInt(6)).andReturn(5);
-//		EasyMock.expect(rand.nextInt(6)).andReturn(4);
-//		pc.playerLoss();
-//		EasyMock.expect(pc.getCurrentPlayer()).andReturn(player);
-//		EasyMock.expect(pc.getNumberOfPlayers()).andReturn(1);
-//
-//		EasyMock.replay(pc, gbc, rand);
-//
-//		pc.addPlayer(player);
-//		pc.addPlayer(player2);
-//
-//		gfc.phase = "attack";
-//		gfc.initiateCombat("test1", "test2", rand, 1, 1);
-//
-//		EasyMock.verify(pc, gbc, rand);
-//	}
-//
-//	@Test
-//	public void attackPhaseFortifyPhaseTest() {
-//		GameFlowController gfc = EasyMock.partialMockBuilder(GameFlowController.class).addMockedMethod("fortify_phase")
-//				.withConstructor(new PlayerController(), new GameBoardController(), new AttackerDefenderController(),
-//						new GraphicalUserInterface(msg), msg)
-//				.createMock();
-//		gfc.fortify_phase();
-//
-//		EasyMock.replay(gfc);
-//		gfc.setPhase("attack");
-//		assertEquals(gfc.getPhase(), "attack");
-//		System.out.println(gfc.getPhase());
-//
-//		gfc.next_phase();
-//
-//		EasyMock.verify(gfc);
-//	}
-//
-//	@Test
-//	public void fortifyPhaseAssignmentPhaseTest() {
-//		PlayerController playercontroller = EasyMock.strictMock(PlayerController.class);
-//
-//		GameFlowController gfc = EasyMock.partialMockBuilder(GameFlowController.class)
-//				.addMockedMethod("assignment_phase").withConstructor(playercontroller, new GameBoardController(),
-//						new AttackerDefenderController(), new GraphicalUserInterface(msg), msg)
-//				.createMock();
-//		playercontroller.nextPlayer();
-//		gfc.assignment_phase();
-//
-//		EasyMock.replay(gfc);
-//		EasyMock.replay(playercontroller);
-//
-//		gfc.setPhase("fortify");
-//		assertEquals(gfc.getPhase(), "fortify");
-//		gfc.next_phase();
-//
-//		EasyMock.verify(gfc);
-//		EasyMock.verify(playercontroller);
-//	}
-//
+	
 	@Test
 	public void verifyAdjacenttest_null() {
 		GameBoardController gb = EasyMock.mock(GameBoardController.class);
