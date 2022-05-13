@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class PlayerController {
 
 	ArrayList<Player> players = new ArrayList<>();
-	int currentIndex = 0, numArmiesPerPlayer;
+	int currentIndex = 0;
 	boolean initSetup = true;
 	private String gameMode = "NORMAL";
 
