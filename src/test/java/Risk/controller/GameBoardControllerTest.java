@@ -12,7 +12,7 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 
-public class 	GameBoardControllerTest {
+public class GameBoardControllerTest {
 
 
 	@Test

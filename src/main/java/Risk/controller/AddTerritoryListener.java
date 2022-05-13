@@ -41,8 +41,6 @@ public class AddTerritoryListener implements EventHandler<javafx.event.ActionEve
 				int player = gfc.playercontroller.getCurrentPlayer().getId();
 				gfc.addInfantrytoTerritoryfromString(gfc.gui.clickedTerritory.getText());
 				if (player == gfc.gbcontroller.territoryController.getTerritoryOwner(gfc.gui.clickedTerritory.getText())) {
-					System.err.println(gfc.gui.clickedTerritory.getText());
-					System.err.println(player);
 					gfc.gui.setTerritoryColor(gfc.gui.clickedTerritory.getText(), player);
 				}
 				Territory territory = gfc.gbcontroller.territoryController.getTerritory(gfc.gui.clickedTerritory.getText());
