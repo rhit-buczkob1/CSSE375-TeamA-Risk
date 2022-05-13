@@ -40,6 +40,7 @@ public class GraphicalUserInterface {
 	private Stage stage;
 	public int screenWidth = 1500;
 	public int screenHeight = 750;
+	public int startingWidthAndHeight = 500;
 	public int boxWidthAndHeight = 40;
 	public int currentTerritoryArmyCount = 0;
 	public int currentTerritoryPlayer = 0;
@@ -275,7 +276,7 @@ public class GraphicalUserInterface {
 		this.territoryColors.clear();
 		this.territoriesBounds.clear();
 		for (int i = 0; i <= 42; i++) {
-			territoryColors.add(Color.BLACK);
+			territoryColors.add(Color.DARKGRAY);
 		}
 		try {
 			Scanner scanner = new Scanner(new FileReader(filename));
@@ -313,104 +314,21 @@ public class GraphicalUserInterface {
 
 	public void initializeFrame() {
 		stage.setTitle(this.messages.getString("risk"));
-		stage.setMaxWidth(screenWidth);
-		stage.setMinWidth(screenWidth);
-		stage.setMaxHeight(screenHeight);
-		stage.setMinHeight(screenHeight);
-
+		
+		stage.setMaxHeight(startingWidthAndHeight);
+		stage.setMaxWidth(startingWidthAndHeight);
+		stage.setMinHeight(startingWidthAndHeight);
+		stage.setMinWidth(startingWidthAndHeight);
+		
 		GridPane pane = new GridPane();
-		
-		try {
-			BackgroundImage bImg = new BackgroundImage(new Image(new FileInputStream("src/main/resources/background"+map+".png")),
-                    BackgroundRepeat.NO_REPEAT,
-                    BackgroundRepeat.NO_REPEAT,
-                    BackgroundPosition.DEFAULT,
-                    new BackgroundSize(75, 75,
-                    		true, true, true, false));
-			
-			pane.setBackground(new Background(bImg));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		
-		Group root = new Group();
-		this.addTerritoryBoundsToPane(root);
-		this.paintTerritoryBounds();
-		
-		pane.vgapProperty().bind(stage.heightProperty().divide(15));
-		pane.hgapProperty().bind(stage.widthProperty().divide(33.33));
 		
 		pane.setOnMouseClicked(this.mouseListener);
 		
 		GridPane options = new GridPane();
-		
-		Group player = new Group();
-		
-		player.getChildren().add(currentPhase);
-		
-		player.getChildren().add(currentPlayer);
-		player.getChildren().add(currentPlayerId);
-		player.getChildren().add(playerArmies);
-		player.getChildren().add(playerArmiesNumber);
-		
-		player.getChildren().add(currentTerritoryDesc);
-		player.getChildren().add(clickedTerritory);
-		player.getChildren().add(territoryPlayer);
-		player.getChildren().add(territoryPlayerNumber);
-		player.getChildren().add(territoryArmies);
-		player.getChildren().add(territoryArmiesNumber);
-		
 		Font standard = Font.font("Tahoma", FontWeight.NORMAL, 20);
 		
-		currentPhase.setFont(Font.font("Tahoma", FontWeight.BOLD, 25));
-		
 		currentPlayer.setFont(standard);
-		currentPlayerId.setFont(standard);
 		
-		playerArmies.setFont(standard);
-		playerArmiesNumber.setFont(standard);
-		
-		territoryPlayer.setFont(standard);
-		territoryPlayerNumber.setFont(standard);
-		
-		territoryArmies.setFont(standard);
-		territoryArmiesNumber.setFont(standard);
-		
-		currentTerritoryDesc.setFont(standard);
-		clickedTerritory.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));
-		
-		currentPlayer.setY(35);
-		currentPlayerId.setY(35);
-		currentPlayerId.setX(220);
-		
-		playerArmies.setY(70);
-		playerArmiesNumber.setY(70);
-		playerArmiesNumber.setX(300);
-		
-		currentTerritoryDesc.setY(105);
-		clickedTerritory.setY(140);
-		
-		territoryPlayer.setY(185);
-		territoryPlayerNumber.setY(185);
-		territoryPlayerNumber.setX(300);
-		
-		territoryArmies.setY(220);
-		territoryArmiesNumber.setY(220);
-		territoryArmiesNumber.setX(300);
-		
-		attackerDiceSlider.setSnapToTicks(true);
-		attackerDiceSlider.setMinorTickCount(0);
-		attackerDiceSlider.setMajorTickUnit(1);
-		attackerDiceSlider.setShowTickMarks(true);
-		attackerDiceSlider.setShowTickLabels(true);
-		
-		defenderDiceSlider.setSnapToTicks(true);
-		defenderDiceSlider.setMinorTickCount(0);
-		defenderDiceSlider.setMajorTickUnit(1);
-		defenderDiceSlider.setShowTickMarks(true);
-		defenderDiceSlider.setShowTickLabels(true);
-
-
 		numPlayersSlider.setSnapToTicks(true);
 		numPlayersSlider.setMinorTickCount(0);
 		numPlayersSlider.setMajorTickUnit(1);
@@ -418,91 +336,37 @@ public class GraphicalUserInterface {
 		numPlayersSlider.setShowTickLabels(true);
 		
 		Group buttons = new Group();
-		
-		buttons.getChildren().add(addArmy);
-		buttons.getChildren().add(moveFrom);
+		buttons.getChildren().add(currentPlayer);
 		buttons.getChildren().add(setNumPlayers);
 		buttons.getChildren().add(maps);
 		maps.setPrefWidth(100);
+		maps.setTranslateY(30);;
 		maps.getItems().add("Globe");
 		maps.getItems().add("Europe");
 		setNumPlayers.setTranslateY(50);
-		buttons.getChildren().add(nextTurn);
-		buttons.getChildren().add(language);
-		buttons.getChildren().add(attack);
+
 		buttons.getChildren().add(chooseGameMode);
-		buttons.getChildren().add(attackFrom);
-		
-		buttons.getChildren().add(attackerDiceSlider);
-		buttons.getChildren().add(defenderDiceSlider);
 		buttons.getChildren().add(numPlayersSlider);
-		buttons.getChildren().add(attackerDice);
-		buttons.getChildren().add(defenderDice);
 		buttons.getChildren().add(numPlayers);
 
-
-		moveFrom.setTranslateX(120);
-		nextTurn.setTranslateY(30);
-		attack.setTranslateY(60);
-		attackFrom.setTranslateY(60);
-		attackFrom.setTranslateX(120);
-		language.setTranslateY(90);
 		chooseGameMode.setTranslateY(120);
-		
-		attackerDice.setTranslateY(140);
-		defenderDice.setTranslateY(185);
-		attackerDiceSlider.setTranslateY(130);
-		defenderDiceSlider.setTranslateY(175);
-		attackerDiceSlider.setTranslateX(160);
-		defenderDiceSlider.setTranslateX(160);
 		
 		setNumPlayers.setTranslateY(230);
 		numPlayers.setTranslateY(200);
 		numPlayersSlider.setTranslateY(200);
 		numPlayersSlider.setTranslateX(125);
-
-
-		Group cards = new Group();
-		
-		cards.getChildren().add(card1);
-		cards.getChildren().add(card2);
-		cards.getChildren().add(card3);
-		cards.getChildren().add(spendCards);
-		
-		card1.setPrefWidth(100);
-		card2.setPrefWidth(100);
-		card3.setPrefWidth(100);
-		
-		card2.setTranslateX(100);
-		card3.setTranslateX(200);
-		spendCards.setTranslateY(30);
 		
 		pane.setAlignment(Pos.TOP_LEFT);
 		
-		options.add(player, 0, 0);
-		options.add(buttons, 0, 1);
-		options.add(cards, 0, 2);
+		options.add(buttons, 0, 0);
 		
-		pane.add(root, 1, 1);
-		pane.add(options, 2, 1);
+		pane.add(options, 1, 1);
 
 
 		Scene scene = new Scene(pane);
-		if(map.equals("")){
-			cards.setTranslateX(1060);
-			buttons.setTranslateX(1060);
-			player.setTranslateX(1060);
-			setControlsVisibility(false);
-		} else if(map.equals("-europe")){
-			cards.setTranslateX(200);
-			buttons.setTranslateX(200);
-			player.setTranslateX(200);
-			root.setTranslateX(80);
-			root.setTranslateY(-20);
-		}
 
 		stage.setScene(scene);
-
+		
 		this.changeMoveFrom(true);
 		stage.show();
 	}
@@ -514,7 +378,7 @@ public class GraphicalUserInterface {
 		}
 	}
 	
-	public void paintTerritoryBounds() { //TODO: fix index out of bounds
+	public void paintTerritoryBounds() {
 		for (int i = 0; i < this.territoriesBounds.size(); i++) {
 			
 			Rectangle border = this.territoriesBounds.get(i);
@@ -563,7 +427,7 @@ public class GraphicalUserInterface {
 		} else if (player == 6){
 			return Color.WHITE;
 		}
-		return Color.BLACK;
+		return Color.DARKGRAY;
 	}
 
 	public void setTerritoryColor(String territory, int player) {
@@ -653,7 +517,7 @@ public class GraphicalUserInterface {
 			this.map = "-globe";
 			this.setUpTerritoryNamesAndLocation("src/main/resources/TerritoryNamesAndLocations-globe");
 		}
-		this.initializeFrame();
+		this.gameFrame();
 
 	}
 	
@@ -667,5 +531,186 @@ public class GraphicalUserInterface {
 	
 	public void setTransporting(String text) {
 		this.transportingTerritory = text.replace(' ', '_');
+	}
+	
+	private void gameFrame() {
+		stage.setTitle(this.messages.getString("risk"));
+
+		stage.setMaxWidth(screenWidth);
+		stage.setMinWidth(screenWidth);
+		stage.setMaxHeight(screenHeight);
+		stage.setMinHeight(screenHeight);
+
+		
+		GridPane pane = new GridPane();
+		
+		try {
+			BackgroundImage bImg = new BackgroundImage(new Image(new FileInputStream("src/main/resources/background"+map+".png")),
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundPosition.DEFAULT,
+                    new BackgroundSize(75, 75,
+                    		true, true, true, false));
+			
+			pane.setBackground(new Background(bImg));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		Group root = new Group();
+		this.addTerritoryBoundsToPane(root);
+		this.paintTerritoryBounds();
+		
+		if (map.equals("-globe")) {
+			pane.vgapProperty().bind(stage.heightProperty().divide(15));
+			pane.hgapProperty().bind(stage.widthProperty().divide(33.33));
+		} else {
+			pane.vgapProperty().bind(stage.heightProperty().divide(15));
+			pane.hgapProperty().bind(stage.widthProperty().divide(14.8));
+		}
+		
+		
+		pane.setOnMouseClicked(this.mouseListener);
+		
+		GridPane options = new GridPane();
+		
+		Group player = new Group();
+		
+		player.getChildren().add(currentPhase);
+		
+		player.getChildren().add(currentPlayer);
+		player.getChildren().add(currentPlayerId);
+		player.getChildren().add(playerArmies);
+		player.getChildren().add(playerArmiesNumber);
+		
+		player.getChildren().add(currentTerritoryDesc);
+		player.getChildren().add(clickedTerritory);
+		player.getChildren().add(territoryPlayer);
+		player.getChildren().add(territoryPlayerNumber);
+		player.getChildren().add(territoryArmies);
+		player.getChildren().add(territoryArmiesNumber);
+		
+		Font standard = Font.font("Tahoma", FontWeight.NORMAL, 20);
+		
+		currentPhase.setFont(Font.font("Tahoma", FontWeight.BOLD, 25));
+		
+		currentPlayer.setFont(standard);
+		currentPlayerId.setFont(standard);
+		
+		playerArmies.setFont(standard);
+		playerArmiesNumber.setFont(standard);
+		
+		territoryPlayer.setFont(standard);
+		territoryPlayerNumber.setFont(standard);
+		
+		territoryArmies.setFont(standard);
+		territoryArmiesNumber.setFont(standard);
+		
+		currentTerritoryDesc.setFont(standard);
+		clickedTerritory.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));
+		
+		currentPlayer.setY(35);
+		currentPlayerId.setY(35);
+		currentPlayerId.setX(220);
+		
+		playerArmies.setY(70);
+		playerArmiesNumber.setY(70);
+		playerArmiesNumber.setX(300);
+		
+		currentTerritoryDesc.setY(105);
+		clickedTerritory.setY(140);
+		
+		territoryPlayer.setY(185);
+		territoryPlayerNumber.setY(185);
+		territoryPlayerNumber.setX(300);
+		
+		territoryArmies.setY(220);
+		territoryArmiesNumber.setY(220);
+		territoryArmiesNumber.setX(300);
+		
+		attackerDiceSlider.setSnapToTicks(true);
+		attackerDiceSlider.setMinorTickCount(0);
+		attackerDiceSlider.setMajorTickUnit(1);
+		attackerDiceSlider.setShowTickMarks(true);
+		attackerDiceSlider.setShowTickLabels(true);
+		
+		defenderDiceSlider.setSnapToTicks(true);
+		defenderDiceSlider.setMinorTickCount(0);
+		defenderDiceSlider.setMajorTickUnit(1);
+		defenderDiceSlider.setShowTickMarks(true);
+		defenderDiceSlider.setShowTickLabels(true);
+		
+		Group buttons = new Group();
+		
+		buttons.getChildren().add(addArmy);
+		buttons.getChildren().add(moveFrom);
+		buttons.getChildren().add(nextTurn);
+		buttons.getChildren().add(language);
+		buttons.getChildren().add(attack);
+		buttons.getChildren().add(attackFrom);
+		
+		buttons.getChildren().add(attackerDiceSlider);
+		buttons.getChildren().add(defenderDiceSlider);
+		buttons.getChildren().add(attackerDice);
+		buttons.getChildren().add(defenderDice);
+
+
+		moveFrom.setTranslateX(120);
+		nextTurn.setTranslateY(30);
+		attack.setTranslateY(60);
+		attackFrom.setTranslateY(60);
+		attackFrom.setTranslateX(120);
+		language.setTranslateY(90);
+		
+		attackerDice.setTranslateY(140);
+		defenderDice.setTranslateY(185);
+		attackerDiceSlider.setTranslateY(130);
+		defenderDiceSlider.setTranslateY(175);
+		attackerDiceSlider.setTranslateX(160);
+		defenderDiceSlider.setTranslateX(160);
+
+		Group cards = new Group();
+		
+		cards.getChildren().add(card1);
+		cards.getChildren().add(card2);
+		cards.getChildren().add(card3);
+		cards.getChildren().add(spendCards);
+		
+		card1.setPrefWidth(100);
+		card2.setPrefWidth(100);
+		card3.setPrefWidth(100);
+		
+		card2.setTranslateX(100);
+		card3.setTranslateX(200);
+		spendCards.setTranslateY(30);
+		
+		pane.setAlignment(Pos.TOP_LEFT);
+		
+		options.add(player, 0, 0);
+		options.add(buttons, 0, 1);
+		options.add(cards, 0, 2);
+		
+		pane.add(root, 1, 1);
+		pane.add(options, 2, 1);
+
+
+		Scene scene = new Scene(pane);
+		if(map.equals("")){
+			cards.setTranslateX(1060);
+			buttons.setTranslateX(1060);
+			player.setTranslateX(1060);
+			setControlsVisibility(false);
+		} else if(map.equals("-europe")){
+			cards.setTranslateX(100);
+			buttons.setTranslateX(100);
+			player.setTranslateX(100);
+//			root.setTranslateX(80);
+//			root.setTranslateY(-20);
+		}
+
+		stage.setScene(scene);
+		
+		this.changeMoveFrom(true);
+		stage.show();
 	}
 }
