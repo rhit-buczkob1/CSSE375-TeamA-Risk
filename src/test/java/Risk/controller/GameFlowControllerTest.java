@@ -426,7 +426,7 @@ public class GameFlowControllerTest extends ApplicationTest {
 
 		Card card = new Card("Russia", "Infantry");
 
-		assertTrue(gfc.convertCardForGui(card).equals("<html>Russia<br>Infantry<html/>"));
+		assertTrue(gfc.convertCardForGui(card).equals("Russia" + "\t" + "Infantry"));
 	}
 	
 	@Test
