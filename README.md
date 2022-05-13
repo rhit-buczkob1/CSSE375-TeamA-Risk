@@ -1,8 +1,5 @@
 # Team3-Risk
 
-![Gradle workflow](https://github.com/rhit-csse376/Team3-Risk/actions/workflows/gradle.yml/badge.svg)
-![Linter workflow](https://github.com/rhit-csse376/Team3-Risk/actions/workflows/linter.yml/badge.svg)
-
 <br>
 <img src="https://images-na.ssl-images-amazon.com/images/I/91jsvpbPP3L._AC_SL1500_.jpg"/>
 <br>
