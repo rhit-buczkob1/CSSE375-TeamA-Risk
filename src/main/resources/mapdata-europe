@@ -1,22 +1,28 @@
-[continent]Europe 4
-    Norway
-    Sweden
-    Finland
-    Russia
-    Iceland
-    Latvia
-    Belarus
-    Ukraine
-    Romania
-    Bulgaria
-    Greece
-    Turkey
-    Hungary
-    Poland
+[continent]West 2
     Germany
     Italy
     France
     Spain
     Portugal
-    United Kingdom
+    
+[continent]North 3
+	United Kingdom
     Ireland
+    Iceland
+    Norway
+    Sweden
+    
+[continent]South 3
+    Romania
+    Bulgaria
+    Greece
+    Turkey
+    Hungary
+    
+[continent]East 4
+    Finland
+    Russia
+    Latvia
+    Belarus
+    Ukraine
+    Poland
