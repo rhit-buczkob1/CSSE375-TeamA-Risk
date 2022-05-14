@@ -1,0 +1,255 @@
+[Territory]Eastern Australia
+    Western Australia
+    New Guinea
+
+
+[Territory]Western Australia
+    Eastern Australia
+    Indonesia
+    New Guinea
+    
+
+[Territory]New Guinea
+    Indonesia
+    Eastern Australia
+    Western Australia
+    
+[Territory]Indonesia
+    Southeast Asia
+    Western Australia
+    
+[Territory]Southeast Asia
+	Indonesia
+    India
+    China
+
+[Territory]India
+    Middle East
+    Afghanistan
+    China
+    Southeast Asia
+    
+[Territory]China
+	Southeast Asia
+	India
+	Afghanistan
+	Ural
+	Siberia
+	Mongolia
+    
+[Territory]Middle East
+    Russia
+    Afghanistan
+    India
+    Southern Europe
+    Egypt
+    East Africa
+    
+[Territory]Afghanistan
+	Middle East
+	India
+	China
+	Ural
+	Russia
+
+[Territory]Japan
+	Kamchatka
+	Mongolia
+    
+[Territory]Mongolia
+	Japan
+	Kamchatka
+	Irkutsk
+	Siberia
+	China
+    
+[Territory]Siberia
+	Yakutsk
+	Irkutsk
+	Mongolia
+	Ural
+	China
+
+[Territory]Ural
+	Russia
+	Afghanistan
+	China
+	Siberia
+	
+[Territory]Irkutsk
+	Kamchatka
+	Mongolia
+	Siberia
+	Yakutsk
+	
+[Territory]Yakutsk
+	Kamchatka
+	Siberia
+	Irkutsk
+	
+	
+[Territory]Kamchatka
+	Japan
+	Yakutsk
+	Irkutsk
+	Mongolia
+	Alaska
+
+[Territory]Madagascar
+	South Africa
+	East Africa
+
+[Territory]South Africa
+	Madagascar
+	East Africa
+	Central Africa
+	
+
+[Territory]Central Africa
+	North Africa
+	East Africa
+	South Africa
+
+[Territory]East Africa
+	Middle East
+	Madagascar
+	Central Africa
+	Egypt
+	North Africa
+
+[Territory]Egypt
+	Middle East
+	Southern Europe
+	North Africa
+	East Africa
+
+[Territory]North Africa
+	Brazil
+	Egypt
+	East Africa
+	Central Africa
+
+[Territory]Argentina
+	Peru 
+	Brazil
+
+[Territory]Peru
+	Argentina
+	Brazil
+	Venezuela
+
+[Territory]Brazil
+	North Africa
+	Venezuela
+	Peru
+	Argentina
+
+[Territory]Venezuela
+	Central America
+	Brazil
+	Peru
+    
+    
+    
+    
+[Territory]Central America
+	Venezuela
+	Eastern United States
+	Western United States
+
+[Territory]Eastern United States
+	Central America
+	Western United States
+	Eastern Canada
+	Ontario
+
+[Territory]Western United States
+	Alberta
+	Ontario
+	Eastern United States
+	Central America
+
+[Territory]Eastern Canada
+	Eastern United States
+	Ontario
+	Greenland
+
+[Territory]Ontario
+	Eastern United States
+	Western United States
+	Alberta
+	Eastern Canada
+	Northwest Territory
+	Greenland
+
+[Territory]Alberta
+	Alaska
+	Northwest Territory
+	Ontario
+	Western United States
+
+[Territory]Alaska
+	Northwest Territory
+	Alberta
+	Kamchatka
+	
+	
+
+[Territory]Northwest Territory
+	Alaska
+	Alberta
+	Ontario
+	Greenland
+	
+
+[Territory]Greenland
+	Eastern Canada
+	Ontario
+	Northwest Territory
+	Iceland
+
+[Territory]Iceland
+	Greenland
+	Great Britain
+	Scandinavia
+	
+[Territory]Great Britain
+	Northern Europe
+	Scandinavia
+	Iceland
+	
+
+[Territory]Scandinavia
+	Russia
+	Northern Europe
+	Great Britain
+	Iceland
+
+[Territory]Russia
+	Ural
+	Afghanistan
+	Middle East
+	Scandinavia
+	Northern Europe
+	Southern Europe
+
+[Territory]Northern Europe
+	Scandinavia
+	Great Britain
+	Russia
+	Southern Europe
+	
+
+[Territory]Southern Europe
+	Egypt
+	Middle East
+	Russia
+	Northern Europe
+	Western Europe
+	
+
+[Territory]Western Europe
+	North Africa
+	Southern Europe
+	Northern Europe
+
